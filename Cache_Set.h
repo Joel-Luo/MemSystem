@@ -1,6 +1,7 @@
 #ifndef CACHE_SET_H
 #define CACHE_SET_H
 #include <stdint.h>
+#include <stdio.h>
 
 typedef unsigned char Byte  ;
 
