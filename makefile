@@ -1,17 +1,13 @@
-SHELL = /usr/bin/bash
-
-all:	MemSystem
+all:	MemSystem clean
 CC = g++
-CFLAGS = -O3 -Wall
+CFLAGS = -O3
 
-SRC=$(wildcard *.cpp)
-OBJS=$(SRCS:.cpp=.o)
 
-MemSystem:	$(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) -o MemSystem
+MemSystem:	*.o
+	$(CC) $(CFLAGS) *.o -o MemSystem
 
-%.o: %.cpp
-	$(CC) -c $(CFLAGS) $< -o $@
+*.o: *.cpp
+	$(CC) $(CFLAGS) -c *.cpp
 
 .PHONY: clean
 clean:

@@ -1,8 +1,7 @@
 #include "MemSystem.h"
 
-MemSystem::MemSystem() {
+MemSystem::MemSystem( const  char * cfg ) {
 
 
 
-	
-}
+}  // MemSystem::MemSystem()
