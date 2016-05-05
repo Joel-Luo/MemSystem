@@ -2,13 +2,24 @@
 #define MEMSYSTEM_H
 #include "Cache.h"
 
+class CfgParser {
+
+	FILE * m_cfgfile ;
+
+  private:
+	CfgParser( const char * cfg ) ;
+	void ParseCfg( const char * path, uint32_t CacheType ) ;
+
+	~CfgParser() ;
+};
+
 
 class MemSystem {
 
 
   private: 
     Cache ** cache_list ;
-
+    CfgParser * cfgparser ;
   public:  
  	MemSystem( const char * cfg ) ;
 
@@ -17,12 +28,14 @@ class MemSystem {
     void AccessNextLevel( uint32_t Cachetype, const uint64_t address ) ;
   
   private: 
-    void ParseCfg( const char * path, uint32_t CacheType ) ;
 
-    void CreateMemSystem( uint32_t numOflevel ) ;
+
+    void CreateMemSystem(  uint32_t numOflevel ) ;
 
 
 };
+
+
 
 #endif
   
