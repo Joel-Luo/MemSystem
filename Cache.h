@@ -2,20 +2,23 @@
 #define CACHE_H
 #include "Cache_Set.h"
 
-enum ACCESS_TYPE {
-	ACCESS_TYPE_LOAD = 0,
-	ACCESS_TYPE_STORE,
-	ACCESS_TYPE_WRITEBACK
-} ;
 
-enum CACHETYPE {
-  L1_D = 0,
-  L2,
-  L3
-} ;
 
 class Cache {
-private: 
+  public:
+	enum  {
+		ACCESS_TYPE_LOAD = 0,
+		ACCESS_TYPE_STORE,
+		ACCESS_TYPE_WRITEBACK
+	} ACCESS_TYPE;
+
+	enum  {
+	  L1_D = 0,
+	  L2,
+	  L3
+	} CACHE_NAME ;
+
+  private:
 	uint64_t m_Num_Access ;
 	uint64_t m_Num_Hit ;
 
@@ -24,7 +27,7 @@ private:
     uint64_t m_CacheSize ;
     uint32_t m_num_set ;
 
-public:
+  public:
 
 	Cache( int CacheType, uint32_t replacePolicy, uint32_t cache_size, uint32_t blocksize, uint32_t associativity );
 

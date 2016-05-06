@@ -9,17 +9,17 @@ MemSystem::MemSystem( const  char * cfg ) {
 void MemSystem::CreateMemSystem( uint32_t numOflevel ) {
 
 	  for ( int i = 0 ; i < numOflevel ; i++ ) {
-	    if ( i == CACHETYPE::L1_D ) {
+	    if ( i == Cache::L1_D ) {
 
 
 	    }   // if
 
-	    else if ( i == CACHETYPE::L2 ) {
+	    else if ( i == Cache::L2 ) {
 
 
-	    }  // esle if
+	    }  // else if
 
-	    else if ( i == CACHETYPE::L3 ) {
+	    else if ( i == Cache::L3 ) {
 
 
 	    } // else if

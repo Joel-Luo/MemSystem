@@ -3,10 +3,10 @@
 #include "Cache.h"
 
 class CfgParser {
-
+  private:
 	FILE * m_cfgfile ;
 
-  private:
+  public:
 	CfgParser( const char * cfg ) ;
 	void ParseCfg( const char * path, uint32_t CacheType ) ;
 
@@ -20,6 +20,7 @@ class MemSystem {
   private: 
     Cache ** cache_list ;
     CfgParser * cfgparser ;
+
   public:  
  	MemSystem( const char * cfg ) ;
 

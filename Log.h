@@ -7,7 +7,7 @@
 
 #ifndef LOG_H
 #define LOG_H
-#include <string.h>
+#include <string>
 #include <stdio.h>
 #include <stdlib.h>
 
