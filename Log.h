@@ -11,8 +11,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#define DEBUG ;
+
 class Log {
+
   public :
+
     static void PrintError( std::string ErrorMsg ) {
       printf( "%s\n", ErrorMsg.c_str() ) ;
       exit(-1) ;
@@ -21,6 +25,12 @@ class Log {
     static void PrintWarning( std::string WarningMsg  ) {
 	  printf( "%s\n", WarningMsg.c_str() ) ;
     } // printWarning()
+
+#ifdef DEBUG
+    static void PrintMessage( std::string Msg  ) {
+      printf( "%s\n", Msg.c_str() ) ;
+    } // printWarning()
+#endif
 
 };
 

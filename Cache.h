@@ -6,17 +6,28 @@
 
 class Cache {
   public:
-	enum  {
-		ACCESS_TYPE_LOAD = 0,
-		ACCESS_TYPE_STORE,
-		ACCESS_TYPE_WRITEBACK
-	} ACCESS_TYPE;
-
-	enum  {
+	enum CACHE_NAME  {
 	  L1_D = 0,
 	  L2,
 	  L3
-	} CACHE_NAME ;
+	} ;
+
+	enum ACCESS_TYPE {
+		ACCESS_TYPE_LOAD = 0,
+		ACCESS_TYPE_STORE,
+		ACCESS_TYPE_WRITEBACK
+	} ;
+
+	enum REPLACEPOLICY {
+      LRU = 0,
+	  ROUND_ROBIN,
+	  RANDOM
+	} ;
+
+	enum WRITE_POLICY {
+      WRITE_BACK = 0,
+	  WRITE_TROUGH
+	};
 
   private:
 	uint64_t m_Num_Access ;

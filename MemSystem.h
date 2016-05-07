@@ -1,17 +1,8 @@
 #ifndef MEMSYSTEM_H
 #define MEMSYSTEM_H
 #include "Cache.h"
-
-class CfgParser {
-  private:
-	FILE * m_cfgfile ;
-
-  public:
-	CfgParser( const char * cfg ) ;
-	void ParseCfg( const char * path, uint32_t CacheType ) ;
-
-	~CfgParser() ;
-};
+#include "MainMemory.h"
+#include "CfgParser.h"
 
 
 class MemSystem {
@@ -19,9 +10,11 @@ class MemSystem {
 
   private: 
     Cache ** cache_list ;
+    uint32_t m_Cache_level ;
     CfgParser * cfgparser ;
 
   public:  
+
  	MemSystem( const char * cfg ) ;
 
 	void CoreAccessMem( const uint64_t address ) ;
@@ -31,7 +24,7 @@ class MemSystem {
   private: 
 
 
-    void CreateMemSystem(  uint32_t numOflevel ) ;
+    void CreateMemSystem() ;
 
 
 };

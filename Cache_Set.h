@@ -14,8 +14,6 @@ enum REPLACEPOLICY {
 
 class Cache_Set {    
 
-
-  
   private:
     uint32_t m_ReplacePolicy ;
     uint32_t m_Associativity ;
@@ -35,8 +33,8 @@ class Cache_Set {
     uint64_t GetTag() { return m_tag ; } 
     void SetTag(  uint64_t tag ) {  m_tag = tag ; } 
 
-	  void ReadLine( Byte * out, uint32_t offset, uint32_t length ) ;  
-	  void WriteLine( Byte * in, uint32_t offset, uint32_t length ) ;
+	void ReadLine( Byte * out, uint32_t offset, uint32_t length ) ;
+	void WriteLine( Byte * in, uint32_t offset, uint32_t length ) ;
 
 	
 };
