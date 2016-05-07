@@ -27,11 +27,14 @@ class Log {
     } // printWarning()
 
 #ifdef DEBUG
-    static void PrintMessage( std::string Msg  ) {
+    static void PrintDebugLog( std::string Msg  ) {
       printf( "%s\n", Msg.c_str() ) ;
     } // printWarning()
 #endif
 
+    static void PrintMessage( std::string Msg  ) {
+      printf( "%s\n", Msg.c_str() ) ;
+    } // printWarning()
 };
 
 

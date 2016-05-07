@@ -1,13 +1,13 @@
 #include <stdio.h>
 #include "MemSystem.h"
+#include "Log.h"
 
 int main(int argc, char const *argv[]) {
 
     if ( argc > 1 ) {
       	
-      printf( "CfgFile=%s\n", argv[1] ) ;
+      Log::PrintMessage( "CfgFile=" + std::string(argv[1]) ) ;
       MemSystem * memsystem = new MemSystem( argv[1] ) ;
-      
     
     } // if 
 

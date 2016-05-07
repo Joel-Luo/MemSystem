@@ -35,10 +35,13 @@ class Cache {
 
     Cache_Set** m_Sets ;
 
+  public :
     uint64_t m_CacheSize ;
-    uint32_t m_num_set ;
+    uint32_t m_Num_Set ;
     uint32_t m_Name ;
-
+    uint32_t m_ReplacePolicy ;
+    uint32_t m_WrtiePolicy ;
+    uint32_t m_BlockSize ;
 
   public:
 
