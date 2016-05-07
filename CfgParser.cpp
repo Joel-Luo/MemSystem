@@ -42,7 +42,7 @@ string SplitTag( string input, string tag ) {
   return input.substr( start, end - start ) ;
 } // SplitTag()
 
-uint32_t CacheParamter( string tag, string value) {
+uint64_t CacheParamter( string tag, string value) {
   try {
 
     if ( tag.compare( "replacepolicy" )  == 0 ) {
@@ -58,10 +58,10 @@ uint32_t CacheParamter( string tag, string value) {
 
     else return std::stoul( value ) ; // level, size, blocksize, associativity
 
-    return -1 ;
+    return 0 ;
   } catch( std::exception & e ) {
 	Log::PrintError( "CfgParser.cpp:CacheParamter-Configure File is incorrect. Can not convert " + tag + " = " + value + "." ) ;
-	return -1 ;
+	return 0 ;
   }
 }
 
@@ -85,7 +85,7 @@ CfgParser::CfgParser(const char * cfg ){
 
 }  // CfgParser::CfgParser()
 
-int CfgParser::ParseDevice( std::string DeviceName, std::string Tag ) {
+uint64_t CfgParser::ParseDevice( std::string DeviceName, std::string Tag ) {
 
 	 for ( int i = 0 ; i < m_DeviceList->size() ; i++  ) {
        if ( (*m_DeviceList)[i].find( DeviceName ) != string::npos ) {
@@ -96,6 +96,6 @@ int CfgParser::ParseDevice( std::string DeviceName, std::string Tag ) {
 	 }  // for()
 
 	 Log::PrintError( "CCfgParser.cpp:ParseDevice-Configure File is incorrect. Can not find \"" + DeviceName + "/" + Tag + "\"") ;
-     return -1 ;
+     return 0 ;
 
 }  // CfgParser::SplitComponent()

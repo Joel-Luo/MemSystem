@@ -37,16 +37,20 @@ class Cache {
 
     uint64_t m_CacheSize ;
     uint32_t m_num_set ;
+    uint32_t m_Name ;
+
 
   public:
 
-	Cache( int CacheType, uint32_t replacePolicy, uint32_t cache_size, uint32_t blocksize, uint32_t associativity );
+	Cache( uint32_t CacheName,  uint32_t cache_size, uint32_t blocksize, uint32_t associativity, uint32_t replacePolicy, uint32_t writepolicy );
 
-    void AccessSingleLine( uint32_t AccessType, uint64_t address, Byte * Data, uint32_t length ) ;
+	Cache( uint32_t CacheName,  uint32_t cache_size, uint32_t blocksize, uint32_t replacePolicy, uint32_t writepolicy );
+
+	void AccessSingleLine( uint32_t AccessType, uint64_t address, Byte * Data, uint32_t length ) ;
     
 	void splitAddress(const uint64_t addr, uint64_t& tag, uint32_t& set_index, uint32_t& block_offset) ;
 
-    bool peekSingleLine( const uint64_t address ) ;
+    bool peekSingleLine( const uint64_t addr ) ;
 
 };
 

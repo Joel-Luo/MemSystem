@@ -19,7 +19,7 @@ class CfgParser {
 
   public:
 	CfgParser( const char * cfg ) ;
-	int ParseDevice( std::string DeviceType, std::string Tag ) ;
+	uint64_t ParseDevice( std::string DeviceType, std::string Tag ) ;
 
 	~CfgParser() ;
 };
