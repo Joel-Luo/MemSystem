@@ -28,7 +28,7 @@ class Log {
 
 #ifdef DEBUG
     static void PrintDebugLog( std::string Msg  ) {
-      printf( "%s\n", Msg.c_str() ) ;
+      printf( "%s", Msg.c_str() ) ;
     } // printWarning()
 #endif
 

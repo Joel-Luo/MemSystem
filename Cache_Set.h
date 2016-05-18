@@ -8,22 +8,20 @@ typedef unsigned char Byte  ;
 
 class Cache_Set {    
   public:
-	static uint32_t floorLog2( uint32_t number ) ;
 
 
   private:
     uint32_t m_Associativity ;  // if associativity == 0 then is direct-map
-    uint32_t m_BlockSize_log2 ;
-    uint64_t m_tag ; 
-    Byte * Data ;  // Data size = way * blocksize 
+    uint32_t m_BlockSize ;
+    uint64_t m_tag ;
+
+    Byte * m_Data ;  // Data size = way * blocksize
     
-    void ReplaceMent() ;
 
   public:
-  	Cache_Set( uint32_t blocksize_log2, uint32_t associativity );
-	  
 
-    uint32_t GetBlockSize_log2() { return m_BlockSize_log2 ; }
+  	Cache_Set( uint32_t blocksize, uint32_t associativity );
+	  
     uint32_t GetAssociativity() { return m_Associativity ; } 
     
     uint64_t GetTag() { return m_tag ; } 
@@ -31,6 +29,8 @@ class Cache_Set {
 
 	void ReadLine( Byte * out, uint32_t offset, uint32_t length ) ;
 	void WriteLine( Byte * in, uint32_t offset, uint32_t length ) ;
+
+	Byte * GetSetData() {  return m_Data ; }
 
 };
 

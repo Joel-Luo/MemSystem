@@ -1,6 +1,6 @@
 #include "MemSystem.h"
 #include "Log.h"
-
+#include <sstream>
 MemSystem::MemSystem( const  char * cfg ) {
   cache_list = NULL  ;
   cfgparser = new CfgParser( cfg ) ;
@@ -49,4 +49,87 @@ void MemSystem::CreateMemSystem() {
 
 
 }  // MemSystem::CreateMemSystem
+
+void MemSystem::CoreAccessMem( const uint64_t address, const uint32_t AccessType, Byte* Data, uint32_t length ) {
+
+	if ( cache_list[0]->PeekSingleLine( address ) ) { // hit
+		cache_list[0]->MaintainReplacePolicy( address ) ;
+		cache_list[0]->AccessSingleLine( true, AccessType, address, Data, 8 ) ;
+
+		Log::PrintDebugLog( "CACHE L1 hit : address:" ) ;
+		printf( "%llX length: %d\n", (long long)address ,length  ) ;
+
+	}  // if
+
+	else {  // miss
+		Log::PrintDebugLog( "CACHE L1 miss : address:" ) ;
+		printf( "%llX length: %d\n", (long long)address ,length  ) ;
+
+		uint32_t set_index = cache_list[0]->MaintainReplacePolicy( address ) ;
+		Cache_Set * cache_set = cache_list[0]->GetCacheSet(set_index) ;
+		bool isNeedToWriteBack = cache_list[0]->ReplaceSet( set_index, address ) ;
+
+
+        if ( isNeedToWriteBack  ) {
+        	uint64_t WB_Addr = cache_list[0]->AppendAddress( cache_set ) ;
+        	AccessNextLevel( Cache::L2, WB_Addr, MemSystem::WRITE, cache_set->GetSetData(), cache_list[0]->m_BlockSize ) ;
+        }  // if
+
+
+        AccessNextLevel( Cache::L2, address, MemSystem::READ, cache_set->GetSetData(), cache_list[0]->m_BlockSize ) ;
+
+        // AccessNextLevel( Cache::L2, address, MemSystem::READ,NULL, cache_list[0]->m_BlockSize ) ;
+
+
+
+		cache_list[0]->AccessSingleLine( false, AccessType, address, Data, 8 ) ;
+
+	}  // else
+
+}  // MemSystem::CoreAccessMem()
+
+
+void MemSystem::AccessNextLevel( uint32_t Cachetype, const uint64_t address, const uint32_t AccessType, Byte* Data, uint32_t length ) {
+
+	if ( Cachetype == MAINMEM ) {
+      // Read and Write data from MAINMEM
+
+		Log::PrintDebugLog( "Read and Write from Mem address:" ) ;
+		printf( "%llX length: %d\n", (long long)address ,length  ) ;
+
+	}  // if
+	else {
+
+	  if ( cache_list[Cachetype]->PeekSingleLine( address ) ) { // hit
+		  cache_list[Cachetype]->MaintainReplacePolicy( address ) ;
+		  cache_list[Cachetype]->AccessSingleLine( true, AccessType, address, Data, cache_list[Cachetype-1]->m_BlockSize ) ;
+
+
+			Log::PrintDebugLog( "CACHE L" + std::to_string(Cachetype+1) + " hit : address:"  ) ;
+			printf( "%llX length: %d\n", (long long)address ,length  ) ;
+
+	  }  // if
+
+	  else {  // miss
+
+		  Log::PrintDebugLog( "CACHE L" + std::to_string(Cachetype+1) + " miss : address:"  ) ;
+		  printf( "%llX length: %d\n", (long long)address ,length  ) ;
+
+		  uint32_t set_index = cache_list[Cachetype]->MaintainReplacePolicy( address ) ;
+		  Cache_Set * cache_set = cache_list[Cachetype]->GetCacheSet(set_index) ;
+		  bool isNeedToWriteBack = cache_list[Cachetype]->ReplaceSet( set_index, address ) ;
+
+          if ( isNeedToWriteBack  ) {
+              uint64_t WB_Addr = cache_list[Cachetype]->AppendAddress( cache_set ) ;
+              AccessNextLevel( Cachetype+1, WB_Addr, MemSystem::WRITE, cache_set->GetSetData(), cache_list[Cachetype]->m_BlockSize ) ;
+          }  // if
+
+          AccessNextLevel( Cachetype+1, address, MemSystem::READ, cache_set->GetSetData(), cache_list[Cachetype]->m_BlockSize ) ;
+
+	      cache_list[Cachetype]->AccessSingleLine( false, AccessType, address, Data, cache_list[Cachetype-1]->m_BlockSize ) ;
+
+    	}  // else
+	} // else
+
+}  // MemSystem::AccessNextLevel()
 

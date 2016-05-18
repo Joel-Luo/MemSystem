@@ -7,11 +7,11 @@
 #include "CfgParser.h"
 #include "Log.h"
 #include "Cache.h"
-#include <string>
+
 
 using namespace std ;
 
-vector<string> * Split( string * input ){
+vector<string> * CfgParser::Split( string * input ){
   vector<string> * vec = new vector<string>()  ;
   string src ( input->c_str() )  ;
   size_t start = 0;
@@ -31,7 +31,7 @@ vector<string> * Split( string * input ){
   return vec ;
 }  // Split()
 
-string SplitTag( string input, string tag ) {
+string CfgParser::SplitTag( string input, string tag ) {
 
 
   size_t start = input.find( "<" + tag + ">" ) ;
@@ -42,7 +42,7 @@ string SplitTag( string input, string tag ) {
   return input.substr( start, end - start ) ;
 } // SplitTag()
 
-uint64_t CacheParamter( string tag, string value) {
+uint64_t CfgParser::CacheParamter( string tag, string value) {
   try {
 
     if ( tag.compare( "replacepolicy" )  == 0 ) {
