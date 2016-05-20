@@ -15,26 +15,26 @@
 
 class Log {
 
-	public:
+    public:
 
-		static void PrintError( std::string ErrorMsg ) {
-			printf( "%s\n", ErrorMsg.c_str() ) ;
-			exit( -1 ) ;
-		}  // ExcptionPrint
+        static void PrintError( std::string ErrorMsg ) {
+            printf( "%s\n", ErrorMsg.c_str() ) ;
+            exit( -1 ) ;
+        }  // ExcptionPrint
 
-		static void PrintWarning( std::string WarningMsg ) {
-			printf( "%s\n", WarningMsg.c_str() ) ;
-		} // printWarning()
+        static void PrintWarning( std::string WarningMsg ) {
+            printf( "%s\n", WarningMsg.c_str() ) ;
+        }  // printWarning()
 
 #ifdef DEBUG
-		static void PrintDebugLog( std::string Msg ) {
-			printf( "%s", Msg.c_str() ) ;
-		} // printWarning()
+        static void PrintDebugLog( std::string Msg ) {
+            printf( "%s", Msg.c_str() ) ;
+        }  // printWarning()
 #endif
 
-		static void PrintMessage( std::string Msg ) {
-			printf( "%s\n", Msg.c_str() ) ;
-		} // printWarning()
+        static void PrintMessage( std::string Msg ) {
+            printf( "%s\n", Msg.c_str() ) ;
+        }  // printWarning()
 } ;
 
 #endif /* LOG_H_ */
