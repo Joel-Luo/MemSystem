@@ -10,18 +10,16 @@
 #include "Cache.h"
 
 class Monitor {
-  private :
-    FILE * m_File ;
-  public :
-    Cache ** m_Cache_list ;
+	private:
+		FILE * m_File ;
+	public:
+		Cache ** m_Cache_list ;
 
-  public :
-    Monitor( Cache ** CL ) ;
+	public:
+		Monitor( Cache ** CL ) ;
 
-    void OutputResult() ;
+		void OutputResult() ;
 
-
-};
-
+} ;
 
 #endif /* MONITOR_H_ */

@@ -3,29 +3,29 @@
 #include "Log.h"
 #include <stdint.h>
 
-int main(int argc, char const *argv[]) {
+int main( int argc, char const *argv[] ) {
 
-    if ( argc > 1 ) {
-      	
-      Log::PrintMessage( "CfgFile=" + std::string(argv[1]) ) ;
-      MemSystem * memsystem = new MemSystem( argv[1] ) ;
-      uint64_t address =  0x0000000000000001 ;
-      for ( int i = 0 ; i < 10 ; i++ ) {
+	if ( argc > 1 ) {
 
-    	  memsystem->CoreAccessMem( address ,MemSystem::READ, NULL, 8 ) ;
-    	  address = address + 64 ;
-    	  Log::PrintMessage("\n") ;
+		Log::PrintMessage( "CfgFile=" + std::string( argv[ 1 ] ) ) ;
+		MemSystem * memsystem = new MemSystem( argv[ 1 ] ) ;
+		uint64_t address = 0x0000000000000000 ;
+		for ( int i = 0; i < 100; i++ ) {
 
-      } // for
-    } // if 
+			memsystem->CoreAccessMem( address, MemSystem::READ, NULL, 8 ) ;
+			address = address + 64 ;
+			Log::PrintMessage( "\n" ) ;
 
-    else {
+		} // for
+	} // if
 
-      printf("Incorrect number of Argument\n" );
+	else {
 
-    }  // else 
+		printf( "Incorrect number of Argument\n" ) ;
 
-	return 0;
+	}  // else
+
+	return 0 ;
 
 }  // main()
 
