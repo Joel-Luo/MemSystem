@@ -45,14 +45,14 @@ uint64_t CfgParser::CacheParamter( string tag, string value ) {
     try {
 
         if ( tag.compare( "replacepolicy" ) == 0 ) {
-            if ( value.compare( "LRU" ) == 0 ) return Cache::LRU ;
-            else if ( value.compare( "ROUND_ROBIN" ) == 0 ) return Cache::ROUND_ROBIN ;
-            else if ( value.compare( "RANDOM" ) == 0 ) return Cache::RANDOM ;
+            if ( value.compare( "LRU" ) == 0 ) return REPLACEPOLICY::LRU ;
+            else if ( value.compare( "ROUND_ROBIN" ) == 0 ) return REPLACEPOLICY::ROUND_ROBIN ;
+            else if ( value.compare( "RANDOM" ) == 0 ) return REPLACEPOLICY::RANDOM ;
         }  // else if
 
         else if ( tag.compare( "writepolicy" ) == 0 ) {
-            if ( value.compare( "WB" ) == 0 ) return Cache::WRITE_BACK ;
-            else if ( value.compare( "WT" ) == 0 ) return Cache::WRITE_TROUGH ;
+            if ( value.compare( "WB" ) == 0 ) return WRITEPOLICY::WRITE_BACK ;
+            else if ( value.compare( "WT" ) == 0 ) return WRITEPOLICY::WRITE_TROUGH ;
         }  // else if
 
         else return std::stoul( value ) ;  // level, size, blocksize, associativity

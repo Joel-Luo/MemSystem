@@ -3,7 +3,8 @@
 
 uint32_t Cache::floorLog2( uint32_t number ) {
     int p = 0 ;
-    if ( number == 0 ) return -1 ;
+    if ( number == 0 )
+        return -1 ;
     if ( number & 0xffff0000 ) {
         p += 16 ;
         number >>= 16 ;
@@ -28,129 +29,87 @@ uint32_t Cache::floorLog2( uint32_t number ) {
 
 Cache::Cache( uint32_t CacheName, uint32_t cache_size, uint32_t blocksize, uint32_t associativity,
         uint32_t replacePolicy, uint32_t writepolicy ) :
-        m_Name( CacheName ), m_CacheSize( cache_size << 10 ), m_BlockSize( blocksize ), m_Num_Access(
-                0 ), m_Num_Hit( 0 ), m_Sets( NULL ), m_Num_Set( 0 ), m_ReplacePolicy(
-                replacePolicy ), m_WrtiePolicy( writepolicy ), m_NeedWriteBack( false ) {
+        m_Name( CacheName ), m_CacheSize( cache_size << 10 ), m_BlockSize( blocksize ), m_Num_Access( 0 ), m_Num_Hit( 0 ), m_Sets(
+        NULL ), m_Num_Set( 0 ), m_ReplacePolicy( replacePolicy ), m_WritePolicy( writepolicy ) {
     m_BlockSize_log2 = Cache::floorLog2( blocksize ) ;
     m_Associativity_log2 = Cache::floorLog2( associativity ) ;
     m_Num_Set = m_CacheSize >> ( m_BlockSize_log2 + m_Associativity_log2 ) ;
     m_Sets = new Cache_Set*[ m_Num_Set ] ;
-    RP_record = new std::vector < int >() ;
+
     for ( int i = 0; i < m_Num_Set; i++ )
-        m_Sets[ i ] = new Cache_Set( blocksize, associativity ) ;
+        m_Sets[ i ] = new Cache_Set( blocksize, associativity, replacePolicy, writepolicy ) ;
 
 }  // Cache::Cache()
 
-Cache::Cache( uint32_t CacheName, uint32_t cache_size, uint32_t blocksize, uint32_t replacePolicy,
-        uint32_t writepolicy ) :
-        m_Name( CacheName ), m_CacheSize( cache_size << 10 ), m_BlockSize( blocksize ), m_Num_Access(
-                0 ), m_Num_Hit( 0 ), m_Sets( NULL ), m_Num_Set( 0 ), m_ReplacePolicy(
-                replacePolicy ), m_WrtiePolicy( writepolicy ), m_NeedWriteBack( false ) {
+void Cache::SplitAddress( const uint64_t addr, uint64_t& tag, uint32_t& associ_index, uint32_t& block_offset ) {
 
-    m_BlockSize_log2 = Cache::floorLog2( blocksize ) ;
-    m_Associativity_log2 = 0 ;
-    m_Num_Set = m_CacheSize >> m_BlockSize_log2 ;
-    m_Sets = new Cache_Set*[ m_Num_Set ] ;
-    RP_record = new std::vector < int >() ;
-    for ( int i = 0; i < m_Num_Set; i++ )
-        m_Sets[ i ] = new Cache_Set( blocksize, 0 ) ;
-
-}  // Cache::Cache()
-
-void Cache::SplitAddress( const uint64_t addr, uint64_t& tag, uint32_t& associ_index,
-        uint32_t& block_offset ) {
     uint32_t mask_block = ( 1 << ( m_BlockSize_log2 ) ) - 1 ;
     uint32_t mask_associ = ( ( ( mask_block + 1 ) << m_Associativity_log2 ) - 1 ) ^ mask_block ;
-
-    associ_index = ( addr & mask_associ ) >> m_BlockSize_log2 ;
     block_offset = addr & mask_block ;
+    associ_index = ( addr & mask_associ ) >> m_BlockSize_log2 ;
     tag = addr >> ( m_BlockSize_log2 + m_Associativity_log2 ) ;
+
 }  // Cache::SplitAddress()
 
-void Cache::AccessSingleLine( bool hit, uint32_t AccessType, const uint64_t address, Byte * Data,
-        uint32_t length ) {
-    m_Num_Access++ ;
-    if ( hit ) m_Num_Hit++ ;
+
+
+bool Cache::AccessCache( uint32_t AccessType, const uint64_t address, Byte * Data, uint32_t length ) {
 
     uint64_t tag ;
-    uint32_t associ_index, block_offset ;
-    SplitAddress( address, tag, associ_index, block_offset ) ;
-    int i = FindTagSet( tag ) ;
-    if ( AccessType == Cache::READ ) {  // READ
-        m_Sets[ i ]->ReadLine( Data, associ_index * m_BlockSize + block_offset, length ) ;
+    uint32_t index, block_offset ;
+    SplitAddress( address, tag, index, block_offset ) ;
+
+    uint32_t way_index = m_Sets[ index ]->FindTagInWay( tag ) ;
+    if ( way_index == -1 )
+        return false ;  // cache miss
+
+    if ( AccessType == Cache::READ ) {
+
+        m_Sets[ index ]->ReadData( Data, way_index, block_offset, length ) ;
     }  // if
-    else {  // WRITE
-        m_Sets[ i ]->WriteLine( Data, associ_index * m_BlockSize + block_offset, length ) ;
-    }  // else
+
+    else if ( AccessType == Cache::WRITE ) {
+        if ( m_WritePolicy == WRITE_BACK )
+            m_Sets[ index ]->m_Way[ way_index ].Dirty = true ;
+        m_Sets[ index ]->WriteData( Data, way_index, block_offset, length ) ;
+    }  // else if
+
+    m_Sets[ index ]->m_RP_Manager->UpdateRecord( way_index ) ;
+    return true ;
 }  // Cache::AccessSingleLine
 
-bool Cache::PeekSingleLine( const uint64_t addr ) {
-    uint64_t tag ;
-    uint32_t associ_index, block_offset ;
-    SplitAddress( addr, tag, associ_index, block_offset ) ;
-    int i = FindTagSet( tag ) ;
-    return ( i == -1 ) ? false : true ;
-}  // Cache::AccessSingleLine
+uint64_t Cache::TagToAddress( uint64_t tag, uint32_t index ) {
+    uint64_t address ;
+    address = ( tag << m_Associativity_log2 ) + index ;
+    return address ;
+}  // Cache::TagToAddress()
 
-uint32_t Cache::FindTagSet( uint32_t tag ) {
+bool Cache::AllocateCache( uint32_t set_index ) {
 
-    for ( int i = 0; i < m_Num_Set; i++ ) {
-        if ( m_Sets[ i ]->GetTag() == tag ) return i ;
-    }  // for
+    uint8_t way_index = m_Sets[set_index]->m_RP_Manager->GetReplaceIndex() ;
+    Cache_Set::Way wayentry = m_Sets[set_index]->m_Way[way_index] ;
+    if ( wayentry.Dirty ) return false ;  // Allocation is not successful.
+    else return true ;
 
-    return -1 ;
+} // Cache::AllocateCache
 
-}  // Cache::FindTagSet
+void Cache::LoadCacheBlock( uint64_t tag, uint32_t set_index, Byte * in ) {
 
-uint32_t Cache::MaintainLRU( uint32_t index ) {
+    uint8_t way_index = m_Sets[set_index]->m_RP_Manager->GetReplaceIndex() ;
+    m_Sets[set_index]->m_Way[way_index].Valid = true ;
+    m_Sets[set_index]->m_Way[way_index].tag = tag ;
+    m_Sets[set_index]->m_RP_Manager->UpdateRecord( way_index ) ;
+    m_Sets[set_index]->WriteData( in, way_index, 0, m_BlockSize ) ;
 
-    for ( int i = 0; index != -1 && i < RP_record->size(); i++ ) {
-        if ( RP_record->at( i ) == index ) {
-            RP_record->erase( RP_record->begin() ) ;
-            RP_record->insert( RP_record->begin(), index ) ;
-            return index ;
-        }  // if
-    }  // for
+}  // Cache::LoadCacheBlock()
 
-    if ( RP_record->size() != m_Num_Set ) {
-        int index = RP_record->size() ;
-        RP_record->insert( RP_record->begin(), index ) ;
-        return index ;
-    }  // if
-    else {
-        int i = RP_record->at( RP_record->size() - 1 ) ;
-        RP_record->insert( RP_record->begin(), i ) ;
-        m_NeedWriteBack = true ;
-        return i ;
-    }  // else
-    return -1 ;
-}
+void Cache::StoreCacheBlock( uint64_t tag, uint32_t set_index, uint64_t & TatgetAddr, Byte * out ) {
 
-bool Cache::ReplaceSet( uint32_t set_index, const uint64_t address ) {
+    uint8_t way_index = m_Sets[set_index]->m_RP_Manager->GetReplaceIndex() ;
+    m_Sets[set_index]->m_Way[way_index].Valid = false ;
+    m_Sets[set_index]->ReadData( out, way_index, 0, m_BlockSize ) ;
 
-    uint64_t tag ;
-    uint32_t associ_index, block_offset ;
-    SplitAddress( address, tag, associ_index, block_offset ) ;
-    m_Sets[ set_index ]->SetTag( tag ) ;
+}  // Cache::StoreCacheBlock()
 
-    return m_NeedWriteBack ;
 
-}
-
-uint64_t Cache::AppendAddress( Cache_Set * cache_set ) {
-    uint64_t addr = cache_set->GetTag() ;
-    addr = addr << ( m_BlockSize_log2 + m_Associativity_log2 ) ;
-    return addr ;
-}  // Cache::AppendAddress()
-
-uint32_t Cache::MaintainReplacePolicy( const uint64_t address ) {
-
-    uint64_t tag ;
-    uint32_t associ_index, block_offset ;
-    SplitAddress( address, tag, associ_index, block_offset ) ;
-    uint32_t i = FindTagSet( tag ) ;
-
-    if ( m_ReplacePolicy == LRU ) return MaintainLRU( i ) ;
-    return -1 ;
-}  //
 
