@@ -18,6 +18,6 @@ void Monitor::OutputCacheInfo( int CacheType ) {
    double rate = (double)hit / (double)access * 100  ;
    Log::PrintMessage( "\nL" + std::to_string(CacheType+1)+ " info :\naccess: " + std::to_string(access) +
                            "\nhit: " + std::to_string(hit) +
-                           "\nrate: " + std::to_string(rate) + "%" ) ;
+                           "\nhit rate: " + std::to_string(rate) + "%" ) ;
 
 }  // Monitor::OutputL1CacheInfo()

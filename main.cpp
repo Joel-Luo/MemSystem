@@ -23,13 +23,14 @@ int main( int argc, char const *argv[] ) {
 
         else if ( strcmp( argv[ i ], "-input" ) == 0 ) {
           FILE * input = fopen( argv[ i + 1 ], "r" ) ;
+          if ( input == NULL ) Log::PrintError( "Input file error: no this inputfile."  ) ;
           uint64_t address = 0x0 ;
           char op = 'x' ;
           for ( int counter = 1 ; !feof( input ); counter ++  ) {
             char * addr_s = new char[ 20 ] ;
             char * op_s = new char[ 2 ] ;
             fscanf( input, "%s", addr_s ) ;
-            if ( feof( input ) ) break ;
+            if ( feof( input ) || strcmp( addr_s, "#eof") == 0 ) break ;
             fscanf( input, "%s", op_s ) ;
             address = strtoll( addr_s , NULL ,16) ;
             // Log::PrintMessage( "Instruction id : " + std::to_string(counter) ) ;
@@ -37,7 +38,7 @@ int main( int argc, char const *argv[] ) {
               memsystem->CoreAccessMem( address, MemSystem::READ, NULL, 8 ) ;
             else if ( strcmp( op_s, "W" ) == 0 )
               memsystem->CoreAccessMem( address, MemSystem::WRITE, NULL, 8 ) ;
-            else
+            else 
               Log::PrintError( "Unknown memory operation" ) ;
 
 
