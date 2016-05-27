@@ -76,7 +76,7 @@ CfgParser::CfgParser( const char * cfg ) {
 
     while ( !feof( m_cfgfile ) ) {
         char temp ;
-        fscanf( m_cfgfile, "%c", &temp ) ;
+        int value = fscanf( m_cfgfile, "%c", &temp ) ;
         cfgstr->append( 1, temp ) ;
     }  // while
 

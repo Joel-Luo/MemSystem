@@ -3,7 +3,7 @@
 #include "Cache.h"
 #include "MainMemory.h"
 #include "CfgParser.h"
-
+#include "Monitor.h"
 class MemSystem {
 
     public:
@@ -16,11 +16,12 @@ class MemSystem {
         } ;
 
     private:
-        Cache ** cache_list ;
+        Cache ** m_Cache_list ;
         uint32_t m_Cache_level ;
         CfgParser * cfgparser ;
 
     public:
+        Monitor * m_Monitor ;
 
         MemSystem( const char * cfg ) ;
 

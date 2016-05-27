@@ -1,5 +1,6 @@
 #include "Cache_Set.h"
 #include <string.h>
+#include <stdio.h>
 
 ReplaceManager::ReplaceManager( uint32_t way, uint32_t rp ) :
         m_ReplacePolicy( rp ) {

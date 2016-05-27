@@ -3,6 +3,7 @@
 #include "Log.h"
 #include <stdint.h>
 #include <stdlib.h>
+#include <string.h>
 
 int main( int argc, char const *argv[] ) {
 
@@ -31,7 +32,7 @@ int main( int argc, char const *argv[] ) {
             if ( feof( input ) ) break ;
             fscanf( input, "%s", op_s ) ;
             address = strtoll( addr_s , NULL ,16) ;
-            Log::PrintMessage( "Instruction id : " + std::to_string(counter) ) ;
+            // Log::PrintMessage( "Instruction id : " + std::to_string(counter) ) ;
             if ( strcmp( op_s, "R" ) == 0 )
               memsystem->CoreAccessMem( address, MemSystem::READ, NULL, 8 ) ;
             else if ( strcmp( op_s, "W" ) == 0 )
@@ -39,12 +40,15 @@ int main( int argc, char const *argv[] ) {
             else
               Log::PrintError( "Unknown memory operation" ) ;
 
-            Log::PrintMessage( "" ) ;
+
             delete[] addr_s ;
             delete[] op_s ;
           }  // while()
         }  // else if
       }  // for
+
+      for ( int i = 0 ; i < memsystem->m_Monitor->m_CacheLevel ; i++ )
+        memsystem->m_Monitor->OutputCacheInfo( i ) ;
     }  // else
   }  // if
 
@@ -53,6 +57,8 @@ int main( int argc, char const *argv[] ) {
     printf( "Incorrect number of Argument\n" ) ;
 
   }  // else
+
+
 
   return 0 ;
 

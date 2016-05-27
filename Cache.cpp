@@ -63,6 +63,7 @@ bool Cache::AccessCache( uint32_t AccessType, const uint64_t address, Byte * Dat
     if ( way_index == -1 )
         return false ;  // cache miss
 
+
     if ( AccessType == Cache::READ ) {
 
         m_Sets[ index ]->ReadData( Data, way_index, block_offset, length ) ;

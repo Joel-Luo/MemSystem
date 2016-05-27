@@ -8,16 +8,18 @@
 #ifndef MONITOR_H
 #define MONITOR_H
 #include "Cache.h"
+#include <stdio.h>
 
 class Monitor {
     private:
         FILE * m_File ;
     public:
         Cache ** m_Cache_list ;
-
+        int m_CacheLevel ;
     public:
-        Monitor( Cache ** CL ) ;
+        Monitor( int level, Cache ** CL ) ;
 
+        void OutputCacheInfo( int CacheType ) ;
         void OutputResult() ;
 
 } ;
