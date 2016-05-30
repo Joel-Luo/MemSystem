@@ -25,11 +25,10 @@ class MemSystem {
 
         MemSystem( const char * cfg ) ;
 
-        void CoreAccessMem( const uint64_t address, const uint32_t AccessType, Byte* Data,
-                uint32_t length ) ;
+        void CoreAccessMem( const uint64_t address, const uint32_t AccessType, Byte* Data, uint32_t length ) ;
 
-        void AccessNextLevel( uint32_t Cachetype, const uint64_t address, const uint32_t AccessType,
-                Byte* Data, uint32_t length ) ;
+        void AccessNextLevel( uint32_t Cachetype, const uint64_t address, const uint32_t AccessType, Byte* Data,
+                uint32_t length ) ;
 
     private:
 

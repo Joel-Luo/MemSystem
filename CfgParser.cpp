@@ -24,7 +24,8 @@ vector < string > * CfgParser::Split( string * input ) {
             vec->push_back( device ) ;
             src = src.substr( end ) ;
         }  // if
-        else break ;
+        else
+            break ;
 
     }  // while()
     return vec ;
@@ -33,8 +34,8 @@ vector < string > * CfgParser::Split( string * input ) {
 string CfgParser::SplitTag( string input, string tag ) {
 
     size_t start = input.find( "<" + tag + ">" ) ;
-    if ( start == string::npos ) Log::PrintError(
-            "CfgParser.cpp:SplitTag-Configure File is incorrect. Can not find tag = " + tag ) ;
+    if ( start == string::npos )
+        Log::PrintError( "CfgParser.cpp:SplitTag-Configure File is incorrect. Can not find tag = " + tag ) ;
     start += tag.size() + 2 ;
     size_t end = input.find( "</" + tag + ">" ) ;
 
@@ -45,24 +46,28 @@ uint64_t CfgParser::CacheParamter( string tag, string value ) {
     try {
 
         if ( tag.compare( "replacepolicy" ) == 0 ) {
-            if ( value.compare( "LRU" ) == 0 ) return REPLACEPOLICY::LRU ;
-            else if ( value.compare( "ROUND_ROBIN" ) == 0 ) return REPLACEPOLICY::ROUND_ROBIN ;
-            else if ( value.compare( "RANDOM" ) == 0 ) return REPLACEPOLICY::RANDOM ;
+            if ( value.compare( "LRU" ) == 0 )
+                return REPLACEPOLICY::LRU ;
+            else if ( value.compare( "ROUND_ROBIN" ) == 0 )
+                return REPLACEPOLICY::ROUND_ROBIN ;
+            else if ( value.compare( "RANDOM" ) == 0 )
+                return REPLACEPOLICY::RANDOM ;
         }  // else if
 
         else if ( tag.compare( "writepolicy" ) == 0 ) {
-            if ( value.compare( "WB" ) == 0 ) return WRITEPOLICY::WRITE_BACK ;
-            else if ( value.compare( "WT" ) == 0 ) return WRITEPOLICY::WRITE_TROUGH ;
+            if ( value.compare( "WB" ) == 0 )
+                return WRITEPOLICY::WRITE_BACK ;
+            else if ( value.compare( "WT" ) == 0 )
+                return WRITEPOLICY::WRITE_TROUGH ;
         }  // else if
 
-        else return std::stoul( value ) ;  // level, size, blocksize, associativity
+        else
+            return std::stoul( value ) ;  // level, size, blocksize, associativity
 
         return 0 ;
-    }
-    catch ( std::exception & e ) {
-        Log::PrintError(
-                "CfgParser.cpp:CacheParamter-Configure File is incorrect. Can not convert " + tag
-                        + " = " + value + "." ) ;
+    } catch ( std::exception & e ) {
+        Log::PrintError( "CfgParser.cpp:CacheParamter-Configure File is incorrect. Can not convert " + tag + " = "
+                + value + "." ) ;
         return 0 ;
     }
 }
@@ -70,7 +75,8 @@ uint64_t CfgParser::CacheParamter( string tag, string value ) {
 CfgParser::CfgParser( const char * cfg ) {
 
     m_cfgfile = fopen( cfg, "r" ) ;
-    if ( m_cfgfile == NULL ) Log::PrintError( "CfgFile is NULL." ) ;
+    if ( m_cfgfile == NULL )
+        Log::PrintError( "CfgFile is NULL." ) ;
     m_DeviceList = NULL ;
     std::string * cfgstr = new std::string() ;
 
@@ -96,9 +102,8 @@ uint64_t CfgParser::ParseDevice( std::string DeviceName, std::string Tag ) {
         }  // if
     }  // for()
 
-    Log::PrintError(
-            "CCfgParser.cpp:ParseDevice-Configure File is incorrect. Can not find \"" + DeviceName
-                    + "/" + Tag + "\"" ) ;
+    Log::PrintError( "CCfgParser.cpp:ParseDevice-Configure File is incorrect. Can not find \"" + DeviceName + "/" + Tag
+            + "\"" ) ;
     return 0 ;
 
 }  // CfgParser::SplitComponent()

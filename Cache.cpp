@@ -28,9 +28,9 @@ uint32_t Cache::floorLog2( uint32_t number ) {
 }  // Cache::floorLog2()
 
 Cache::Cache( uint32_t CacheName, uint32_t cache_size, uint32_t blocksize, uint32_t associativity,
-        uint32_t replacePolicy, uint32_t writepolicy ) :
-        m_Name( CacheName ), m_CacheSize( cache_size << 10 ), m_BlockSize( blocksize ), m_Num_Access( 0 ), m_Num_Hit( 0 ), m_Sets(
-        NULL ), m_Num_Set( 0 ), m_ReplacePolicy( replacePolicy ), m_WritePolicy( writepolicy ) {
+        uint32_t replacePolicy, uint32_t writepolicy, uint32_t readlatency, uint32_t writelatnecy ) :
+        m_Name( CacheName ), m_CacheSize( cache_size << 10 ), m_BlockSize( blocksize ), m_Num_W_Access( 0 ), m_Num_W_Hit( 0 ), m_Num_R_Access( 0 ), m_Num_R_Hit( 0 ), m_Sets(
+        NULL ), m_Num_Set( 0 ), m_ReplacePolicy( replacePolicy ), m_WritePolicy( writepolicy ), m_ReadLatency( readlatency ), m_WriteLatency( writelatnecy ) {
     m_BlockSize_log2 = Cache::floorLog2( blocksize ) ;
     m_Associativity_log2 = Cache::floorLog2( associativity ) ;
     m_Num_Set = m_CacheSize >> ( m_BlockSize_log2 + m_Associativity_log2 ) ;
@@ -51,8 +51,6 @@ void Cache::SplitAddress( const uint64_t addr, uint64_t& tag, uint32_t& associ_i
 
 }  // Cache::SplitAddress()
 
-
-
 bool Cache::AccessCache( uint32_t AccessType, const uint64_t address, Byte * Data, uint32_t length ) {
 
     uint64_t tag ;
@@ -62,7 +60,6 @@ bool Cache::AccessCache( uint32_t AccessType, const uint64_t address, Byte * Dat
     uint32_t way_index = m_Sets[ index ]->FindTagInWay( tag ) ;
     if ( way_index == -1 )
         return false ;  // cache miss
-
 
     if ( AccessType == Cache::READ ) {
 
@@ -87,30 +84,30 @@ uint64_t Cache::TagToAddress( uint64_t tag, uint32_t index ) {
 
 bool Cache::AllocateCache( uint32_t set_index ) {
 
-    uint8_t way_index = m_Sets[set_index]->m_RP_Manager->GetReplaceIndex() ;
-    Cache_Set::Way wayentry = m_Sets[set_index]->m_Way[way_index] ;
-    if ( wayentry.Dirty ) return false ;  // Allocation is not successful.
-    else return true ;
+    uint8_t way_index = m_Sets[ set_index ]->m_RP_Manager->GetReplaceIndex() ;
+    Cache_Set::Way wayentry = m_Sets[ set_index ]->m_Way[ way_index ] ;
+    if ( wayentry.Dirty )
+        return false ;  // Allocation is not successful.
+    else
+        return true ;
 
-} // Cache::AllocateCache
+}  // Cache::AllocateCache
 
 void Cache::LoadCacheBlock( uint64_t tag, uint32_t set_index, Byte * in ) {
 
-    uint8_t way_index = m_Sets[set_index]->m_RP_Manager->GetReplaceIndex() ;
-    m_Sets[set_index]->m_Way[way_index].Valid = true ;
-    m_Sets[set_index]->m_Way[way_index].tag = tag ;
-    m_Sets[set_index]->m_RP_Manager->UpdateRecord( way_index ) ;
-    m_Sets[set_index]->WriteData( in, way_index, 0, m_BlockSize ) ;
+    uint8_t way_index = m_Sets[ set_index ]->m_RP_Manager->GetReplaceIndex() ;
+    m_Sets[ set_index ]->m_Way[ way_index ].Valid = true ;
+    m_Sets[ set_index ]->m_Way[ way_index ].tag = tag ;
+    m_Sets[ set_index ]->m_RP_Manager->UpdateRecord( way_index ) ;
+    m_Sets[ set_index ]->WriteData( in, way_index, 0, m_BlockSize ) ;
 
 }  // Cache::LoadCacheBlock()
 
 void Cache::StoreCacheBlock( uint64_t tag, uint32_t set_index, uint64_t & TatgetAddr, Byte * out ) {
 
-    uint8_t way_index = m_Sets[set_index]->m_RP_Manager->GetReplaceIndex() ;
-    m_Sets[set_index]->m_Way[way_index].Valid = false ;
-    m_Sets[set_index]->ReadData( out, way_index, 0, m_BlockSize ) ;
+    uint8_t way_index = m_Sets[ set_index ]->m_RP_Manager->GetReplaceIndex() ;
+    m_Sets[ set_index ]->m_Way[ way_index ].Valid = false ;
+    m_Sets[ set_index ]->ReadData( out, way_index, 0, m_BlockSize ) ;
 
 }  // Cache::StoreCacheBlock()
-
-
 

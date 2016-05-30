@@ -65,7 +65,6 @@ void Cache_Set::AllocateData( Byte * in, uint64_t tag, uint32_t way_index, uint3
         memcpy( m_Way[ way_index ].m_Data + offset, in, length ) ;
 }  // Cache_Set::WriteLine()
 
-
 uint32_t Cache_Set::FindTagInWay( uint64_t tag ) {
     for ( int i = 0; i < m_Associativity; i++ ) {
         if ( m_Way[ i ].tag == tag && m_Way[ i ].Valid )
@@ -73,5 +72,4 @@ uint32_t Cache_Set::FindTagInWay( uint64_t tag ) {
     }  // for
     return -1 ;
 }  // Cache_Set::FindTagInWay()
-
 

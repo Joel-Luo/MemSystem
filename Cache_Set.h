@@ -16,18 +16,17 @@ enum WRITEPOLICY {
     WRITE_BACK = 0, WRITE_TROUGH
 } ;
 
-
 class ReplaceManager {
 
-    private :
-        std::vector<uint8_t> * m_Record ;
+    private:
+        std::vector < uint8_t > * m_Record ;
         uint32_t m_ReplacePolicy ;
-    public :
+    public:
         ReplaceManager( uint32_t way, uint32_t rp ) ;
         uint8_t GetReplaceIndex() ;
         void UpdateRecord( uint8_t index ) ;
 
-};
+} ;
 
 class Cache_Set {
 
@@ -46,18 +45,15 @@ class Cache_Set {
         uint32_t m_BlockSize ;
         uint32_t m_WritePolicy ;
 
-
-
-
     public:
 
-        Cache_Set( uint32_t blocksize, uint32_t associativity, uint32_t replacePolicy, uint32_t writePolicy  ) ;
+        Cache_Set( uint32_t blocksize, uint32_t associativity, uint32_t replacePolicy, uint32_t writePolicy ) ;
 
         uint32_t FindTagInWay( uint64_t tag ) ;
 
         void ReadData( Byte * out, uint32_t way_index, uint32_t offset, uint32_t length ) ;
         void WriteData( Byte * in, uint32_t way_index, uint32_t offset, uint32_t length ) ;
-        void AllocateData(  Byte * in, uint64_t tag, uint32_t way_index, uint32_t offset, uint32_t length ) ;
+        void AllocateData( Byte * in, uint64_t tag, uint32_t way_index, uint32_t offset, uint32_t length ) ;
 
 } ;
 

@@ -13,7 +13,6 @@ class Cache {
             READ = 0, WRITE
         } ;
 
-
     private:
 
         uint32_t m_BlockSize_log2 ;
@@ -22,8 +21,12 @@ class Cache {
         Cache_Set** m_Sets ;
 
     public:
-        uint64_t m_Num_Access ;
-        uint64_t m_Num_Hit ;
+        uint64_t m_Num_W_Access ;
+        uint64_t m_Num_W_Hit ;
+        uint64_t m_Num_R_Access ;
+        uint64_t m_Num_R_Hit ;
+        uint32_t m_ReadLatency ;
+        uint32_t m_WriteLatency ;
         uint64_t m_CacheSize ;
         uint32_t m_Num_Set ;
         uint32_t m_Name ;
@@ -36,8 +39,7 @@ class Cache {
     public:
 
         Cache( uint32_t CacheName, uint32_t cache_size, uint32_t blocksize, uint32_t associativity,
-                uint32_t replacePolicy, uint32_t writepolicy ) ;
-
+                uint32_t replacePolicy, uint32_t writepolicy, uint32_t readlatency, uint32_t writelatnecy ) ;
 
         bool AccessCache( uint32_t AccessType, const uint64_t address, Byte * Data, uint32_t length ) ;
 
