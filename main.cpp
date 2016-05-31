@@ -5,6 +5,32 @@
 #include <stdlib.h>
 #include <string.h>
 
+FILE * Log::CacheResultInfoFile = NULL ;
+
+void ExecuteMemOperation( FILE * input, MemSystem * memsystem ) {
+    uint64_t address = 0x0 ;
+    char op = 'x' ;
+    for ( int counter = 1; !feof( input ); counter++ ) {
+        char * addr_s = new char[ 20 ] ;
+        char * op_s = new char[ 2 ] ;
+        fscanf( input, "%s", addr_s ) ;
+        if ( feof( input ) || strcmp( addr_s, "#eof" ) == 0 )
+            break ;
+        fscanf( input, "%s", op_s ) ;
+        address = strtoll( addr_s, NULL, 16 ) ;
+        // Log::PrintMessage( "Instruction id : " + std::to_string(counter) ) ;
+        if ( strcmp( op_s, "R" ) == 0 )
+            memsystem->CoreAccessMem( address, MemSystem::READ, NULL, 8 ) ;
+        else if ( strcmp( op_s, "W" ) == 0 )
+            memsystem->CoreAccessMem( address, MemSystem::WRITE, NULL, 8 ) ;
+        else
+            Log::PrintError( "Unknown memory operation" ) ;
+
+        delete[] addr_s ;
+        delete[] op_s ;
+    }  // while()
+}
+
 int main( int argc, char const *argv[] ) {
 
     if ( argc > 1 ) {
@@ -15,39 +41,41 @@ int main( int argc, char const *argv[] ) {
         }  // if
         else {
             MemSystem * memsystem = NULL ;
+            FILE * input = NULL ;
+            FILE * output = NULL ;
+            char * configFile = NULL ;
+
             for ( int i = 1; i < argc; i = i + 2 ) {
                 if ( strcmp( argv[ i ], "-conf" ) == 0 ) {
-                    Log::PrintMessage( "CfgFile=" + std::string( argv[ i + 1 ] ) ) ;
-                    memsystem = new MemSystem( argv[ i + 1 ] ) ;
+                    Log::PrintMessage( "Confige File = " + std::string( argv[ i + 1 ] ) ) ;
+                    configFile =(char*) argv[ i + 1 ] ;
                 }  // if
 
                 else if ( strcmp( argv[ i ], "-input" ) == 0 ) {
-                    FILE * input = fopen( argv[ i + 1 ], "r" ) ;
+                    input = fopen( argv[ i + 1 ], "r" ) ;
                     if ( input == NULL )
                         Log::PrintError( "Input file error: no this inputfile." ) ;
-                    uint64_t address = 0x0 ;
-                    char op = 'x' ;
-                    for ( int counter = 1; !feof( input ); counter++ ) {
-                        char * addr_s = new char[ 20 ] ;
-                        char * op_s = new char[ 2 ] ;
-                        fscanf( input, "%s", addr_s ) ;
-                        if ( feof( input ) || strcmp( addr_s, "#eof" ) == 0 )
-                            break ;
-                        fscanf( input, "%s", op_s ) ;
-                        address = strtoll( addr_s, NULL, 16 ) ;
-                        // Log::PrintMessage( "Instruction id : " + std::to_string(counter) ) ;
-                        if ( strcmp( op_s, "R" ) == 0 )
-                            memsystem->CoreAccessMem( address, MemSystem::READ, NULL, 8 ) ;
-                        else if ( strcmp( op_s, "W" ) == 0 )
-                            memsystem->CoreAccessMem( address, MemSystem::WRITE, NULL, 8 ) ;
-                        else
-                            Log::PrintError( "Unknown memory operation" ) ;
-
-                        delete[] addr_s ;
-                        delete[] op_s ;
-                    }  // while()
+                    Log::PrintMessage( "Input File Path = " + std::string( argv[ i + 1 ] ) ) ;
+                }  // else if
+                else if ( strcmp( argv[ i ], "-output" ) == 0 ) {
+                    output = fopen( argv[ i + 1 ], "w" ) ;
+                    Log::PrintMessage( "Output File Path = " + std::string( argv[ i + 1 ] ) ) ;
                 }  // else if
             }  // for
+
+            if ( input == NULL )
+                Log::PrintError( "Input file error:There is no inputfile." ) ;
+            else if ( output == NULL ) {
+                output = fopen( "./CacheResultInfo.out", "w" ) ;
+                Log::PrintMessage( "Output File Path = ./CacheResultInfo.out" ) ;
+            }  // else
+            else if ( configFile == NULL ) {
+                Log::PrintMessage( "Configure File error: There is no configure file." ) ;
+            }  // else if
+
+            Log::CacheResultInfoFile = output ;
+            memsystem = new MemSystem( configFile ) ;
+            ExecuteMemOperation( input, memsystem ) ;
 
             for ( int i = 0; i < memsystem->m_Monitor->m_CacheLevel; i++ )
                 memsystem->m_Monitor->OutputCacheInfo( i ) ;

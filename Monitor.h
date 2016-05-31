@@ -11,8 +11,6 @@
 #include <stdio.h>
 
 class Monitor {
-    private:
-        FILE * m_File ;
     public:
         Cache ** m_Cache_list ;
         int m_CacheLevel ;

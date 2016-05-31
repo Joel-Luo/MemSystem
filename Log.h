@@ -15,7 +15,10 @@
 
 class Log {
 
+
+
     public:
+        static FILE * CacheResultInfoFile ;
 
         static void PrintError( std::string ErrorMsg ) {
             printf( "%s\n", ErrorMsg.c_str() ) ;
@@ -35,6 +38,11 @@ class Log {
         static void PrintMessage( std::string Msg ) {
             printf( "%s\n", Msg.c_str() ) ;
         }  // printWarning()
+
+        static void PrintMessageToFile( FILE * outfile, std::string Msg ) {
+            fprintf( outfile, "%s\n", Msg.c_str() ) ;
+        }  // printWarning()
+
 } ;
 
 #endif /* LOG_H_ */

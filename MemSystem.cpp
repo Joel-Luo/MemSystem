@@ -16,7 +16,7 @@ void MemSystem::CreateMemSystem() {
         if ( i == Cache::L1_D ) {
             m_Cache_list[ i ] =
                     new Cache( Cache::L1_D, cfgparser->ParseDevice( "cache_l1_D", "size" ), cfgparser->ParseDevice( "cache_l1_D", "blocksize" ), cfgparser->ParseDevice( "cache_l1", "associativity" ), cfgparser->ParseDevice( "cache_l1_D", "replacepolicy" ), cfgparser->ParseDevice( "cache_l1_D", "writepolicy" ), cfgparser->ParseDevice( "cache_l1_D", "readlatency" ), cfgparser->ParseDevice( "cache_l1_D", "writelatency" ) ) ;
-            Log::PrintMessage( "Create cache: cache_l1_D\tsize: "
+            Log::PrintMessageToFile( Log::CacheResultInfoFile, "Create cache: cache_l1_D\tsize: "
                     + std::to_string( m_Cache_list[ i ]->m_CacheSize >> 10 ) + "\tblocksize:"
                     + std::to_string( m_Cache_list[ i ]->m_BlockSize ) + "\tReadLatency:"
                     + std::to_string( m_Cache_list[ i ]->m_ReadLatency ) + "\tWriteLatency:"
@@ -26,7 +26,7 @@ void MemSystem::CreateMemSystem() {
         else if ( i == Cache::L2 ) {
             m_Cache_list[ i ] =
                     new Cache( Cache::L2, cfgparser->ParseDevice( "cache_l2", "size" ), cfgparser->ParseDevice( "cache_l2", "blocksize" ), cfgparser->ParseDevice( "cache_l2", "associativity" ), cfgparser->ParseDevice( "cache_l2", "replacepolicy" ), cfgparser->ParseDevice( "cache_l2", "writepolicy" ), cfgparser->ParseDevice( "cache_l2", "readlatency" ), cfgparser->ParseDevice( "cache_l2", "writelatency" ) ) ;
-            Log::PrintMessage( "Create cache: cache_l2\t\tsize: "
+            Log::PrintMessageToFile( Log::CacheResultInfoFile, "Create cache: cache_l2\t\tsize: "
                     + std::to_string( m_Cache_list[ i ]->m_CacheSize >> 10 ) + "\tblocksize:"
                     + std::to_string( m_Cache_list[ i ]->m_BlockSize ) + "\tReadLatency:"
                     + std::to_string( m_Cache_list[ i ]->m_ReadLatency ) + "\tWriteLatency:"
@@ -37,7 +37,7 @@ void MemSystem::CreateMemSystem() {
         else if ( i == Cache::L3 ) {
             m_Cache_list[ i ] =
                     new Cache( Cache::L3, cfgparser->ParseDevice( "cache_l3", "size" ), cfgparser->ParseDevice( "cache_l3", "blocksize" ), cfgparser->ParseDevice( "cache_l3", "associativity" ), cfgparser->ParseDevice( "cache_l3", "replacepolicy" ), cfgparser->ParseDevice( "cache_l3", "writepolicy" ), cfgparser->ParseDevice( "cache_l3", "readlatency" ), cfgparser->ParseDevice( "cache_l3", "writelatency" ) ) ;
-            Log::PrintMessage( "Create cache: cache_l3\t\tsize: "
+            Log::PrintMessageToFile( Log::CacheResultInfoFile, "Create cache: cache_l3\t\tsize: "
                     + std::to_string( m_Cache_list[ i ]->m_CacheSize >> 10 ) + "\tblocksize:"
                     + std::to_string( m_Cache_list[ i ]->m_BlockSize ) + "\tReadLatency:"
                     + std::to_string( m_Cache_list[ i ]->m_ReadLatency ) + "\tWriteLatency:"

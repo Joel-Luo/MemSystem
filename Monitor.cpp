@@ -8,7 +8,6 @@
 #include "Log.h"
 Monitor::Monitor( int level, Cache ** CL ) {
     m_Cache_list = CL ;
-    m_File = NULL ;
     m_CacheLevel = level ;
 }  // Monitor::Monitor()
 
@@ -30,7 +29,7 @@ void Monitor::OutputCacheInfo( int CacheType ) {
     int Load_l = ( CacheType + 1 < m_CacheLevel ) ? m_Cache_list[ CacheType + 1 ]->m_ReadLatency : 50 ;
     Load_l += write_l ;
 
-    Log::PrintMessage( "\nL" + std::to_string( CacheType + 1 ) + " info :\nw_access: " + std::to_string( w_access )
+    Log::PrintMessageToFile( Log::CacheResultInfoFile, "L" + std::to_string( CacheType + 1 ) + " info :\nw_access: " + std::to_string( w_access )
             + "\tw_miss: " + std::to_string( w_miss ) + "\tw_miss rate: " + std::to_string( w_rate ) + "%"
             + "\nr_access: " + std::to_string( r_access ) + "\tr_miss: " + std::to_string( r_miss ) + "\tr_miss rate: "
             + std::to_string( r_rate ) + "%" + "\nt_access: " + std::to_string( t_access ) + "\tt_miss: "
@@ -38,6 +37,6 @@ void Monitor::OutputCacheInfo( int CacheType ) {
 
     int tr_l = ( m_Cache_list[ CacheType ]->m_Num_R_Hit * read_l ) + ( r_miss * ( read_l + Load_l ) ) ;
     int tw_l = ( m_Cache_list[ CacheType ]->m_Num_W_Hit * write_l ) + ( w_miss * ( write_l + Load_l ) ) ;
-    Log::PrintMessage( "Read Latency: " + std::to_string( tr_l ) + "\tWrite Latency: " + std::to_string( tw_l ) ) ;
+    Log::PrintMessageToFile( Log::CacheResultInfoFile, "Read Latency: " + std::to_string( tr_l ) + "\tWrite Latency: " + std::to_string( tw_l ) ) ;
 
 }  // Monitor::OutputL1CacheInfo()
