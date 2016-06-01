@@ -1,0 +1,18 @@
+Create cache: cache_l1_D	size: 64	blocksize:64	ReadLatency:3	WriteLatency:3
+Create cache: cache_l2		size: 4096	blocksize:64	ReadLatency:9	WriteLatency:9
+Create cache: cache_l3		size: 8192	blocksize:64	ReadLatency:25	WriteLatency:25
+L1 info :
+w_access: 151661806	w_miss: 72265384	w_miss rate: 47.649033%
+r_access: 348336580	r_miss: 190078108	r_miss rate: 54.567369%
+t_access: 499998386	t_miss: 262343492	w_miss rate: 52.468868%
+Read Latency: 3325947036	Write Latency: 1322170026
+L2 info :
+w_access: 524686964	w_miss: 1	w_miss rate: 0.000000%
+r_access: 524686984	r_miss: 270315	r_miss rate: 0.051519%
+t_access: 1049373948	t_miss: 270316	w_miss rate: 0.025760%
+Read Latency: 4731373566	Write Latency: 4722182710
+L3 info :
+w_access: 0	w_miss: 0	w_miss rate: -nan%
+r_access: 540632	r_miss: 398	r_miss rate: 0.073618%
+t_access: 540632	t_miss: 398	w_miss rate: 0.073618%
+Read Latency: 13545650	Write Latency: 0

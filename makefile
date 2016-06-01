@@ -1,4 +1,4 @@
-all:	MemSystem clean
+all:	MemSystem rmobj
 CC = g++
 CFLAGS = -std=c++11
 
@@ -11,4 +11,6 @@ MemSystem:	*.o
 
 .PHONY: clean
 clean:
-	rm -f *.o
+	rm -f *.o MemSystem
+rmobj:
+	rm -f *.o       
