@@ -107,10 +107,10 @@ void MemContoller::CoreAccessMem( const uint64_t accessTime, const uint64_t addr
             m_Cache_list[ 0 ]->m_Num_R_Hit++ ;
         }  // else
 
-
+/*
          Log::PrintDebugLog( "CACHE L1 hit  : address:" ) ;
          printf( "0x%016llX length: %d\n", ( long long ) address, length ) ;
-
+*/
     }  // if
 
     else {  // miss
@@ -119,10 +119,10 @@ void MemContoller::CoreAccessMem( const uint64_t accessTime, const uint64_t addr
         else
             m_Cache_list[ 0 ]->m_Num_R_Access++ ;
 
-
+/*
          Log::PrintDebugLog( "CACHE L1 miss : address:" ) ;
          printf( "0x%016llX length: %d\n", ( long long ) address, length ) ;
-
+*/
 
         uint64_t tag ;
         uint32_t set_index, block_offset ;
@@ -184,10 +184,10 @@ void MemContoller::AccessNextLevel( uint32_t Cachetype, const uint64_t accessTim
                 m_Cache_list[ Cachetype ]->m_Num_R_Access++ ;
                 m_Cache_list[ Cachetype ]->m_Num_R_Hit++ ;
             }  // else
-
+/*
              Log::PrintDebugLog( "CACHE L"+ std::to_string(Cachetype+1) + " hit  : address:" ) ;
              printf( "0x%016llX length: %d\n", ( long long ) address, length ) ;
-
+*/
         }  // if
 
         else {  // miss
@@ -196,11 +196,10 @@ void MemContoller::AccessNextLevel( uint32_t Cachetype, const uint64_t accessTim
             else
                 m_Cache_list[ Cachetype ]->m_Num_R_Access++ ;
 
-            Log::PrintMessage( "here" + std::to_string(m_Cache_list[ Cachetype ]->m_Num_R_Access)) ;
-
+/*
              Log::PrintDebugLog( "CACHE L"+ std::to_string(Cachetype+1) + " miss : address:" ) ;
              printf( "0x%016llX length: %d\n", ( long long ) address, length ) ;
-
+*/
 
             uint64_t tag ;
             uint32_t set_index, block_offset ;
