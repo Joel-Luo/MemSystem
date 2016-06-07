@@ -27,19 +27,35 @@ uint32_t Cache::floorLog2( uint32_t number ) {
     return p ;
 }  // Cache::floorLog2()
 
-Cache::Cache( uint32_t CacheName, uint32_t cache_size, uint32_t blocksize, uint32_t associativity,
-        uint32_t replacePolicy, uint32_t writepolicy, uint32_t readlatency, uint32_t writelatnecy ) :
-        m_Name( CacheName ), m_CacheSize( cache_size << 10 ), m_BlockSize( blocksize ), m_Num_W_Access( 0 ), m_Num_W_Hit( 0 ), m_Num_R_Access( 0 ), m_Num_R_Hit( 0 ), m_Sets(
-        NULL ), m_Num_Set( 0 ), m_ReplacePolicy( replacePolicy ), m_WritePolicy( writepolicy ), m_ReadLatency( readlatency ), m_WriteLatency( writelatnecy ) {
+Cache::Cache( uint32_t CacheName, uint8_t CacheType, uint32_t cache_size, uint32_t blocksize, uint32_t associativity,
+        uint32_t replacePolicy, uint32_t writepolicy, uint8_t readlatency, uint8_t writelatnecy ) :
+        m_Name( CacheName ), m_CacheType( CacheType ), m_CacheSize( cache_size << 10 ), m_BlockSize( blocksize ), m_Num_W_Access( 0 ), m_Num_W_Hit( 0 ), m_Num_R_Access( 0 ), m_Num_R_Hit( 0 ), m_Sets(
+        NULL ), m_Num_Set( 0 ), m_ReplacePolicy( replacePolicy ), m_WritePolicy( writepolicy ), m_ReadLatency( readlatency ), m_WriteLatency( writelatnecy )   {
     m_BlockSize_log2 = Cache::floorLog2( blocksize ) ;
     m_Associativity_log2 = Cache::floorLog2( associativity ) ;
     m_Num_Set = m_CacheSize >> ( m_BlockSize_log2 + m_Associativity_log2 ) ;
     m_Sets = new Cache_Set*[ m_Num_Set ] ;
 
-    for ( int i = 0; i < m_Num_Set; i++ )
-        m_Sets[ i ] = new Cache_Set( blocksize, associativity, replacePolicy, writepolicy ) ;
+    if ( CacheType == CACHE )
+        for ( int i = 0; i < m_Num_Set; i++ )
+            m_Sets[ i ] = new Cache_Set( blocksize, associativity, replacePolicy, writepolicy, readlatency, writelatnecy ) ;
 
 }  // Cache::Cache()
+
+void Cache::BuildHybridCache( uint8_t numofcellType, uint8_t numofsub, uint8_t * size, uint32_t * retentiontime, uint8_t * readlatency, uint8_t * writelatency, uint32_t blocksize, uint32_t associativity, uint32_t replacePolicy, uint32_t writepolicy ) {
+
+    int setsize = 0 ;
+      int nowIndex = 0 ;
+      for ( int i = 0 ; i < numofcellType ; i++ ) {
+        setsize += ( m_Num_Set / numofsub ) * size[i] ;
+        for ( ; nowIndex < setsize ; nowIndex++ )
+            m_Sets[ nowIndex ] = new Cache_Set( blocksize, associativity, replacePolicy, writepolicy, readlatency[i], writelatency[i], retentiontime[i] ) ;
+      }  // for
+      delete [] size ;
+      delete [] retentiontime ;
+      delete [] readlatency ;
+      delete [] writelatency ;
+}  // Cache::BuildHybridCache
 
 void Cache::SplitAddress( const uint64_t addr, uint64_t& tag, uint32_t& associ_index, uint32_t& block_offset ) {
 
@@ -51,7 +67,8 @@ void Cache::SplitAddress( const uint64_t addr, uint64_t& tag, uint32_t& associ_i
 
 }  // Cache::SplitAddress()
 
-bool Cache::AccessCache( uint32_t AccessType, const uint64_t address, Byte * Data, uint32_t length ) {
+bool Cache::AccessCache( uint32_t AccessType, const uint64_t accessTime, const uint64_t address, Byte * Data,
+        uint32_t length ) {
 
     uint64_t tag ;
     uint32_t index, block_offset ;
@@ -103,7 +120,7 @@ void Cache::LoadCacheBlock( uint64_t tag, uint32_t set_index, Byte * in ) {
 
 }  // Cache::LoadCacheBlock()
 
-void Cache::StoreCacheBlock( uint64_t tag, uint32_t set_index, uint64_t & TatgetAddr, Byte * out ) {
+void Cache::StoreCacheBlock( uint32_t set_index, uint64_t & TatgetAddr, Byte * out ) {
 
     uint8_t way_index = m_Sets[ set_index ]->m_RP_Manager->GetReplaceIndex() ;
     m_Sets[ set_index ]->m_Way[ way_index ].Valid = false ;
@@ -111,3 +128,10 @@ void Cache::StoreCacheBlock( uint64_t tag, uint32_t set_index, uint64_t & Tatget
 
 }  // Cache::StoreCacheBlock()
 
+bool Cache::CalRTime( uint32_t set_index, uint32_t & wayindex, uint64_t accessTime,  Byte * out) {
+
+  return false ;
+}  // Cache::CalRTime()
+void Cache::UpdateTimeStamp(  uint32_t set_index, uint32_t & wayindex, uint64_t accessTime) {
+
+}  // Cache::UpdateTimeStamp()

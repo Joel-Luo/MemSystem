@@ -35,19 +35,27 @@ class Cache_Set {
                 bool Valid ;
                 bool Dirty ;
                 uint64_t tag ;
+                uint64_t timeStamp ;
                 Byte * m_Data ;  // Data size = blocksize
         } ;
 
         Way * m_Way ;
         ReplaceManager * m_RP_Manager ;
+        uint32_t m_RetentionTime ;
+
+        uint8_t m_ReadLatency ;
+        uint8_t m_WriteLatency ;
+
     private:
         uint32_t m_Associativity ;
         uint32_t m_BlockSize ;
         uint32_t m_WritePolicy ;
 
+
     public:
 
-        Cache_Set( uint32_t blocksize, uint32_t associativity, uint32_t replacePolicy, uint32_t writePolicy ) ;
+        Cache_Set( uint32_t blocksize, uint32_t associativity, uint32_t replacePolicy, uint32_t writePolicy, uint8_t ReadLatency, uint8_t WriteLatency ) ;
+        Cache_Set( uint32_t blocksize, uint32_t associativity, uint32_t replacePolicy, uint32_t writePolicy, uint8_t ReadLatency, uint8_t WriteLatency, uint32_t retentionTime ) ;
 
         uint32_t FindTagInWay( uint64_t tag ) ;
 

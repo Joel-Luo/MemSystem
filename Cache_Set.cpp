@@ -31,8 +31,8 @@ void ReplaceManager::UpdateRecord( uint8_t index ) {
        // TODO  else if ( m_RP == ROUND_ROBIN ) ;
 }  //  ReplaceManager::UpdateRecord()
 
-Cache_Set::Cache_Set( uint32_t blocksize, uint32_t associativity, uint32_t replacePolicy, uint32_t writePolicy ) :
-        m_BlockSize( blocksize ), m_Associativity( associativity ), m_WritePolicy( writePolicy ) {
+Cache_Set::Cache_Set( uint32_t blocksize, uint32_t associativity, uint32_t replacePolicy, uint32_t writePolicy, uint8_t ReadLatency, uint8_t WriteLatency  ) :
+        m_BlockSize( blocksize ), m_Associativity( associativity ), m_WritePolicy( writePolicy ), m_RetentionTime(0), m_ReadLatency(ReadLatency), m_WriteLatency(WriteLatency){
     m_RP_Manager = new ReplaceManager( associativity, REPLACEPOLICY::LRU ) ;
     m_Way = new Way[ m_Associativity ] ;
     for ( int i = 0; i < m_Associativity; i++ ) {
@@ -48,6 +48,22 @@ Cache_Set::Cache_Set( uint32_t blocksize, uint32_t associativity, uint32_t repla
 
 }  // Cache_Set::Cache_Set
 
+Cache_Set::Cache_Set( uint32_t blocksize, uint32_t associativity, uint32_t replacePolicy, uint32_t writePolicy, uint8_t ReadLatency, uint8_t WriteLatency, uint32_t retentionTime  ) :
+        m_BlockSize( blocksize ), m_Associativity( associativity ), m_WritePolicy( writePolicy ), m_RetentionTime( retentionTime ), m_ReadLatency(ReadLatency), m_WriteLatency(WriteLatency) {
+    m_RP_Manager = new ReplaceManager( associativity, REPLACEPOLICY::LRU ) ;
+    m_Way = new Way[ m_Associativity ] ;
+    for ( int i = 0; i < m_Associativity; i++ ) {
+        m_Way[ i ].tag = -1 ;
+        m_Way[ i ].Valid = false ;
+        m_Way[ i ].Dirty = false ;
+#ifdef SIM_DATA
+        m_Way[ i ].m_Data = new Byte [ m_BlockSize ] ;
+#else
+        m_Way[ i ].m_Data = NULL ;
+#endif
+    }  // for
+
+}  // Cache_Set::Cache_Set
 void Cache_Set::ReadData( Byte * out, uint32_t way_index, uint32_t offset, uint32_t length ) {
     if ( out != NULL )
         memcpy( out, m_Way[ way_index ].m_Data + offset, length ) ;

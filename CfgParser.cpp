@@ -61,6 +61,14 @@ uint64_t CfgParser::CacheParamter( string tag, string value ) {
                 return WRITEPOLICY::WRITE_TROUGH ;
         }  // else if
 
+        else if ( tag.compare( "type" ) == 0 ) {
+            if ( value.compare( "Cache" ) == 0 )
+                return Cache::CACHE ;
+            else if ( value.compare( "hybridcache" ) == 0 )
+                return Cache::HYBRIDCACHE ;
+        }  // else if
+
+
         else
             return std::stoul( value ) ;  // level, size, blocksize, associativity
 

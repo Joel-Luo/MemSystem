@@ -15,7 +15,9 @@ class MemSystem {
             L1_D = 0, L2, L3, MAINMEM
         } ;
 
+
     private:
+        uint8_t * m_CacheType ;
         Cache ** m_Cache_list ;
         uint32_t m_Cache_level ;
         CfgParser * cfgparser ;
@@ -25,9 +27,9 @@ class MemSystem {
 
         MemSystem( const char * cfg ) ;
 
-        void CoreAccessMem( const uint64_t address, const uint32_t AccessType, Byte* Data, uint32_t length ) ;
+        void CoreAccessMem( const uint64_t accessTime, const uint64_t address, const uint32_t AccessType, Byte* Data, uint32_t length ) ;
 
-        void AccessNextLevel( uint32_t Cachetype, const uint64_t address, const uint32_t AccessType, Byte* Data,
+        void AccessNextLevel( uint32_t Cachetype, const uint64_t accessTime, const uint64_t address, const uint32_t AccessType, Byte* Data,
                 uint32_t length ) ;
 
     private:

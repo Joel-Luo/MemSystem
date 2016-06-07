@@ -8,25 +8,28 @@
 FILE * Log::CacheResultInfoFile = NULL ;
 
 void ExecuteMemOperation( FILE * input, MemSystem * memsystem ) {
+    uint64_t accessTime = 0x0 ;
     uint64_t address = 0x0 ;
     char op = 'x' ;
     for ( int counter = 1; !feof( input ); counter++ ) {
-        char * addr_s = new char[ 20 ] ;
+        char * tempStr = new char[ 20 ] ;
         char * op_s = new char[ 2 ] ;
-        fscanf( input, "%s", addr_s ) ;
-        if ( feof( input ) || strcmp( addr_s, "#eof" ) == 0 )
+        fscanf( input, "%s", tempStr ) ;
+        if ( feof( input ) || strcmp( tempStr, "#eof" ) == 0 )
             break ;
+        accessTime = strtoll( tempStr, NULL, 16 ) ;
+        fscanf( input, "%s", tempStr ) ;
+        address = strtoll( tempStr, NULL, 16 ) ;
         fscanf( input, "%s", op_s ) ;
-        address = strtoll( addr_s, NULL, 16 ) ;
         // Log::PrintMessage( "Instruction id : " + std::to_string(counter) ) ;
         if ( strcmp( op_s, "R" ) == 0 )
-            memsystem->CoreAccessMem( address, MemSystem::READ, NULL, 8 ) ;
+            memsystem->CoreAccessMem( accessTime, address, MemSystem::READ, NULL, 8 ) ;
         else if ( strcmp( op_s, "W" ) == 0 )
-            memsystem->CoreAccessMem( address, MemSystem::WRITE, NULL, 8 ) ;
+            memsystem->CoreAccessMem( accessTime, address, MemSystem::WRITE, NULL, 8 ) ;
         else
             Log::PrintError( "Unknown memory operation" ) ;
 
-        delete[] addr_s ;
+        delete[] tempStr ;
         delete[] op_s ;
     }  // while()
 }
