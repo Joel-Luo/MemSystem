@@ -4,7 +4,7 @@
 #include "MainMemory.h"
 #include "CfgParser.h"
 #include "Monitor.h"
-class MemSystem {
+class MemContoller {
 
     public:
         enum ACCESSTYPE {
@@ -25,7 +25,7 @@ class MemSystem {
     public:
         Monitor * m_Monitor ;
 
-        MemSystem( const char * cfg ) ;
+        MemContoller( const char * cfg ) ;
 
         void CoreAccessMem( const uint64_t accessTime, const uint64_t address, const uint32_t AccessType, Byte* Data, uint32_t length ) ;
 
@@ -36,6 +36,7 @@ class MemSystem {
 
         void CreateMemSystem() ;
 
+        void CacheMigrationContrl() ;
 } ;
 
 #endif

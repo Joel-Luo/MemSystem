@@ -1,13 +1,13 @@
 #include <stdio.h>
-#include "MemSystem.h"
 #include "Log.h"
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
+#include "MemContoller.h"
 
 FILE * Log::CacheResultInfoFile = NULL ;
 
-void ExecuteMemOperation( FILE * input, MemSystem * memsystem ) {
+void ExecuteMemOperation( FILE * input, MemContoller * memsystem ) {
     uint64_t accessTime = 0x0 ;
     uint64_t address = 0x0 ;
     char op = 'x' ;
@@ -23,9 +23,9 @@ void ExecuteMemOperation( FILE * input, MemSystem * memsystem ) {
         fscanf( input, "%s", op_s ) ;
         // Log::PrintMessage( "Instruction id : " + std::to_string(counter) ) ;
         if ( strcmp( op_s, "R" ) == 0 )
-            memsystem->CoreAccessMem( accessTime, address, MemSystem::READ, NULL, 8 ) ;
+            memsystem->CoreAccessMem( accessTime, address, MemContoller::READ, NULL, 8 ) ;
         else if ( strcmp( op_s, "W" ) == 0 )
-            memsystem->CoreAccessMem( accessTime, address, MemSystem::WRITE, NULL, 8 ) ;
+            memsystem->CoreAccessMem( accessTime, address, MemContoller::WRITE, NULL, 8 ) ;
         else
             Log::PrintError( "Unknown memory operation" ) ;
 
@@ -43,7 +43,7 @@ int main( int argc, char const *argv[] ) {
 
         }  // if
         else {
-            MemSystem * memsystem = NULL ;
+            MemContoller * memsystem = NULL ;
             FILE * input = NULL ;
             FILE * output = NULL ;
             char * configFile = NULL ;
@@ -77,7 +77,7 @@ int main( int argc, char const *argv[] ) {
             }  // else if
 
             Log::CacheResultInfoFile = output ;
-            memsystem = new MemSystem( configFile ) ;
+            memsystem = new MemContoller( configFile ) ;
             ExecuteMemOperation( input, memsystem ) ;
 
             for ( int i = 0; i < memsystem->m_Monitor->m_CacheLevel; i++ )

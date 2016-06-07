@@ -68,28 +68,32 @@ void Cache::SplitAddress( const uint64_t addr, uint64_t& tag, uint32_t& associ_i
 }  // Cache::SplitAddress()
 
 bool Cache::AccessCache( uint32_t AccessType, const uint64_t accessTime, const uint64_t address, Byte * Data,
-        uint32_t length ) {
+        uint32_t length, bool & timeUpWriteBack, Byte * WBData ) {
 
     uint64_t tag ;
     uint32_t index, block_offset ;
     SplitAddress( address, tag, index, block_offset ) ;
 
     uint32_t way_index = m_Sets[ index ]->FindTagInWay( tag ) ;
+
+    if ( way_index != -1 )
+        timeUpWriteBack = RetentionTimeUp( index, way_index, accessTime, WBData ) ;
+
     if ( way_index == -1 )
         return false ;  // cache miss
 
     if ( AccessType == Cache::READ ) {
-
         m_Sets[ index ]->ReadData( Data, way_index, block_offset, length ) ;
     }  // if
 
     else if ( AccessType == Cache::WRITE ) {
+        UpdateTimeStamp( index, way_index, accessTime ) ;
         if ( m_WritePolicy == WRITE_BACK )
             m_Sets[ index ]->m_Way[ way_index ].Dirty = true ;
         m_Sets[ index ]->WriteData( Data, way_index, block_offset, length ) ;
     }  // else if
 
-    m_Sets[ index ]->m_RP_Manager->UpdateRecord( way_index ) ;
+    m_Sets[ index ]->m_RP_Manager->UpdateRecord( way_index, true  ) ;
     return true ;
 }  // Cache::AccessSingleLine
 
@@ -115,7 +119,7 @@ void Cache::LoadCacheBlock( uint64_t tag, uint32_t set_index, Byte * in ) {
     uint8_t way_index = m_Sets[ set_index ]->m_RP_Manager->GetReplaceIndex() ;
     m_Sets[ set_index ]->m_Way[ way_index ].Valid = true ;
     m_Sets[ set_index ]->m_Way[ way_index ].tag = tag ;
-    m_Sets[ set_index ]->m_RP_Manager->UpdateRecord( way_index ) ;
+    m_Sets[ set_index ]->m_RP_Manager->UpdateRecord( way_index, true ) ;
     m_Sets[ set_index ]->WriteData( in, way_index, 0, m_BlockSize ) ;
 
 }  // Cache::LoadCacheBlock()
@@ -128,10 +132,22 @@ void Cache::StoreCacheBlock( uint32_t set_index, uint64_t & TatgetAddr, Byte * o
 
 }  // Cache::StoreCacheBlock()
 
-bool Cache::CalRTime( uint32_t set_index, uint32_t & wayindex, uint64_t accessTime,  Byte * out) {
+bool Cache::RetentionTimeUp( uint32_t set_index, uint32_t & wayindex, uint64_t accessTime,  Byte * out) {
 
-  return false ;
+    uint64_t lasttime = m_Sets[set_index]->m_Way[wayindex].timeStamp ;
+    if ( lasttime == -1 ) return false ;
+    uint64_t timelength = accessTime - lasttime ;
+
+    if ( timelength >= m_Sets[set_index]->m_RetentionTime ) {
+        m_Sets[ set_index ]->ReadData( out, wayindex, 0, m_BlockSize ) ;
+        m_Sets[set_index]->m_Way[wayindex].Valid = false ;
+        m_Sets[ set_index ]->m_RP_Manager->UpdateRecord( wayindex, false ) ;
+        wayindex = -1 ;
+        return true ;
+    }  // if
+    else return false ;
+
 }  // Cache::CalRTime()
-void Cache::UpdateTimeStamp(  uint32_t set_index, uint32_t & wayindex, uint64_t accessTime) {
-
+void Cache::UpdateTimeStamp(  uint32_t set_index, uint32_t  wayindex, uint64_t accessTime) {
+    m_Sets[set_index]->m_Way[wayindex].timeStamp = accessTime ;
 }  // Cache::UpdateTimeStamp()

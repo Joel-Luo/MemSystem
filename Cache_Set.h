@@ -24,7 +24,7 @@ class ReplaceManager {
     public:
         ReplaceManager( uint32_t way, uint32_t rp ) ;
         uint8_t GetReplaceIndex() ;
-        void UpdateRecord( uint8_t index ) ;
+        void UpdateRecord( uint8_t index, bool Endposition  ) ;
 
 } ;
 

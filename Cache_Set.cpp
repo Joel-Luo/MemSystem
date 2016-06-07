@@ -18,18 +18,22 @@ uint8_t ReplaceManager::GetReplaceIndex() {
     return -1 ;
 }  //  ReplaceManager::GetReplaceIndex()
 
-void ReplaceManager::UpdateRecord( uint8_t index ) {
+void ReplaceManager::UpdateRecord( uint8_t index, bool Endposition ) {
     if ( m_ReplacePolicy == LRU ) {
         for ( int i = 0; i < m_Record->size(); i++ ) {
             if ( ( *m_Record )[ i ] == index ) {
                 m_Record->erase( m_Record->begin() + i ) ;
-                m_Record->push_back( index ) ;
+                if ( Endposition )
+                  m_Record->push_back( index ) ;
+                else
+                    m_Record->insert( m_Record->begin(), index ) ;
                 return ;
             }  // if
         }  // for
     }  // if
        // TODO  else if ( m_RP == ROUND_ROBIN ) ;
 }  //  ReplaceManager::UpdateRecord()
+
 
 Cache_Set::Cache_Set( uint32_t blocksize, uint32_t associativity, uint32_t replacePolicy, uint32_t writePolicy, uint8_t ReadLatency, uint8_t WriteLatency  ) :
         m_BlockSize( blocksize ), m_Associativity( associativity ), m_WritePolicy( writePolicy ), m_RetentionTime(0), m_ReadLatency(ReadLatency), m_WriteLatency(WriteLatency){
@@ -44,6 +48,7 @@ Cache_Set::Cache_Set( uint32_t blocksize, uint32_t associativity, uint32_t repla
 #else
         m_Way[ i ].m_Data = NULL ;
 #endif
+        m_Way[i].timeStamp = -1 ;
     }  // for
 
 }  // Cache_Set::Cache_Set
@@ -61,6 +66,7 @@ Cache_Set::Cache_Set( uint32_t blocksize, uint32_t associativity, uint32_t repla
 #else
         m_Way[ i ].m_Data = NULL ;
 #endif
+        m_Way[i].timeStamp = -1 ;
     }  // for
 
 }  // Cache_Set::Cache_Set
