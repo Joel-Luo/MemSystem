@@ -76,7 +76,7 @@ bool Cache::AccessCache( uint32_t AccessType, const uint64_t accessTime, const u
 
     uint32_t way_index = m_Sets[ index ]->FindTagInWay( tag ) ;
 
-    if ( way_index != -1 )
+    if ( m_CacheType == HYBRIDCACHE && way_index != -1 )
         timeUpWriteBack = RetentionTimeUp( index, way_index, accessTime, WBData ) ;
 
     if ( way_index == -1 )
@@ -137,7 +137,6 @@ bool Cache::RetentionTimeUp( uint32_t set_index, uint32_t & wayindex, uint64_t a
     uint64_t lasttime = m_Sets[set_index]->m_Way[wayindex].timeStamp ;
     if ( lasttime == -1 ) return false ;
     uint64_t timelength = accessTime - lasttime ;
-
     if ( timelength >= m_Sets[set_index]->m_RetentionTime ) {
         m_Sets[ set_index ]->ReadData( out, wayindex, 0, m_BlockSize ) ;
         m_Sets[set_index]->m_Way[wayindex].Valid = false ;

@@ -66,7 +66,7 @@ Cache_Set::Cache_Set( uint32_t blocksize, uint32_t associativity, uint32_t repla
 #else
         m_Way[ i ].m_Data = NULL ;
 #endif
-        m_Way[i].timeStamp = -1 ;
+        m_Way[i].timeStamp = 0 ;
     }  // for
 
 }  // Cache_Set::Cache_Set
