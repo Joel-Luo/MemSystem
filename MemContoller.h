@@ -4,6 +4,7 @@
 #include "MainMemory.h"
 #include "CfgParser.h"
 #include "Monitor.h"
+#include "Cache_Ctrl.h"
 class MemContoller {
 
     public:
@@ -19,6 +20,7 @@ class MemContoller {
     private:
         uint8_t * m_CacheType ;
         Cache ** m_Cache_list ;
+        Cache_Ctrl ** m_CacheCtrl_list ;
         uint32_t m_Cache_level ;
         CfgParser * cfgparser ;
 

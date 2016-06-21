@@ -14,6 +14,7 @@ void MemContoller::CreateMemSystem() {
     Log::PrintMessageToFile( Log::CacheResultInfoFile, "========== Cache Configuration ==========" ) ;
     m_Cache_level = cfgparser->ParseDevice( "cache_level", "level" ) ;
     m_Cache_list = new Cache*[ m_Cache_level ] ;
+    m_CacheCtrl_list = new Cache_Ctrl*[ m_Cache_level ] ;
     m_CacheType = new uint8_t [ m_Cache_level ] ;
     for ( int i = 0; i < m_Cache_level; i++ ) {
         if ( i == Cache::L1_D ) {
@@ -25,6 +26,9 @@ void MemContoller::CreateMemSystem() {
                     + std::to_string( m_Cache_list[ i ]->m_BlockSize ) + "\tReadLatency:"
                     + std::to_string( m_Cache_list[ i ]->m_ReadLatency ) + "\tWriteLatency:"
                     + std::to_string( m_Cache_list[ i ]->m_WriteLatency ) ) ;
+
+            m_CacheCtrl_list[ i ] = new Cache_Ctrl( m_Cache_list[ i ] ) ;
+
         }   // if
 
         else if ( i == Cache::L2 ) {
@@ -55,7 +59,7 @@ void MemContoller::CreateMemSystem() {
                                       + std::to_string( writel[ii]) ) ;
                 }  // for
 
-                m_Cache_list[ i ]->BuildHybridCache( numOfCellType, numofsub, size, retentiontime, readl, writel, cfgparser->ParseDevice( "cache_l3", "blocksize" ), cfgparser->ParseDevice( "cache_l3", "associativity" ), cfgparser->ParseDevice( "cache_l3", "replacepolicy" ), cfgparser->ParseDevice( "cache_l3", "writepolicy" ) ) ;
+                m_Cache_list[ i ]->BuildHybridCache( numOfCellType, numofsub, size, retentiontime, readl, writel, cfgparser->ParseDevice( "cache_l2", "blocksize" ), cfgparser->ParseDevice( "cache_l2", "associativity" ), cfgparser->ParseDevice( "cache_l2", "replacepolicy" ), cfgparser->ParseDevice( "cache_l2", "writepolicy" ) ) ;
 
 
             } // if
@@ -67,6 +71,8 @@ void MemContoller::CreateMemSystem() {
                                     + std::to_string( m_Cache_list[ i ]->m_ReadLatency ) + "\tWriteLatency:"
                                     + std::to_string( m_Cache_list[ i ]->m_WriteLatency ) ) ;
             }  // else
+            m_CacheCtrl_list[ i ] = new Cache_Ctrl( m_Cache_list[ i ] ) ;
+            m_CacheCtrl_list[ i-1 ]->SetNextLevelCacheCtrl( m_CacheCtrl_list[i] ) ;
         }  // else if
 
         else if ( i == Cache::L3 ) {
@@ -78,10 +84,13 @@ void MemContoller::CreateMemSystem() {
                     + std::to_string( m_Cache_list[ i ]->m_BlockSize ) + "\tReadLatency:"
                     + std::to_string( m_Cache_list[ i ]->m_ReadLatency ) + "\tWriteLatency:"
                     + std::to_string( m_Cache_list[ i ]->m_WriteLatency ) ) ;
-
+            m_CacheCtrl_list[ i ] = new Cache_Ctrl( m_Cache_list[ i ] ) ;
+            m_CacheCtrl_list[ i-1 ]->SetNextLevelCacheCtrl( m_CacheCtrl_list[i] ) ;
         }  // else if
     }  // for ()
 
+    // connect memory control , now assume is null
+    m_CacheCtrl_list[ m_Cache_level -1 ]->SetNextLevelCacheCtrl( NULL ) ;
 
     m_Monitor = new Monitor( m_Cache_level, m_Cache_list ) ;
     Log::PrintMessageToFile( Log::CacheResultInfoFile, "========== End of Cache Configuration ==========\n" ) ;
@@ -90,159 +99,6 @@ void MemContoller::CreateMemSystem() {
 
 void MemContoller::CoreAccessMem( const uint64_t accessTime, const uint64_t address, const uint32_t AccessType, Byte* Data, uint32_t length ) {
 
-    bool TimeUpWriteBack = false ;
-#ifdef SIM_DATA
-        Byte * wire_L1ToL2 = new Byte[ m_Cache_list[ 0 ]->m_BlockSize ] ;
-#else
-        Byte * wire_L1ToL2 = NULL ;
-#endif
-
-    if ( m_Cache_list[ 0 ]->AccessCache( AccessType, accessTime , address, Data, length, TimeUpWriteBack, wire_L1ToL2 ) ) {  // hit
-        if ( AccessType == Cache::WRITE ) {
-            m_Cache_list[ 0 ]->m_Num_W_Access++ ;
-            m_Cache_list[ 0 ]->m_Num_W_Hit++ ;
-        }  // if
-        else {
-            m_Cache_list[ 0 ]->m_Num_R_Access++ ;
-            m_Cache_list[ 0 ]->m_Num_R_Hit++ ;
-        }  // else
-
-/*
-         Log::PrintDebugLog( "CACHE L1 hit  : address:" ) ;
-         printf( "0x%016llX length: %d\n", ( long long ) address, length ) ;
-*/
-    }  // if
-
-    else {  // miss
-        if ( AccessType == Cache::WRITE )
-            m_Cache_list[ 0 ]->m_Num_W_Access++ ;
-        else
-            m_Cache_list[ 0 ]->m_Num_R_Access++ ;
-
-/*
-         Log::PrintDebugLog( "CACHE L1 miss : address:" ) ;
-         printf( "0x%016llX length: %d\n", ( long long ) address, length ) ;
-*/
-
-        uint64_t tag ;
-        uint32_t set_index, block_offset ;
-        m_Cache_list[ 0 ]->SplitAddress( address, tag, set_index, block_offset ) ;
-
-        if ( TimeUpWriteBack ) {  // Time up write back
-            uint64_t StoreAddress ;
-            m_Cache_list[ 0 ]->StoreCacheBlock( set_index, StoreAddress, wire_L1ToL2 ) ;
-            AccessNextLevel( Cache::L2, accessTime, StoreAddress, Cache::WRITE, wire_L1ToL2, m_Cache_list[ 0 ]->m_BlockSize ) ;
-            delete[] wire_L1ToL2 ;
-        }  // if
-
-        bool isNeedToWriteBack = !m_Cache_list[ 0 ]->AllocateCache( set_index ) ;
-        if ( isNeedToWriteBack ) {  // if write through and always false
-            uint64_t StoreAddress ;
-            m_Cache_list[ 0 ]->StoreCacheBlock( set_index, StoreAddress, wire_L1ToL2 ) ;
-            AccessNextLevel( Cache::L2, accessTime, StoreAddress, Cache::WRITE, wire_L1ToL2, m_Cache_list[ 0 ]->m_BlockSize ) ;
-            delete[] wire_L1ToL2 ;
-        }  // if
-
-        uint64_t LoadAddress = m_Cache_list[ 0 ]->TagToAddress( tag, set_index ) ;
-
-#ifdef SIM_DATA
-        Byte * wire_L2ToL1 = new Byte[ m_Cache_list[ 0 ]->m_BlockSize ] ;
-#else
-        Byte * wire_L2ToL1 = NULL ;
-#endif
-        AccessNextLevel( Cache::L2, accessTime, LoadAddress, Cache::READ, wire_L2ToL1, m_Cache_list[ 0 ]->m_BlockSize ) ;
-        m_Cache_list[ 0 ]->LoadCacheBlock( tag, set_index, wire_L2ToL1 ) ;
-        delete[] wire_L2ToL1 ;
-        m_Cache_list[ 0 ]->AccessCache( AccessType, accessTime , address, Data, length, TimeUpWriteBack, wire_L1ToL2 ) ;
-    }  // else
+    m_CacheCtrl_list[0]->Access( accessTime, address, AccessType, Data, length ) ;
 
 }  // MemSystem::CoreAccessMem()
-
-void MemContoller::AccessNextLevel( uint32_t Cachetype, const uint64_t accessTime,  const uint64_t address, const uint32_t AccessType, Byte* Data,
-        uint32_t length ) {
-
-    if ( Cachetype == MAINMEM ) {
-        // Read and Write data from MAINMEM
-        /*
-         Log::PrintDebugLog( "R/W from Memory address:" ) ;
-         printf( "0x%016llX length: %d\n", ( long long ) address, length ) ;
-         */
-    }  // if
-    else {
-        bool TimeUpWriteBack = false ;
-#ifdef SIM_DATA
-        Byte * wire_L1ToL2 = new Byte[ m_Cache_list[ 0 ]->m_BlockSize ] ;
-#else
-        Byte * wire_L1ToL2 = NULL ;
-#endif
-        if ( m_Cache_list[ Cachetype ]->AccessCache( AccessType, accessTime , address, Data, length, TimeUpWriteBack, wire_L1ToL2 ) ) {  // hit
-            if ( AccessType == Cache::WRITE ) {
-                m_Cache_list[ Cachetype ]->m_Num_W_Access++ ;
-                m_Cache_list[ Cachetype ]->m_Num_W_Hit++ ;
-            }  // if
-            else {
-                m_Cache_list[ Cachetype ]->m_Num_R_Access++ ;
-                m_Cache_list[ Cachetype ]->m_Num_R_Hit++ ;
-            }  // else
-/*
-             Log::PrintDebugLog( "CACHE L"+ std::to_string(Cachetype+1) + " hit  : address:" ) ;
-             printf( "0x%016llX length: %d\n", ( long long ) address, length ) ;
-*/
-        }  // if
-
-        else {  // miss
-            if ( AccessType == Cache::WRITE )
-                m_Cache_list[ Cachetype ]->m_Num_W_Access++ ;
-            else
-                m_Cache_list[ Cachetype ]->m_Num_R_Access++ ;
-
-/*
-             Log::PrintDebugLog( "CACHE L"+ std::to_string(Cachetype+1) + " miss : address:" ) ;
-             printf( "0x%016llX length: %d\n", ( long long ) address, length ) ;
-*/
-
-            uint64_t tag ;
-            uint32_t set_index, block_offset ;
-            m_Cache_list[ Cachetype ]->SplitAddress( address, tag, set_index, block_offset ) ;
-
-
-            if ( TimeUpWriteBack ) {  // Time up write back
-                uint64_t StoreAddress ;
-                m_Cache_list[ Cachetype ]->StoreCacheBlock( set_index, StoreAddress, wire_L1ToL2 ) ;
-                AccessNextLevel( Cachetype + 1 , accessTime, StoreAddress, Cache::WRITE, wire_L1ToL2, m_Cache_list[ Cachetype ]->m_BlockSize ) ;
-                delete[] wire_L1ToL2 ;
-            }  // if
-
-
-            bool isNeedToWriteBack = !m_Cache_list[ Cachetype ]->AllocateCache( set_index ) ;
-            if ( isNeedToWriteBack ) {  // if write through always false
-                uint64_t StoreAddress ;
-                m_Cache_list[ Cachetype ]->StoreCacheBlock( set_index, StoreAddress, wire_L1ToL2 ) ;
-                AccessNextLevel( Cachetype + 1, accessTime, StoreAddress, Cache::WRITE, wire_L1ToL2, m_Cache_list[ Cachetype ]->m_BlockSize ) ;
-                delete[] wire_L1ToL2 ;
-            }  // if
-
-            uint64_t LoadAddress = m_Cache_list[ 0 ]->TagToAddress( tag, set_index ) ;
-
-#ifdef SIM_DATA
-            Byte * wire_L2ToL1 = new Byte[ m_Cache_list[ 0 ]->m_BlockSize ] ;
-#else
-            Byte * wire_L2ToL1 = NULL ;
-#endif
-            AccessNextLevel( Cachetype + 1, accessTime, LoadAddress, Cache::READ, wire_L2ToL1, m_Cache_list[ Cachetype ]->m_BlockSize ) ;
-
-            m_Cache_list[ Cachetype ]->LoadCacheBlock( tag, set_index, wire_L2ToL1 ) ;
-            delete[] wire_L2ToL1 ;
-            m_Cache_list[ Cachetype ]->AccessCache( AccessType, accessTime , address, Data, length, TimeUpWriteBack, wire_L1ToL2 ) ;
-
-        }  // else
-
-    }  // else
-
-}  // MemSystem::AccessNextLevel()
-
-void MemContoller::CacheMigrationContrl() {
-
-
-}  // MemContoller::CacheMigrationContrl
-
