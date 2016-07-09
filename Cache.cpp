@@ -214,7 +214,7 @@ std::vector < uint8_t > * BufferCache::GetRequestToCache( std::vector < uint8_t 
 
     if ( mBufferQueue->size() != 0 ) {
         while ( mBufferQueue->size() != 0  ) {
-            if ( nowTime - mBufferSet[ mBufferQueue->at( 0 ) ]->mAccessTime > m_WriteLatency ) {
+            if ( nowTime - mBufferSet[ mBufferQueue->at( 0 ) ]->mAccessTime > m_WriteLatency*50 ) {
                 uint8_t index = mBufferQueue->at( 0) ;
                 list->push_back(  index ) ;
                 mBufferQueue->erase( mBufferQueue->begin() ) ;
@@ -272,8 +272,8 @@ uint8_t BufferCache::AllocatBufferEntry( uint64_t nowTime, uint32_t &AddLatency,
         isBufferFull = true ;
         index = mBufferQueue->at( 0 ) ;
         uint64_t timeLength = nowTime - mBufferSet[ index ]->mAccessTime ;
-        if ( timeLength > m_WriteLatency )
-            AddLatency = m_WriteLatency - timeLength ;
+        if ( timeLength > m_WriteLatency*50 )
+            AddLatency = ( m_WriteLatency*50 - timeLength )/50 ;
         mBufferQueue->erase( mBufferQueue->begin() ) ;
         mBufferNonUseQueue->push_back( index ) ;
     }  // if
