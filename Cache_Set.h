@@ -34,9 +34,9 @@ class Cache_Set {
         struct Way {
                 bool Valid ;
                 bool Dirty ;
-                uint64_t tag ;
-                uint64_t timeStamp ;
-                Byte * m_Data ;  // Data size = blocksize
+                uint64_t mTag ;
+                uint64_t mTimeStamp ;
+                Byte * mData ;  // Data size = blocksize
         } ;
 
         Way * m_Way ;

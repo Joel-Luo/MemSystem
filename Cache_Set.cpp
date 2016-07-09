@@ -40,15 +40,15 @@ Cache_Set::Cache_Set( uint32_t blocksize, uint32_t associativity, uint32_t repla
     m_RP_Manager = new ReplaceManager( associativity, REPLACEPOLICY::LRU ) ;
     m_Way = new Way[ m_Associativity ] ;
     for ( int i = 0; i < m_Associativity; i++ ) {
-        m_Way[ i ].tag = -1 ;
+        m_Way[ i ].mTag = -1 ;
         m_Way[ i ].Valid = false ;
         m_Way[ i ].Dirty = false ;
 #ifdef SIM_DATA
-        m_Way[ i ].m_Data = new Byte [ m_BlockSize ] ;
+        m_Way[ i ].mData = new Byte [ m_BlockSize ] ;
 #else
-        m_Way[ i ].m_Data = NULL ;
+        m_Way[ i ].mData = NULL ;
 #endif
-        m_Way[i].timeStamp = -1 ;
+        m_Way[i].mTimeStamp = -1 ;
     }  // for
 
 }  // Cache_Set::Cache_Set
@@ -58,38 +58,38 @@ Cache_Set::Cache_Set( uint32_t blocksize, uint32_t associativity, uint32_t repla
     m_RP_Manager = new ReplaceManager( associativity, REPLACEPOLICY::LRU ) ;
     m_Way = new Way[ m_Associativity ] ;
     for ( int i = 0; i < m_Associativity; i++ ) {
-        m_Way[ i ].tag = -1 ;
+        m_Way[ i ].mTag = -1 ;
         m_Way[ i ].Valid = false ;
         m_Way[ i ].Dirty = false ;
 #ifdef SIM_DATA
-        m_Way[ i ].m_Data = new Byte [ m_BlockSize ] ;
+        m_Way[ i ].mData = new Byte [ m_BlockSize ] ;
 #else
-        m_Way[ i ].m_Data = NULL ;
+        m_Way[ i ].mData = NULL ;
 #endif
-        m_Way[i].timeStamp = 0 ;
+        m_Way[i].mTimeStamp = 0 ;
     }  // for
 
 }  // Cache_Set::Cache_Set
 void Cache_Set::ReadData( Byte * out, uint32_t way_index, uint32_t offset, uint32_t length ) {
     if ( out != NULL )
-        memcpy( out, m_Way[ way_index ].m_Data + offset, length ) ;
+        memcpy( out, m_Way[ way_index ].mData + offset, length ) ;
 }  // Cache_Set::ReadLine()
 
 void Cache_Set::WriteData( Byte * in, uint32_t way_index, uint32_t offset, uint32_t length ) {
     if ( in != NULL )
-        memcpy( m_Way[ way_index ].m_Data + offset, in, length ) ;
+        memcpy( m_Way[ way_index ].mData + offset, in, length ) ;
 }  // Cache_Set::WriteLine()
 
 void Cache_Set::AllocateData( Byte * in, uint64_t tag, uint32_t way_index, uint32_t offset, uint32_t length ) {
     m_Way[ way_index ].Valid = true ;
-    m_Way[ way_index ].tag = tag ;
+    m_Way[ way_index ].mTag = tag ;
     if ( in != NULL )
-        memcpy( m_Way[ way_index ].m_Data + offset, in, length ) ;
+        memcpy( m_Way[ way_index ].mData + offset, in, length ) ;
 }  // Cache_Set::WriteLine()
 
 uint32_t Cache_Set::FindTagInWay( uint64_t tag ) {
     for ( int i = 0; i < m_Associativity; i++ ) {
-        if ( m_Way[ i ].tag == tag && m_Way[ i ].Valid )
+        if ( m_Way[ i ].mTag == tag && m_Way[ i ].Valid )
             return i ;
     }  // for
     return -1 ;

@@ -1,29 +1,39 @@
 ========== Cache Configuration ==========
-Create cache: cache_l1_D	size: 128	blocksize:64	ReadLatency:3	WriteLatency:3
-Create cache: Hybridcache_l2		size: 4096	blocksize:128	numOfCellType:2
-	Cell1	subsize:1	retentiontime:4294967295	readlatnecy:9	writelatency:9
-	Cell2	subsize:3	retentiontime:4294967295	readlatnecy:9	writelatency:11
-Create cache: cache_l3		size: 8192	blocksize:128	ReadLatency:25	WriteLatency:25
+Create cache: cache_l1_D	size: 128	blocksize: 64	ReadLatency: 3	WriteLatency: 3
+Create cache: Buffercache_l2		size: 4096	blocksize:128
+	Buffer: 	Entry: 20	readlatnecy: 9	writelatency: 8
+	STTRAM: 	size: 4096	blocksize: 128	ReadLatency: 9	WriteLatency: 13
+Create cache: cache_l3		size: 8192	blocksize: 128	ReadLatency: 25	WriteLatency: 25
 ========== End of Cache Configuration ==========
 
 ========== L1 info ==========
-w_access: 2	w_miss: 2	w_miss_rate: 100.000000%
-r_access: 0	r_miss: 0	r_miss_ rate: nan%
-t_access: 2	t_miss: 2	t_miss_rate: 100.000000%
-Read_Latency: 0	Write_Latency: 522
+w_access: 12583	w_miss: 1692	w_miss_rate: 13.446714%
+r_access: 24454	r_miss: 5442	r_miss_rate: 22.254028%
+t_access: 37037	t_miss: 7134	t_miss_rate: 19.261819%
+Read_Latency: 138666	Write_Latency: 58053
 ========== End of L1 ==========
 
 ========== L2 info ==========
-w_access: 0	w_miss: 0	w_miss_rate: nan%
-r_access: 2	r_miss: 1	r_miss_ rate: 50.000000%
-t_access: 2	t_miss: 1	t_miss_rate: 50.000000%
-Read_Latency: 790	Write_Latency: 0
+Buffer info : 
+w_access: 7112	w_miss: 7112	w_miss_rate: 100.000000%
+r_access: 7134	r_miss: 7134	r_miss_rate: 100.000000%
+t_access: 14246	t_miss: 14246	t_miss_rate: 100.000000%
+Cache info :
+w_access: 7112	w_miss: 1	w_miss_rate: 0.014061%
+r_access: 7134	r_miss: 51	r_miss_rate: 0.714886%
+t_access: 14246	t_miss: 52	t_miss_rate: 0.365015%
+Buffer Latency:
+ReadLatency: 0	WriteLatency: 0
+STTRAM Latency:
+ReadLatency: 66144	WriteLatency: 92494
+Total Latency:
+ReadLatency: 66144	WriteLatency: 92494
 ========== End of L2 ==========
 
 ========== L3 info ==========
 w_access: 0	w_miss: 0	w_miss_rate: nan%
-r_access: 1	r_miss: 1	r_miss_ rate: 100.000000%
-t_access: 1	t_miss: 1	t_miss_rate: 100.000000%
-Read_Latency: 100	Write_Latency: 0
+r_access: 52	r_miss: 11	r_miss_rate: 21.153846%
+t_access: 52	t_miss: 11	t_miss_rate: 21.153846%
+Read_Latency: 2125	Write_Latency: 0
 ========== End of L3 ==========
 

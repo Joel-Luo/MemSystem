@@ -18,13 +18,16 @@ class Cache_Ctrl {
     public:
 
         uint8_t mThisCacheType ;
-        uint8_t mNextLevelCacheType ;
+        uint8_t mThisCacheName ;
+        uint8_t mNextLevelCacheName ;
 
-        Cache_Ctrl( Cache* thisLevel ) ;
+        Cache_Ctrl( Cache* thisLevel, uint8_t cachetype ) ;
 
         void Access(  const uint64_t accessTime, const uint64_t address, const uint32_t AccessType,Byte * Data, uint32_t length ) ;
 
         void Migration() ;
+
+        void FlushOperationInBufferCache() ;
 
         void SetNextLevelCacheCtrl( Cache_Ctrl * nextLevelCacheCtrl ) ;
 

@@ -32,6 +32,9 @@ void ExecuteMemOperation( FILE * input, MemContoller * memsystem ) {
         delete[] tempStr ;
         delete[] op_s ;
     }  // while()
+
+    memsystem->FinishAllOperation() ;
+
 }
 
 int main( int argc, char const *argv[] ) {

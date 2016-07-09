@@ -66,6 +66,8 @@ uint64_t CfgParser::CacheParamter( string tag, string value ) {
                 return Cache::CACHE ;
             else if ( value.compare( "hybridcache" ) == 0 )
                 return Cache::HYBRIDCACHE ;
+            else if ( value.compare( "buffercache" ) == 0 )
+                return Cache::BUFFERCACHE ;
         }  // else if
 
 
