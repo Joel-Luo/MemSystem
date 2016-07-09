@@ -1,7 +1,7 @@
 #ifndef CACHE_H
 #define CACHE_H
 #include "Cache_Set.h"
-#include "stdio.h"
+#include <string.h>
 #include <vector>
 
 class BufferCache {
