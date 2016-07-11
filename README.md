@@ -11,5 +11,5 @@
 
 * git src
 * make 
-* ./memsystem -conf "config file path" -input "input file path" -output "output result file path"
+* ./memsystem -inst_num "500000000" -conf "config file path" -input "input file path" -output "output result file path"
 * ./memsystem -h   // if you need to help.
