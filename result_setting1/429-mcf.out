@@ -1,0 +1,27 @@
+========== Cache Configuration ==========
+Create cache: cache_l1_D	size: 128	blocksize: 64	ReadLatency: 3	WriteLatency: 3
+Create cache: cache_l2		size: 4096	blocksize: 128	ReadLatency: 9	WriteLatency: 13
+Create cache: cache_l3		size: 8192	blocksize: 128	ReadLatency: 25	WriteLatency: 25
+========== End of Cache Configuration ==========
+
+========== L1 info ==========
+w_access: 96468344	w_miss: 12711379	w_miss_rate: 13.176736%
+r_access: 403530374	r_miss: 171744597	r_miss_rate: 42.560513%
+t_access: 499998718	t_miss: 184455976	t_miss_rate: 36.891290%
+Read_Latency: 3271526286	Write_Latency: 441941580
+========== End of L1 ==========
+
+========== L2 info ==========
+w_access: 184455817	w_miss: 1	w_miss_rate: 0.000001%
+r_access: 184455976	r_miss: 27869472	r_miss_rate: 15.109010%
+t_access: 368911793	t_miss: 27869473	t_miss_rate: 7.554509%
+Read_Latency: 2719143720	Write_Latency: 2397925659
+========== End of L2 ==========
+
+========== L3 info ==========
+w_access: 0	w_miss: 0	w_miss_rate: -nan%
+r_access: 27869473	r_miss: 144	r_miss_rate: 0.000517%
+t_access: 27869473	t_miss: 144	t_miss_rate: 0.000517%
+Read_Latency: 696747625	Write_Latency: 0
+========== End of L3 ==========
+

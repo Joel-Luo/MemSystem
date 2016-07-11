@@ -1,9 +1,9 @@
 all:	MemSystem rmobj
 CC = g++
-CFLAGS = -std=c++11
+CFLAGS = -std=c++11 -g
 
 
-MemSystem:	*.o
+MemSystem:	*.o 
 	$(CC) $(CFLAGS) *.o -o MemSystem
 
 *.o: *.cpp

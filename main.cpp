@@ -4,14 +4,18 @@
 #include <stdlib.h>
 #include <string.h>
 #include "MemContoller.h"
+#include <stdint.h>
 
 FILE * Log::CacheResultInfoFile = NULL ;
+unsigned long long  gTotal_inst = 500000000 ;
 
 void ExecuteMemOperation( FILE * input, MemContoller * memsystem ) {
     uint64_t accessTime = 0x0 ;
     uint64_t address = 0x0 ;
     char op = 'x' ;
-    for ( int counter = 1; !feof( input ); counter++ ) {
+    for ( unsigned long long counter = 1; !feof( input ); counter++ ) {
+        if ( counter % 5000000 == 0 )       
+          Log::PrintMessage( "Int: " + std::to_string( counter) + "\tProgress:" + std::to_string( (double)counter/(double)gTotal_inst *100 ) + "%") ;
         char * tempStr = new char[ 20 ] ;
         char * op_s = new char[ 2 ] ;
         fscanf( input, "%s", tempStr ) ;
@@ -43,7 +47,7 @@ int main( int argc, char const *argv[] ) {
         if ( strcmp( argv[ 1 ], "-h" ) == 0 ) {
             Log::PrintMessage( " -conf : \"config file path\"" ) ;
             Log::PrintMessage( " -input : \"input file path\"" ) ;
-
+            Log::PrintMessage( " -inst_num: \"number\"" ) ;
         }  // if
         else {
             MemContoller * memsystem = NULL ;
@@ -67,6 +71,11 @@ int main( int argc, char const *argv[] ) {
                     output = fopen( argv[ i + 1 ], "w" ) ;
                     Log::PrintMessage( "Output File Path = " + std::string( argv[ i + 1 ] ) ) ;
                 }  // else if
+                else if ( strcmp( argv[ i ], "-inst_num" ) == 0 ) {
+                    sscanf( argv[ i + 1 ], "%llu", &gTotal_inst ) ;
+                    Log::PrintMessage( "Total inst: " + std::to_string( gTotal_inst ) ) ;
+                } // else if 
+
             }  // for
 
             if ( input == NULL )
