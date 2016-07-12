@@ -37,7 +37,7 @@ Cache::Cache( uint32_t CacheName, uint8_t CacheType, uint32_t cache_size, uint32
     m_Sets = new Cache_Set*[ m_Num_Set ] ;
 
     if ( CacheType == CACHE ||CacheType == BUFFERCACHE )
-        for ( int i = 0; i < m_Num_Set; i++ )
+        for ( uint8_t i = 0; i < m_Num_Set; i++ )
             m_Sets[ i ] =
                     new Cache_Set( blocksize, associativity, replacePolicy, writepolicy, readlatency, writelatnecy ) ;
 
@@ -80,7 +80,7 @@ bool Cache::AccessCache( uint32_t AccessType, const uint64_t accessTime, const u
 
     uint32_t way_index = m_Sets[ index ]->FindTagInWay( tag ) ;
 
-    if ( way_index == -1 )
+    if ( way_index == (uint32_t)-1 )
         return false ;  // cache miss
 
     if ( AccessType == Cache::READ ) {
@@ -108,10 +108,10 @@ bool Cache::AccessHybridCache( uint32_t AccessType, const uint64_t accessTime, c
 
     uint32_t way_index = m_Sets[ index ]->FindTagInWay( tag ) ;
 
-    if ( m_CacheType == HYBRIDCACHE && way_index != -1 )
+    if ( m_CacheType == HYBRIDCACHE && way_index != (uint32_t)-1 )
         timeUpWriteBack = RetentionTimeUp( index, way_index, accessTime, WBData ) ;
 
-    if ( way_index == -1 )
+    if ( way_index == (uint32_t)-1 )
         return false ;  // cache miss
 
     if ( AccessType == Cache::READ ) {
@@ -167,7 +167,7 @@ void Cache::StoreCacheBlock( uint32_t set_index, uint64_t & TatgetAddr, Byte * o
 bool Cache::RetentionTimeUp( uint32_t set_index, uint32_t & wayindex, uint64_t accessTime, Byte * out ) {
 
     uint64_t lasttime = m_Sets[ set_index ]->m_Way[ wayindex ].mTimeStamp ;
-    if ( lasttime == -1 )
+    if ( lasttime == (uint64_t)-1 )
         return false ;
     uint64_t timelength = accessTime - lasttime ;
     if ( timelength >= m_Sets[ set_index ]->m_RetentionTime ) {
@@ -232,7 +232,7 @@ bool BufferCache::BufferAccess( const uint64_t accessTime, const uint64_t addres
 
     if ( AccessType == Cache::READ ) {
 
-        for ( int i = 0; i < mBufferQueue->size(); i++ ) {
+        for ( uint8_t i = 0; i < mBufferQueue->size(); i++ ) {
             if ( mBufferSet[ mBufferQueue->at( i ) ]->mAddress == address ) {  // hit
                 if ( Data != NULL )
                     memcpy( Data, mBufferSet[ mBufferQueue->at( i ) ]->mData, length ) ;
@@ -244,7 +244,7 @@ bool BufferCache::BufferAccess( const uint64_t accessTime, const uint64_t addres
 
     else {  // Write
         int8_t find = -1 ;
-        for ( int i = 0; i < mBufferQueue->size(); ) {
+        for ( uint8_t i = 0; i < mBufferQueue->size(); ) {
             if ( mBufferSet[ mBufferQueue->at( i ) ]->mAddress == address ) {  // hit
                 uint8_t index = mBufferQueue->at( i ) ;
                 mBufferQueue->erase( mBufferQueue->begin() + i ) ;

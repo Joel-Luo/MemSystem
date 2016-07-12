@@ -16,7 +16,7 @@ void MemContoller::CreateMemSystem() {
     m_Cache_list = new Cache*[ m_Cache_level ] ;
     m_CacheCtrl_list = new Cache_Ctrl*[ m_Cache_level ] ;
     m_CacheType = new uint8_t [ m_Cache_level ] ;
-    for ( int i = 0; i < m_Cache_level; i++ ) {
+    for ( uint8_t i = 0; i < m_Cache_level; i++ ) {
         if ( i == Cache::L1_D ) {
             m_CacheType[ i ] =  cfgparser->ParseDevice( "cache_l1_D", "type" );
             m_Cache_list[ i ] =

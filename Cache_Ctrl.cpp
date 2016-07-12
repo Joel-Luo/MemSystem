@@ -178,7 +178,7 @@ void Cache_Ctrl::Access( const uint64_t accessTime, const uint64_t address, cons
         // move request from buffer to cache
         list = mThis->mBufferCache->GetRequestToCache( list, accessTime ) ;
 
-        for ( int i = 0; i < list->size(); i++ ) {  // do the request which need to finish.
+        for ( uint8_t i = 0; i < list->size(); i++ ) {  // do the request which need to finish.
             BufferCache::BufferSet * op = mThis->mBufferCache->mBufferSet[ list->at( i ) ] ;
             if ( mThis->AccessCache( Cache::WRITE, op->mAccessTime, op->mAddress, op->mData, mThis->mBufferCache->mDataLength ) ) {
                 mThis->m_Num_W_Access++ ;
@@ -371,7 +371,7 @@ void Cache_Ctrl::FlushOperationInBufferCache() {
     // move request from buffer to cache
     list = mThis->mBufferCache->GetRequestToCache( list, accesstime ) ;
 
-    for ( int i = 0; i < list->size(); i++ ) {  // do the request which need to finish.
+    for ( uint8_t i = 0; i < list->size(); i++ ) {  // do the request which need to finish.
         BufferCache::BufferSet * op = mThis->mBufferCache->mBufferSet[ list->at( i ) ] ;
         if ( mThis->AccessCache( Cache::WRITE, op->mAccessTime, op->mAddress, op->mData, mThis->mBufferCache->mDataLength ) ) {
             mThis->m_Num_W_Access++ ;

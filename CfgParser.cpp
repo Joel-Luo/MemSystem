@@ -104,7 +104,7 @@ CfgParser::CfgParser( const char * cfg ) {
 
 uint64_t CfgParser::ParseDevice( std::string DeviceName, std::string Tag ) {
 
-    for ( int i = 0; i < m_DeviceList->size(); i++ ) {
+    for ( uint8_t i = 0; i < m_DeviceList->size(); i++ ) {
         if ( ( *m_DeviceList )[ i ].find( DeviceName ) != string::npos ) {
             string device = ( *m_DeviceList )[ i ] ;
             string value = SplitTag( device, Tag ) ;
