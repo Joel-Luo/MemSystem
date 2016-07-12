@@ -14,8 +14,9 @@ class BufferCache {
 
     public :
       BufferSet ** mBufferSet ;
-      uint8_t mDataLength ;
       uint8_t mNumOfEntry ;
+      uint8_t mDataLength ;
+
 
       uint64_t mAddtionWriteLantency ;
       uint8_t m_ReadLatency ;
@@ -62,24 +63,30 @@ class Cache {
 
         uint32_t m_BlockSize_log2 ;
         uint32_t m_Associativity_log2 ;
-        Cache_Set** m_Sets ;
+
 
     public:
         uint8_t m_CacheType ;
+        uint8_t  m_Name ;
+        uint64_t m_CacheSize ;
+        uint32_t m_BlockSize ;
         uint64_t m_Num_W_Access ;
         uint64_t m_Num_W_Hit ;
         uint64_t m_Num_R_Access ;
         uint64_t m_Num_R_Hit ;
-        uint64_t m_CacheSize ;
+
+    private:
+            Cache_Set** m_Sets ;
+    public:
         uint32_t m_Num_Set ;
-        uint8_t  m_Name ;
         uint32_t m_ReplacePolicy ;
         uint32_t m_WritePolicy ;
-        uint32_t m_BlockSize ;
+
         uint8_t m_ReadLatency ;
         uint8_t m_WriteLatency ;
 
         BufferCache * mBufferCache ;
+
 
     private:
         static uint32_t floorLog2( uint32_t number ) ;

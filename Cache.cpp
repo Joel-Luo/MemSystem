@@ -29,7 +29,7 @@ uint32_t Cache::floorLog2( uint32_t number ) {
 
 Cache::Cache( uint32_t CacheName, uint8_t CacheType, uint32_t cache_size, uint32_t blocksize, uint32_t associativity,
         uint32_t replacePolicy, uint32_t writepolicy, uint8_t readlatency, uint8_t writelatnecy ) :
-        m_Name( CacheName ), m_CacheType( CacheType ), m_CacheSize( cache_size << 10 ), m_BlockSize( blocksize ), m_Num_W_Access( 0 ), m_Num_W_Hit( 0 ), m_Num_R_Access( 0 ), m_Num_R_Hit( 0 ), m_Sets(
+         m_CacheType( CacheType ), m_Name( CacheName ), m_CacheSize( cache_size << 10 ), m_BlockSize( blocksize ), m_Num_W_Access( 0 ),  m_Num_W_Hit( 0 ), m_Num_R_Access( 0 ), m_Num_R_Hit( 0 ), m_Sets(
         NULL ), m_Num_Set( 0 ), m_ReplacePolicy( replacePolicy ), m_WritePolicy( writepolicy ), m_ReadLatency( readlatency ), m_WriteLatency( writelatnecy ) {
     m_BlockSize_log2 = Cache::floorLog2( blocksize ) ;
     m_Associativity_log2 = Cache::floorLog2( associativity ) ;

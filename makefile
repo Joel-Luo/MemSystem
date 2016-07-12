@@ -1,6 +1,6 @@
 all:	MemSystem rmobj
 CC = g++
-CFLAGS = -std=c++11 -g
+CFLAGS = -std=c++11 -g -Wall
 
 
 MemSystem:	*.o 

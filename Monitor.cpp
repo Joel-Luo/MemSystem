@@ -88,7 +88,7 @@ void Monitor::OutputCacheInfo( int CacheLevel ) {
         uint64_t tr_l = br_l + sr_l ;
 
         uint64_t bw_l = ( m_Cache_list[ CacheLevel ]->mBufferCache->m_Num_W_Hit * bwrite_l
-                        + m_Cache_list[ CacheLevel ]->mBufferCache->mAddtionWriteLantency ) ;
+                        + Addtion_Wl ) ;
         uint64_t sw_l = ( m_Cache_list[ CacheLevel ]->m_Num_W_Hit * write_l ) + ( w_miss * ( write_l + Load_l ) ) ;
         uint64_t tw_l = bw_l + sw_l ;
 

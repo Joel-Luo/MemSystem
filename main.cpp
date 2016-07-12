@@ -12,7 +12,7 @@ unsigned long long  gTotal_inst = 500000000 ;
 void ExecuteMemOperation( FILE * input, MemContoller * memsystem ) {
     uint64_t accessTime = 0x0 ;
     uint64_t address = 0x0 ;
-    char op = 'x' ;
+    // char op = 'x' ;
     for ( unsigned long long counter = 1; !feof( input ); counter++ ) {
         if ( counter % 5000000 == 0 )       
           Log::PrintMessage( "Int: " + std::to_string( counter) + "\tProgress:" + std::to_string( (double)counter/(double)gTotal_inst *100 ) + "%") ;
