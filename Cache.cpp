@@ -37,11 +37,7 @@ Cache::Cache( uint32_t CacheName, uint8_t CacheType, uint32_t cache_size, uint32
     m_Sets = new Cache_Set*[ m_Num_Set ] ;
 
     if ( CacheType == CACHE ||CacheType == BUFFERCACHE )
-<<<<<<< HEAD
         for ( uint32_t i = 0; i < m_Num_Set; i++ )
-=======
-        for ( uint8_t i = 0; i < m_Num_Set; i++ )
->>>>>>> BufferCache
             m_Sets[ i ] =
                     new Cache_Set( blocksize, associativity, replacePolicy, writepolicy, readlatency, writelatnecy ) ;
 
