@@ -21,7 +21,7 @@ class MemContoller {
         uint8_t * m_CacheType ;
 
         Cache_Ctrl ** m_CacheCtrl_list ;
-        uint32_t m_Cache_level ;
+        uint8_t m_Cache_level ;
         CfgParser * cfgparser ;
         Cache ** m_Cache_list ;
     public:

@@ -6,7 +6,11 @@ ReplaceManager::ReplaceManager( uint32_t way, uint32_t rp ) :
         m_ReplacePolicy( rp ) {
     m_Record = new std::vector < uint8_t >() ;
     if ( m_ReplacePolicy == LRU )
+<<<<<<< HEAD
+        for ( uint32_t i = 0; i < way; i++ )
+=======
         for ( uint8_t i = 0; i < way; i++ )
+>>>>>>> BufferCache
             m_Record->push_back( i ) ;
     // TODO  else if ( m_RP == ROUND_ROBIN ) ;
 }  // ReplaceManager::ReplaceManager()
@@ -39,7 +43,11 @@ Cache_Set::Cache_Set( uint32_t blocksize, uint32_t associativity, uint32_t repla
         m_BlockSize( blocksize ), m_Associativity( associativity ), m_WritePolicy( writePolicy ), m_RetentionTime( 0 ), m_ReadLatency( ReadLatency ), m_WriteLatency( WriteLatency ) {
     m_RP_Manager = new ReplaceManager( associativity, REPLACEPOLICY::LRU ) ;
     m_Way = new Way[ m_Associativity ] ;
+<<<<<<< HEAD
+    for ( uint32_t i = 0; i < m_Associativity; i++ ) {
+=======
     for ( uint8_t i = 0; i < m_Associativity; i++ ) {
+>>>>>>> BufferCache
         m_Way[ i ].mTag = -1 ;
         m_Way[ i ].Valid = false ;
         m_Way[ i ].Dirty = false ;
@@ -58,7 +66,11 @@ Cache_Set::Cache_Set( uint32_t blocksize, uint32_t associativity, uint32_t repla
         m_BlockSize( blocksize ), m_Associativity( associativity ), m_WritePolicy( writePolicy ), m_RetentionTime( retentionTime ), m_ReadLatency( ReadLatency ), m_WriteLatency( WriteLatency ) {
     m_RP_Manager = new ReplaceManager( associativity, REPLACEPOLICY::LRU ) ;
     m_Way = new Way[ m_Associativity ] ;
+<<<<<<< HEAD
+    for ( uint32_t i = 0; i < m_Associativity; i++ ) {
+=======
     for ( uint8_t i = 0; i < m_Associativity; i++ ) {
+>>>>>>> BufferCache
         m_Way[ i ].mTag = -1 ;
         m_Way[ i ].Valid = false ;
         m_Way[ i ].Dirty = false ;
@@ -91,8 +103,13 @@ void Cache_Set::AllocateData( Byte * in, uint64_t tag, uint32_t way_index, uint3
 }  // Cache_Set::WriteLine()
 
 uint32_t Cache_Set::FindTagInWay( uint64_t tag ) {
+<<<<<<< HEAD
+    for ( uint32_t i = 0; i < m_Associativity; i++ ) {
+        if ( m_Way[ i ].mTag == tag && m_Way[ i ].Valid )
+=======
     for ( uint8_t i = 0; i < m_Associativity; i++ ) {
         if ( m_Way[ i ].Valid && m_Way[ i ].mTag == tag  )
+>>>>>>> BufferCache
             return i ;
     }  // for
     return -1 ;

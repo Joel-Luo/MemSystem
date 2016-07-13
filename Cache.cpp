@@ -37,7 +37,11 @@ Cache::Cache( uint32_t CacheName, uint8_t CacheType, uint32_t cache_size, uint32
     m_Sets = new Cache_Set*[ m_Num_Set ] ;
 
     if ( CacheType == CACHE ||CacheType == BUFFERCACHE )
+<<<<<<< HEAD
+        for ( uint32_t i = 0; i < m_Num_Set; i++ )
+=======
         for ( uint8_t i = 0; i < m_Num_Set; i++ )
+>>>>>>> BufferCache
             m_Sets[ i ] =
                     new Cache_Set( blocksize, associativity, replacePolicy, writepolicy, readlatency, writelatnecy ) ;
 
@@ -49,7 +53,7 @@ void Cache::BuildHybridCache( uint8_t numofcellType, uint8_t numofsub, uint8_t *
 
     int setsize = 0 ;
     int nowIndex = 0 ;
-    for ( int i = 0; i < numofcellType; i++ ) {
+    for ( uint8_t i = 0; i < numofcellType; i++ ) {
         setsize += ( m_Num_Set / numofsub ) * size[ i ] ;
         for ( ; nowIndex < setsize; nowIndex++ )
             m_Sets[ nowIndex ] =
@@ -174,7 +178,7 @@ bool Cache::RetentionTimeUp( uint32_t set_index, uint32_t & wayindex, uint64_t a
         m_Sets[ set_index ]->ReadData( out, wayindex, 0, m_BlockSize ) ;
         m_Sets[ set_index ]->m_Way[ wayindex ].Valid = false ;
         m_Sets[ set_index ]->m_RP_Manager->UpdateRecord( wayindex, false ) ;
-        wayindex = -1 ;
+        wayindex = (uint32_t)-1 ;
         return true ;
     }  // if
     else
@@ -197,7 +201,7 @@ BufferCache::BufferCache( uint8_t NumOfEntry, uint8_t DataLength, uint8_t ReadLa
 
     mBufferQueue = new std::vector < uint8_t >() ;
     mBufferNonUseQueue = new std::vector < uint8_t > ;
-    for ( int i = 0; i < mNumOfEntry; i++ ) {
+    for ( uint8_t i = 0; i < mNumOfEntry; i++ ) {
         mBufferNonUseQueue->push_back( i ) ;
         mBufferSet[ i ] = new BufferSet ;
         mBufferSet[ i ]->mAddress = 0 ;
