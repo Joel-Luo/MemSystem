@@ -18,13 +18,13 @@ void ExecuteMemOperation( FILE * input, MemContoller * memsystem ) {
           Log::PrintMessage( "Int: " + std::to_string( counter) + "\tProgress:" + std::to_string( (double)counter/(double)gTotal_inst *100 ) + "%") ;
         char * tempStr = new char[ 20 ] ;
         char * op_s = new char[ 2 ] ;
-        fscanf( input, "%s", tempStr ) ;
+        if ( fscanf( input, "%s", tempStr ) <= 0  ) break ;
         if ( feof( input ) || strcmp( tempStr, "#eof" ) == 0 )
             break ;
         accessTime = strtoll( tempStr, NULL, 16 ) ;
-        fscanf( input, "%s", tempStr ) ;
+        if ( fscanf( input, "%s", tempStr ) <= 0 ) break ;
         address = strtoll( tempStr, NULL, 16 ) ;
-        fscanf( input, "%s", op_s ) ;
+        if ( fscanf( input, "%s", op_s ) <= 0 ) break ;
         // Log::PrintMessage( "Instruction id : " + std::to_string(counter) ) ;
         if ( strcmp( op_s, "R" ) == 0 )
             memsystem->CoreAccessMem( accessTime, address, MemContoller::READ, NULL, 8 ) ;

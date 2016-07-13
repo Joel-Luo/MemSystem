@@ -92,7 +92,7 @@ CfgParser::CfgParser( const char * cfg ) {
 
     while ( !feof( m_cfgfile ) ) {
         char temp ;
-        fscanf( m_cfgfile, "%c", &temp ) ;
+        if ( fscanf( m_cfgfile, "%c", &temp ) <= 0 ) break ;
         cfgstr->append( 1, temp ) ;
     }  // while
 
