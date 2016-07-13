@@ -16,6 +16,7 @@ void ExecuteMemOperation( FILE * input, MemContoller * memsystem ) {
     for ( unsigned long long counter = 1; !feof( input ); counter++ ) {
         if ( counter % 5000000 == 0 )       
           Log::PrintMessage( "Int: " + std::to_string( counter) + "\tProgress:" + std::to_string( (double)counter/(double)gTotal_inst *100 ) + "%") ;
+        if ( counter > gTotal_inst ) break ;
         char * tempStr = new char[ 20 ] ;
         char * op_s = new char[ 2 ] ;
         if ( fscanf( input, "%s", tempStr ) <= 0  ) break ;

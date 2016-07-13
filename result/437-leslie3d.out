@@ -1,0 +1,8 @@
+========== Cache Configuration ==========
+Create cache: cache_l1_D	size: 128	blocksize: 64	ReadLatency: 3	WriteLatency: 3
+Create cache: Buffercache_l2		size: 4096	blocksize:128
+	Buffer: 	Entry: 20	readlatnecy: 9	writelatency: 8
+	STTRAM: 	size: 4096	blocksize: 128	ReadLatency: 9	WriteLatency: 13
+Create cache: cache_l3		size: 8192	blocksize: 128	ReadLatency: 25	WriteLatency: 25
+========== End of Cache Configuration ==========
+

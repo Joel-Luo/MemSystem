@@ -1,0 +1,17 @@
+Confige File = ./cache_buffer.cfg
+Total inst: 300000000
+Input File Path = /home/luo/spec2006/BenchmarkTrace/437-leslie3d_T.dat
+Output File Path = ./result/437-leslie3d.out
+Int: 5000000	Progress:1.666667%
+Int: 10000000	Progress:3.333333%
+Int: 15000000	Progress:5.000000%
+Int: 20000000	Progress:6.666667%
+Int: 25000000	Progress:8.333333%
+Int: 30000000	Progress:10.000000%
+Int: 35000000	Progress:11.666667%
+Int: 40000000	Progress:13.333333%
+Int: 45000000	Progress:15.000000%
+Int: 50000000	Progress:16.666667%
+Int: 55000000	Progress:18.333333%
+Int: 60000000	Progress:20.000000%
+Int: 65000000	Progress:21.666667%

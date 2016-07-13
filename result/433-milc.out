@@ -6,3 +6,34 @@ Create cache: Buffercache_l2		size: 4096	blocksize:128
 Create cache: cache_l3		size: 8192	blocksize: 128	ReadLatency: 25	WriteLatency: 25
 ========== End of Cache Configuration ==========
 
+========== L1 info ==========
+w_access: 65339103	w_miss: 6233186	w_miss_rate: 9.539748%
+r_access: 234658795	r_miss: 15759769	r_miss_rate: 6.716036%
+t_access: 299997898	t_miss: 21992955	t_miss_rate: 7.331036%
+Read_Latency: 893093613	Write_Latency: 270815541
+========== End of L1 ==========
+
+========== L2 info ==========
+Buffer info : 
+w_access: 21991200	w_miss: 21105898	w_miss_rate: 95.974290%
+r_access: 21992955	r_miss: 21992955	r_miss_rate: 100.000000%
+t_access: 43984155	t_miss: 43098853	t_miss_rate: 97.987225%
+Cache info :
+w_access: 21105897	w_miss: 1	w_miss_rate: 0.000005%
+r_access: 21992955	r_miss: 712616	r_miss_rate: 3.240201%
+t_access: 43098852	t_miss: 712617	t_miss_rate: 1.653448%
+Buffer Latency:
+ReadLatency: 0	WriteLatency: 7082416
+STTRAM Latency:
+ReadLatency: 225016003	WriteLatency: 274376699
+Total Latency:
+ReadLatency: 225016003	WriteLatency: 281459115
+========== End of L2 ==========
+
+========== L3 info ==========
+w_access: 0	w_miss: 0	w_miss_rate: -nan%
+r_access: 712617	r_miss: 18	r_miss_rate: 0.002526%
+t_access: 712617	t_miss: 18	t_miss_rate: 0.002526%
+Read_Latency: 17816775	Write_Latency: 0
+========== End of L3 ==========
+
