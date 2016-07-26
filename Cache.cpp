@@ -34,6 +34,7 @@ Cache::Cache( uint32_t CacheName, uint8_t CacheType, uint32_t cache_size, uint32
     m_BlockSize_log2 = Cache::floorLog2( blocksize ) ;
     m_Associativity_log2 = Cache::floorLog2( associativity ) ;
     m_Num_Set = m_CacheSize >> ( m_BlockSize_log2 + m_Associativity_log2 ) ;
+    m_Num_Set_Log2 = Cache::floorLog2( m_Num_Set ) ;
     m_Sets = new Cache_Set*[ m_Num_Set ] ;
 
     if ( CacheType == CACHE ||CacheType == BUFFERCACHE )
@@ -61,13 +62,13 @@ void Cache::BuildHybridCache( uint8_t numofcellType, uint8_t numofsub, uint8_t *
     delete[] writelatency ;
 }  // Cache::BuildHybridCache
 
-void Cache::SplitAddress( const uint64_t addr, uint64_t& tag, uint32_t& associ_index, uint32_t& block_offset ) {
+void Cache::SplitAddress( const uint64_t addr, uint64_t& tag, uint32_t& set_index, uint32_t& block_offset ) {
 
     uint32_t mask_block = ( 1 << ( m_BlockSize_log2 ) ) - 1 ;
-    uint32_t mask_associ = ( ( ( mask_block + 1 ) << m_Associativity_log2 ) - 1 ) ^ mask_block ;
+    uint32_t mask_setindex = ( ( ( mask_block + 1 ) << m_Num_Set_Log2 ) - 1 ) ^ mask_block ;
     block_offset = addr & mask_block ;
-    associ_index = ( addr & mask_associ ) >> m_BlockSize_log2 ;
-    tag = addr >> ( m_BlockSize_log2 + m_Associativity_log2 ) ;
+    set_index = ( addr & mask_setindex ) >> m_BlockSize_log2 ;
+    tag = addr >> ( m_BlockSize_log2 + m_Num_Set_Log2 ) ;
 
 }  // Cache::SplitAddress()
 
@@ -131,7 +132,7 @@ bool Cache::AccessHybridCache( uint32_t AccessType, const uint64_t accessTime, c
 
 uint64_t Cache::TagToAddress( uint64_t tag, uint32_t index ) {
     uint64_t address ;
-    address = ( tag << m_Associativity_log2 ) + index ;
+    address = ( tag << m_Num_Set_Log2) + index ;
     return address ;
 }  // Cache::TagToAddress()
 

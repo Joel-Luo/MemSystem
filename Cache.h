@@ -63,6 +63,7 @@ class Cache {
 
         uint32_t m_BlockSize_log2 ;
         uint32_t m_Associativity_log2 ;
+        uint32_t m_Num_Set_Log2 ;
 
 
     public:
