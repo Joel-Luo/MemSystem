@@ -72,21 +72,21 @@ Cache_Set::Cache_Set( uint32_t blocksize, uint32_t associativity, uint32_t repla
 
 }  // Cache_Set::Cache_Set
 void Cache_Set::ReadData( Byte * out, uint32_t way_index, uint32_t offset, uint32_t length ) {
-    if ( out != NULL )
-        memcpy( out, m_Way[ way_index ].mData + offset, length ) ;
+    //if ( out != NULL )
+        // memcpy( out, m_Way[ way_index ].mData + offset, length ) ;
 }  // Cache_Set::ReadLine()
 
 void Cache_Set::WriteData( Byte * in, uint32_t way_index, uint32_t offset, uint32_t length ) {
-    if ( in != NULL )
-        memcpy( m_Way[ way_index ].mData + offset, in, length ) ;
+    //if ( in != NULL )
+        // memcpy( m_Way[ way_index ].mData + offset, in, length ) ;
 }  // Cache_Set::WriteLine()
 
 void Cache_Set::AllocateData( Byte * in, uint64_t tag, uint32_t way_index, uint32_t offset, uint32_t length ) {
     if ( m_WritePolicy == WRITEPOLICY::WRITE_BACK ) {
         m_Way[ way_index ].Valid = true ;
         m_Way[ way_index ].mTag = tag ;
-        if ( in != NULL )
-            memcpy( m_Way[ way_index ].mData + offset, in, length ) ;
+        //if ( in != NULL )
+            // memcpy( m_Way[ way_index ].mData + offset, in, length ) ;
     }  // if
 }  // Cache_Set::WriteLine()
 

@@ -19,13 +19,12 @@ void ExecuteMemOperation( FILE * input, MemContoller * memsystem ) {
         if ( counter > gTotal_inst ) break ;
         char * tempStr = new char[ 20 ] ;
         char * op_s = new char[ 2 ] ;
-        if ( fscanf( input, "%s", tempStr ) <= 0  ) break ;
-        if ( feof( input ) || strcmp( tempStr, "#eof" ) == 0 )
-            break ;
+        if ( fscanf( input, "%s", tempStr ) != 1 ) break  ;
+        if ( feof( input ) || strcmp( tempStr, "#eof" ) == 0 ) break ;
         accessTime = strtoll( tempStr, NULL, 16 ) ;
-        if ( fscanf( input, "%s", tempStr ) <= 0 ) break ;
+        if ( fscanf( input, "%s", tempStr ) != 1 ) break  ;
         address = strtoll( tempStr, NULL, 16 ) ;
-        if ( fscanf( input, "%s", op_s ) <= 0 ) break ;
+        if ( fscanf( input, "%s", op_s ) != 1 ) break ;
         // Log::PrintMessage( "Instruction id : " + std::to_string(counter) ) ;
         if ( strcmp( op_s, "R" ) == 0 )
             memsystem->CoreAccessMem( accessTime, address, MemContoller::READ, NULL, 8 ) ;
@@ -34,10 +33,10 @@ void ExecuteMemOperation( FILE * input, MemContoller * memsystem ) {
         else
             Log::PrintError( "Unknown memory operation" ) ;
 
-        delete[] tempStr ;
-        delete[] op_s ;
-    }  // while()
-
+        delete tempStr ;
+        delete op_s ;
+    }  // for ;
+    
     memsystem->FinishAllOperation() ;
 
 }

@@ -234,8 +234,8 @@ bool BufferCache::BufferAccess( const uint64_t accessTime, const uint64_t addres
 
         for ( uint8_t i = 0; i < mBufferQueue->size(); i++ ) {
             if ( mBufferSet[ mBufferQueue->at( i ) ]->mAddress == address ) {  // hit
-                if ( Data != NULL )
-                    memcpy( Data, mBufferSet[ mBufferQueue->at( i ) ]->mData, length ) ;
+                //if ( Data != NULL )
+                    // memcpy( Data, mBufferSet[ mBufferQueue->at( i ) ]->mData, length ) ;
                 return true ;
             }  // if
         }  // for
@@ -244,11 +244,10 @@ bool BufferCache::BufferAccess( const uint64_t accessTime, const uint64_t addres
 
     else {  // Write
         int8_t find = -1 ;
-        for ( uint8_t i = 0; i < mBufferQueue->size(); ) {
+        for ( uint8_t i = 0; i < mBufferQueue->size() ; ) {
             if ( mBufferSet[ mBufferQueue->at( i ) ]->mAddress == address ) {  // hit
                 uint8_t index = mBufferQueue->at( i ) ;
                 mBufferQueue->erase( mBufferQueue->begin() + i ) ;
-                mBufferNonUseQueue->push_back( index ) ;
                 find = index ;
             }  // if
             else
@@ -273,7 +272,7 @@ uint8_t BufferCache::AllocatBufferEntry( uint64_t nowTime, uint32_t &AddLatency,
         index = mBufferQueue->at( 0 ) ;
         uint64_t timeLength = nowTime - mBufferSet[ index ]->mAccessTime ;
         if ( timeLength > m_WriteLatency*50 )
-            AddLatency = ( m_WriteLatency*50 - timeLength )/50 ;
+            AddLatency = ( m_WriteLatency*50 - timeLength )/50 ;    
         mBufferQueue->erase( mBufferQueue->begin() ) ;
         mBufferNonUseQueue->push_back( index ) ;
     }  // if

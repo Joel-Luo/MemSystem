@@ -1,7 +1,7 @@
 Confige File = ./cache_buffer.cfg
 Total inst: 300000000
-Input File Path = /home/luo/spec2006/BenchmarkTrace/437-leslie3d_T.dat
-Output File Path = ./result/437-leslie3d.out
+Input File Path = /home/luo/spec2006/BenchmarkTrace/434-zeusmp_T.dat
+Output File Path = ./result/434-zeusmp.out
 Int: 5000000	Progress:1.666667%
 Int: 10000000	Progress:3.333333%
 Int: 15000000	Progress:5.000000%
