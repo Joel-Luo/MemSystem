@@ -50,7 +50,7 @@ void Cache::BuildHybridCache( uint8_t numofcellType, uint8_t numofsub, uint8_t *
 
     int setsize = 0 ;
     int nowIndex = 0 ;
-    for ( uint8_t i = 0; i < numofcellType; i++ ) {
+    for ( uint32_t i = 0; i < numofcellType; i++ ) {
         setsize += ( m_Num_Set / numofsub ) * size[ i ] ;
         for ( ; nowIndex < setsize; nowIndex++ )
             m_Sets[ nowIndex ] =
@@ -198,7 +198,7 @@ BufferCache::BufferCache( uint8_t NumOfEntry, uint8_t DataLength, uint8_t ReadLa
 
     mBufferQueue = new std::vector < uint8_t >() ;
     mBufferNonUseQueue = new std::vector < uint8_t > ;
-    for ( uint8_t i = 0; i < mNumOfEntry; i++ ) {
+    for ( uint32_t i = 0; i < mNumOfEntry; i++ ) {
         mBufferNonUseQueue->push_back( i ) ;
         mBufferSet[ i ] = new BufferSet ;
         mBufferSet[ i ]->mAddress = 0 ;
@@ -233,7 +233,7 @@ bool BufferCache::BufferAccess( const uint64_t accessTime, const uint64_t addres
 
     if ( AccessType == Cache::READ ) {
 
-        for ( uint8_t i = 0; i < mBufferQueue->size(); i++ ) {
+        for ( uint32t i = 0; i < mBufferQueue->size(); i++ ) {
             if ( mBufferSet[ mBufferQueue->at( i ) ]->mAddress == address ) {  // hit
                 //if ( Data != NULL )
                     // memcpy( Data, mBufferSet[ mBufferQueue->at( i ) ]->mData, length ) ;
@@ -245,7 +245,7 @@ bool BufferCache::BufferAccess( const uint64_t accessTime, const uint64_t addres
 
     else {  // Write
         int8_t find = -1 ;
-        for ( uint8_t i = 0; i < mBufferQueue->size() ; ) {
+        for ( uint32_t i = 0; i < mBufferQueue->size() ; ) {
             if ( mBufferSet[ mBufferQueue->at( i ) ]->mAddress == address ) {  // hit
                 uint8_t index = mBufferQueue->at( i ) ;
                 mBufferQueue->erase( mBufferQueue->begin() + i ) ;

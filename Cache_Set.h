@@ -51,6 +51,7 @@ class Cache_Set {
         uint32_t m_RetentionTime ;
         uint8_t m_ReadLatency ;
         uint8_t m_WriteLatency ;
+        uint32_t m_UsingTime ;
 
     public:
 

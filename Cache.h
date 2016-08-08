@@ -76,8 +76,8 @@ class Cache {
         uint64_t m_Num_R_Access ;
         uint64_t m_Num_R_Hit ;
 
-    private:
-            Cache_Set** m_Sets ;
+    
+        Cache_Set** m_Sets ;
     public:
         uint32_t m_Num_Set ;
         uint32_t m_ReplacePolicy ;
@@ -112,6 +112,8 @@ class Cache {
 
         bool RetentionTimeUp( uint32_t set_index, uint32_t & wayindex, uint64_t accessTime,  Byte * out) ;
         void UpdateTimeStamp(  uint32_t set_index, uint32_t  wayindex, uint64_t accessTime) ;
+        
+        
 
 } ;
 

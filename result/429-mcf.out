@@ -7,33 +7,33 @@ Create cache: cache_l3		size: 8192	blocksize: 128	ReadLatency: 25	WriteLatency: 
 ========== End of Cache Configuration ==========
 
 ========== L1 info ==========
-w_access: 49290200	w_miss: 8571579	w_miss_rate: 17.390027%
-r_access: 250709781	r_miss: 97609383	r_miss_rate: 38.933217%
-t_access: 299999981	t_miss: 106180962	t_miss_rate: 35.393656%
-Read_Latency: 1923441939	Write_Latency: 250729548
+w_access: 49290200	w_miss: 643524	w_miss_rate: 1.305582%
+r_access: 250709781	r_miss: 41913594	r_miss_rate: 16.717973%
+t_access: 299999981	t_miss: 42557118	t_miss_rate: 14.185707%
+Read_Latency: 1255092471	Write_Latency: 155592888
 ========== End of L1 ==========
 
 ========== L2 info ==========
 Buffer info : 
-w_access: 106180813	w_miss: 96802136	w_miss_rate: 91.167258%
-r_access: 106180962	r_miss: 106180962	r_miss_rate: 100.000000%
-t_access: 212361775	t_miss: 202983098	t_miss_rate: 95.583632%
+w_access: 42499186	w_miss: 40593647	w_miss_rate: 95.516293%
+r_access: 42557118	r_miss: 42557118	r_miss_rate: 100.000000%
+t_access: 85056304	t_miss: 83150765	t_miss_rate: 97.759673%
 Cache info :
-w_access: 96802135	w_miss: 1	w_miss_rate: 0.000001%
-r_access: 106180962	r_miss: 20961064	r_miss_rate: 19.740887%
-t_access: 202983097	t_miss: 20961065	t_miss_rate: 10.326508%
+w_access: 40593646	w_miss: 1	w_miss_rate: 0.000002%
+r_access: 42557118	r_miss: 1050	r_miss_rate: 0.002467%
+t_access: 83150764	t_miss: 1051	t_miss_rate: 0.001264%
 Buffer Latency:
-ReadLatency: 0	WriteLatency: 75029416
+ReadLatency: 0	WriteLatency: 15244312
 STTRAM Latency:
-ReadLatency: 1752149090	WriteLatency: 1258427793
+ReadLatency: 383053962	WriteLatency: 527717436
 Total Latency:
-ReadLatency: 1752149090	WriteLatency: 1333457209
+ReadLatency: 383053962	WriteLatency: 542961748
 ========== End of L2 ==========
 
 ========== L3 info ==========
 w_access: 0	w_miss: 0	w_miss_rate: -nan%
-r_access: 20961065	r_miss: 12	r_miss_rate: 0.000057%
-t_access: 20961065	t_miss: 12	t_miss_rate: 0.000057%
-Read_Latency: 524027525	Write_Latency: 0
+r_access: 1051	r_miss: 12	r_miss_rate: 1.141770%
+t_access: 1051	t_miss: 12	t_miss_rate: 1.141770%
+Read_Latency: 27175	Write_Latency: 0
 ========== End of L3 ==========
 

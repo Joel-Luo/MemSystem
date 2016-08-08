@@ -111,9 +111,14 @@ void Monitor::OutputCacheInfo( int CacheLevel ) {
                                          + "\tWriteLatency: " + std::to_string( sw_l )
                                          + "\nTotal Latency:\nReadLatency: " + std::to_string( tr_l )
                                          + "\tWriteLatency: " + std::to_string( tw_l ) ) ;
-
+        /*
+        FILE * temp = fopen( "./logIndex.txt", "w" ) ;
+        for ( uint32_t i = 0 ; i <  m_Cache_list[ CacheLevel ]->m_Num_Set ; i++ )
+          fprintf( temp, "%d %d\n", i,  m_Cache_list[ CacheLevel ]->m_Sets[i]->m_UsingTime ) ;
+        */  
         Log::PrintMessageToFile( Log::CacheResultInfoFile, "========== End of L" + std::to_string( CacheLevel + 1 )
                                          + " ==========\n" ) ;
+                                         
     }  // else if
 
 }  // Monitor::OutputL1CacheInfo()
