@@ -27,7 +27,7 @@ void Cache_Ctrl::SetNextLevelCacheCtrl( Cache_Ctrl * nextLevelCacheCtrl ) {
 
 void Cache_Ctrl::Access( const uint64_t accessTime, const uint64_t address, const uint32_t AccessType, Byte * Data,
         uint32_t length ) {
-
+    mThis->mLastWriteCacheTime = accessTime ;
     if ( mThisCacheType == Cache::CACHE ) {
         if ( mThis->AccessCache( AccessType, accessTime, address, Data, length ) ) {  //if true cache  hit
             if ( AccessType == Cache::WRITE ) {
@@ -365,7 +365,6 @@ void Cache_Ctrl::FlushOperationInBufferCache() {
         return ;
     uint64_t accesstime =
             mThis->mBufferCache->mBufferSet[ mThis->mBufferCache->mBufferQueue->at( size - 1 ) ]->mAccessTime ;
-    mThis->mLastWriteCacheTime = accesstime ;
     accesstime += 50 ;
 
 

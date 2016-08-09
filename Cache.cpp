@@ -300,8 +300,8 @@ uint8_t BufferCache::AllocatBufferEntry( uint64_t nowTime, uint32_t &AddLatency,
         isBufferFull = true ;
         index = mBufferQueue->at( 0 ) ;
         uint64_t timeLength = nowTime - mBufferSet[ index ]->mAccessTime ;
-        if ( timeLength*2 > m_WriteLatency )
-            AddLatency = ( m_WriteLatency - timeLength*2 ) ;    
+        if ( timeLength > m_WriteLatency )
+            AddLatency = ( m_WriteLatency - timeLength ) ;
         mBufferQueue->erase( mBufferQueue->begin() ) ;
         mBufferNonUseQueue->push_back( index ) ;
     }  // if
