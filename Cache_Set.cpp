@@ -50,6 +50,7 @@ Cache_Set::Cache_Set( uint32_t blocksize, uint32_t associativity, uint32_t repla
         m_Way[ i ].mData = NULL ;
 #endif
         m_Way[ i ].mTimeStamp = -1 ;
+        m_Way[ i ].mTimeLog = new std::vector<uint64_t>() ;
     }  // for
 
 }  // Cache_Set::Cache_Set
@@ -57,6 +58,7 @@ Cache_Set::Cache_Set( uint32_t blocksize, uint32_t associativity, uint32_t repla
 Cache_Set::Cache_Set( uint32_t blocksize, uint32_t associativity, uint32_t replacePolicy, uint32_t writePolicy,
         uint8_t ReadLatency, uint8_t WriteLatency, uint32_t retentionTime ) :
         m_BlockSize( blocksize ), m_Associativity( associativity ), m_WritePolicy( writePolicy ), m_RetentionTime( retentionTime ), m_ReadLatency( ReadLatency ), m_WriteLatency( WriteLatency ) {
+    m_UsingTime = 0 ;
     m_RP_Manager = new ReplaceManager( associativity, REPLACEPOLICY::LRU ) ;
     m_Way = new Way[ m_Associativity ] ;
     for ( uint32_t i = 0; i < m_Associativity; i++ ) {
@@ -68,8 +70,10 @@ Cache_Set::Cache_Set( uint32_t blocksize, uint32_t associativity, uint32_t repla
 #else
         m_Way[ i ].mData = NULL ;
 #endif
-        m_Way[ i ].mTimeStamp = 0 ;
+        m_Way[ i ].mTimeStamp = -1 ;
+        m_Way[ i ].mTimeLog = new std::vector<uint64_t>() ;
     }  // for
+
 
 }  // Cache_Set::Cache_Set
 void Cache_Set::ReadData( Byte * out, uint32_t way_index, uint32_t offset, uint32_t length ) {

@@ -7,6 +7,8 @@
 #include <stdint.h>
 
 FILE * Log::CacheResultInfoFile = NULL ;
+FILE * Log::CacheLineInfoFile = NULL ;
+
 unsigned long long  gTotal_inst = 500000000 ;
 
 void ExecuteMemOperation( FILE * input, MemContoller * memsystem ) {
@@ -33,8 +35,8 @@ void ExecuteMemOperation( FILE * input, MemContoller * memsystem ) {
         else
             Log::PrintError( "Unknown memory operation" ) ;
 
-        delete tempStr ;
-        delete op_s ;
+        delete [] tempStr ;
+        delete [] op_s ;
     }  // for ;
     
     memsystem->FinishAllOperation() ;
@@ -53,6 +55,7 @@ int main( int argc, char const *argv[] ) {
             MemContoller * memsystem = NULL ;
             FILE * input = NULL ;
             FILE * output = NULL ;
+            FILE * CLU = NULL ;  // cache line usage
             char * configFile = NULL ;
 
             for ( int i = 1; i < argc; i = i + 2 ) {
@@ -76,6 +79,11 @@ int main( int argc, char const *argv[] ) {
                     Log::PrintMessage( "Total inst: " + std::to_string( gTotal_inst ) ) ;
                 } // else if 
 
+                else if ( strcmp( argv[ i ], "-clu" ) == 0 ) {
+                    CLU = fopen( argv[ i + 1 ], "w" ) ;
+                    Log::PrintMessage( "CacheLineUsage = " + std::string( argv[ i + 1 ] ) ) ;
+                }  // else if
+
             }  // for
 
             if ( input == NULL )
@@ -89,6 +97,7 @@ int main( int argc, char const *argv[] ) {
             }  // else if
 
             Log::CacheResultInfoFile = output ;
+            Log::CacheLineInfoFile = CLU ;
             memsystem = new MemContoller( configFile ) ;
             ExecuteMemOperation( input, memsystem ) ;
 

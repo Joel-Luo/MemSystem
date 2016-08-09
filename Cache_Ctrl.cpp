@@ -367,6 +367,8 @@ void Cache_Ctrl::FlushOperationInBufferCache() {
             mThis->mBufferCache->mBufferSet[ mThis->mBufferCache->mBufferQueue->at( size - 1 ) ]->mAccessTime ;
     accesstime += 50 ;
 
+    mThis->mLastWriteCacheTime = accesstime ;
+
     std::vector < uint8_t > * list = new std::vector < uint8_t > ;
     // move request from buffer to cache
     list = mThis->mBufferCache->GetRequestToCache( list, accesstime ) ;

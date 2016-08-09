@@ -37,6 +37,7 @@ class Cache_Set {
                 uint64_t mTag ;
                 uint64_t mTimeStamp ;
                 Byte * mData ;  // Data size = blocksize
+                std::vector<uint64_t> * mTimeLog ;
         } ;
 
         Way * m_Way ;

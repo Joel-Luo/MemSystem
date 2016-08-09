@@ -69,6 +69,12 @@ uint64_t CfgParser::CacheParamter( string tag, string value ) {
             else if ( value.compare( "buffercache" ) == 0 )
                 return Cache::BUFFERCACHE ;
         }  // else if
+        else if ( tag.compare( "cachelinemode" ) == 0 ) {
+            if ( value.compare( "parallel" ) == 0 )
+                return Cache::PARALLEL ;
+            else if ( value.compare( "single" ) == 0 )
+                return Cache::SINGLE ;
+        }  // else if
 
 
         else

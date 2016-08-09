@@ -28,9 +28,10 @@ uint32_t Cache::floorLog2( uint32_t number ) {
 }  // Cache::floorLog2()
 
 Cache::Cache( uint32_t CacheName, uint8_t CacheType, uint32_t cache_size, uint32_t blocksize, uint32_t associativity,
-        uint32_t replacePolicy, uint32_t writepolicy, uint8_t readlatency, uint8_t writelatnecy ) :
-         m_CacheType( CacheType ), m_Name( CacheName ), m_CacheSize( cache_size << 10 ), m_BlockSize( blocksize ), m_Num_W_Access( 0 ),  m_Num_W_Hit( 0 ), m_Num_R_Access( 0 ), m_Num_R_Hit( 0 ), m_Sets(
-        NULL ), m_Num_Set( 0 ), m_ReplacePolicy( replacePolicy ), m_WritePolicy( writepolicy ), m_ReadLatency( readlatency ), m_WriteLatency( writelatnecy ) {
+        uint32_t replacePolicy, uint32_t writepolicy, uint8_t CLWM,  uint8_t readlatency, uint8_t writelatnecy ) :
+         m_CacheType( CacheType ), m_Name( CacheName ), m_CacheSize( cache_size << 10 ), m_BlockSize( blocksize ), m_Num_W_Access( 0 ),  m_Num_W_Hit( 0 ), m_Num_R_Access( 0 ), m_Num_R_Hit( 0 ), m_Num_Way( associativity ),m_Sets(
+        NULL ), m_Num_Set( 0 ), m_ReplacePolicy( replacePolicy ), m_WritePolicy( writepolicy ), m_CacheLineWriteMod( CLWM ), m_ReadLatency( readlatency ), m_WriteLatency( writelatnecy ) {
+    mLastWriteCacheTime = 0 ;
     m_BlockSize_log2 = Cache::floorLog2( blocksize ) ;
     m_Associativity_log2 = Cache::floorLog2( associativity ) ;
     m_Num_Set = m_CacheSize >> ( m_BlockSize_log2 + m_Associativity_log2 ) ;
@@ -184,6 +185,33 @@ bool Cache::RetentionTimeUp( uint32_t set_index, uint32_t & wayindex, uint64_t a
 }  // Cache::CalRTime()
 void Cache::UpdateTimeStamp( uint32_t set_index, uint32_t wayindex, uint64_t accessTime ) {
     m_Sets[ set_index ]->m_Way[ wayindex ].mTimeStamp = accessTime ;
+    if ( this->m_CacheLineWriteMod == Cache::SINGLE ) {
+      m_Sets[ set_index ]->m_Way[ wayindex ].mTimeLog->push_back( accessTime ) ;
+    } // if
+    else  {
+
+        // write -5 cache line parallel
+        for ( int i = 1, count = 0 ; set_index - i > -1 ; i++) {
+            if ( !m_Sets[ set_index - i ]->m_Way[ wayindex ].Valid ) {
+              m_Sets[ set_index - i ]->m_Way[ wayindex ].mTimeLog->push_back( accessTime ) ;
+              count++ ;
+            } // if
+            if ( count == 2 || i > 6  ) break ;
+        } // for
+
+        m_Sets[ set_index ]->m_Way[ wayindex ].mTimeLog->push_back( accessTime ) ;
+
+        // write +5 cache line parallel
+        for ( int i = 1, count = 0 ; set_index + i < m_Num_Set ; i++) {
+            if ( !m_Sets[ set_index + i ]->m_Way[ wayindex ].Valid ) {
+              m_Sets[ set_index + i ]->m_Way[ wayindex ].mTimeLog->push_back( accessTime ) ;
+              count++ ;
+            } // if
+            if ( count == 2 || i > 6  ) break ;
+        } // for
+
+    }  // else if
+
 }  // Cache::UpdateTimeStamp()
 
 BufferCache::BufferCache( uint8_t NumOfEntry, uint8_t DataLength, uint8_t ReadLatency, uint8_t WriteLatency ) :
@@ -233,7 +261,7 @@ bool BufferCache::BufferAccess( const uint64_t accessTime, const uint64_t addres
 
     if ( AccessType == Cache::READ ) {
 
-        for ( uint32t i = 0; i < mBufferQueue->size(); i++ ) {
+        for ( uint32_t i = 0; i < mBufferQueue->size(); i++ ) {
             if ( mBufferSet[ mBufferQueue->at( i ) ]->mAddress == address ) {  // hit
                 //if ( Data != NULL )
                     // memcpy( Data, mBufferSet[ mBufferQueue->at( i ) ]->mData, length ) ;

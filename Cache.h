@@ -56,7 +56,11 @@ class Cache {
         } ;
 
         enum CACHETYPE {
-            CACHE = 0 , HYBRIDCACHE, BUFFERCACHE
+            CACHE = 0, HYBRIDCACHE, BUFFERCACHE
+        };
+
+        enum CACHELINEWRITEMOD {
+            SINGLE = 0, PARALLEL
         };
 
     private:
@@ -64,6 +68,7 @@ class Cache {
         uint32_t m_BlockSize_log2 ;
         uint32_t m_Associativity_log2 ;
         uint32_t m_Num_Set_Log2 ;
+
 
 
     public:
@@ -75,13 +80,16 @@ class Cache {
         uint64_t m_Num_W_Hit ;
         uint64_t m_Num_R_Access ;
         uint64_t m_Num_R_Hit ;
+        uint32_t m_Num_Way ;
 
     
         Cache_Set** m_Sets ;
+        uint64_t mLastWriteCacheTime ;
     public:
         uint32_t m_Num_Set ;
         uint32_t m_ReplacePolicy ;
         uint32_t m_WritePolicy ;
+        uint8_t m_CacheLineWriteMod ;
 
         uint8_t m_ReadLatency ;
         uint8_t m_WriteLatency ;
@@ -94,7 +102,7 @@ class Cache {
     public:
 
         Cache( uint32_t CacheName, uint8_t CacheType, uint32_t cache_size, uint32_t blocksize, uint32_t associativity,
-                uint32_t replacePolicy, uint32_t writepolicy, uint8_t readlatency, uint8_t writelatnecy ) ;
+                uint32_t replacePolicy, uint32_t writepolicy, uint8_t CLWM, uint8_t readlatency, uint8_t writelatnecy ) ;
         void BuildHybridCache( uint8_t numofcellType, uint8_t numofsub, uint8_t * size, uint32_t * retentiontime, uint8_t * readlatency, uint8_t * writelatency, uint32_t blocksize, uint32_t associativity, uint32_t replacePolicy, uint32_t writepolicy ) ;
 
         void BuildBufferCache( uint8_t numofentry, uint8_t DataLength, uint8_t readlatency, uint8_t writelatency ) ;
