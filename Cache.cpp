@@ -191,7 +191,7 @@ void Cache::UpdateTimeStamp( uint32_t set_index, uint32_t wayindex, uint64_t acc
     else  {
 
         // write -5 cache line parallel
-        for ( int i = 1, count = 0 ; set_index - i > -1 ; i++) {
+        for ( int i = 1, count = 0 ; (int)set_index - i > -1 ; i++) {
             if ( !m_Sets[ set_index - i ]->m_Way[ wayindex ].Valid ) {
               m_Sets[ set_index - i ]->m_Way[ wayindex ].mTimeLog->push_back( accessTime ) ;
               count++ ;
@@ -300,8 +300,8 @@ uint8_t BufferCache::AllocatBufferEntry( uint64_t nowTime, uint32_t &AddLatency,
         isBufferFull = true ;
         index = mBufferQueue->at( 0 ) ;
         uint64_t timeLength = nowTime - mBufferSet[ index ]->mAccessTime ;
-        if ( timeLength > m_WriteLatency*50 )
-            AddLatency = ( m_WriteLatency*50 - timeLength )/50 ;    
+        if ( timeLength*2 > m_WriteLatency )
+            AddLatency = ( m_WriteLatency - timeLength*2 ) ;    
         mBufferQueue->erase( mBufferQueue->begin() ) ;
         mBufferNonUseQueue->push_back( index ) ;
     }  // if

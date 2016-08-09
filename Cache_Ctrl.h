@@ -31,6 +31,8 @@ class Cache_Ctrl {
 
         void SetNextLevelCacheCtrl( Cache_Ctrl * nextLevelCacheCtrl ) ;
 
+        void AddFinishTimeStampInCacheLine() ;
+
 } ;
 
 #endif /* CACHE_CTRL_H_ */

@@ -121,7 +121,7 @@ void Monitor::OutputCacheInfo( int CacheLevel ) {
                 for ( uint32_t j = 0 ; j < m_Cache_list[ CacheLevel ]->m_Num_Way ; j++ ) {
                     fprintf( Log::CacheLineInfoFile, "%d %d\n", i , j ) ;
                     for ( uint32_t k = 0 ; k < m_Cache_list[ CacheLevel ]->m_Sets[i]->m_Way[j].mTimeLog->size() ; k++ )
-                      fprintf( Log::CacheLineInfoFile, "%llx ",  m_Cache_list[ CacheLevel ]->m_Sets[i]->m_Way[j].mTimeLog->at(k) ) ;
+                      fprintf( Log::CacheLineInfoFile, "%lx ",  m_Cache_list[ CacheLevel ]->m_Sets[i]->m_Way[j].mTimeLog->at(k) ) ;
                     fprintf( Log::CacheLineInfoFile, "\n" ) ;
                 } // for
             } // for

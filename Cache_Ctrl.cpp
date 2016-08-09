@@ -365,9 +365,9 @@ void Cache_Ctrl::FlushOperationInBufferCache() {
         return ;
     uint64_t accesstime =
             mThis->mBufferCache->mBufferSet[ mThis->mBufferCache->mBufferQueue->at( size - 1 ) ]->mAccessTime ;
+    mThis->mLastWriteCacheTime = accesstime ;
     accesstime += 50 ;
 
-    mThis->mLastWriteCacheTime = accesstime ;
 
     std::vector < uint8_t > * list = new std::vector < uint8_t > ;
     // move request from buffer to cache
@@ -425,4 +425,13 @@ void Cache_Ctrl::FlushOperationInBufferCache() {
     delete list ;
 
 }
+
+void Cache_Ctrl::AddFinishTimeStampInCacheLine() {
+    for ( uint32_t i = 0 ; i < mThis->m_Num_Set ; i ++ )
+        for ( uint8_t j = 0 ; j < mThis->m_Num_Way ; j++ ) {
+            mThis->m_Sets[i]->m_Way[j].mTimeLog->push_back( mThis->mLastWriteCacheTime ) ;
+            mThis->m_Sets[i]->m_Way[j].mTimeLog->push_back( (uint64_t) -1 ) ;
+        }  // for 
+
+}  // 
 

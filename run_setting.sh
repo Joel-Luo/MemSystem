@@ -2,7 +2,7 @@ stdbuf -o0 ./MemSystem -conf ./cache_setting1.cfg -inst_num 500000000 -input /ho
 
 stdbuf -o0 ./MemSystem -conf ./cache_setting1.cfg -inst_num 500000000 -input /home/luo/spec2006/BenchmarkTrace/401-bzip2_T.dat -output ./result_setting1/401-bzip2.out >& ./log/S401-bzip2.txt &
 
-stdbuf -o0 ./MemSystem -conf ./cache_setting1.cfg -inst_num 100000000 -input /home/luo/spec2006/BenchmarkTrace/403-gcc_T.dat -output ./result_setting1/403-gcc.out >& ./log/S403-gcc.txt &
+stdbuf -o0 ./MemSystem -conf ./cache_setting1.cfg -inst_num 500000000 -input /home/luo/spec2006/BenchmarkTrace/403-gcc_T.dat -output ./result_setting1/403-gcc.out >& ./log/S403-gcc.txt &
 
 stdbuf -o0 ./MemSystem -conf ./cache_setting1.cfg -inst_num 500000000 -input /home/luo/spec2006/BenchmarkTrace/410-bwaves_T.dat -output ./result_setting1/410-bwaves.out >& ./log/S410-bwaves.txt &
 

@@ -2,6 +2,7 @@ Confige File = ./cache_buffer.cfg
 Total inst: 500000000
 Input File Path = /home/luo/spec2006/BenchmarkTrace/400-perlbench_T.dat
 Output File Path = ./result/400-perlbench.out
+CacheLineUsage = ./result/400-perlbench_CLUS.txt
 Int: 5000000	Progress:1.000000%
 Int: 10000000	Progress:2.000000%
 Int: 15000000	Progress:3.000000%

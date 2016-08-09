@@ -178,5 +178,6 @@ void MemContoller::CoreAccessMem( const uint64_t accessTime, const uint64_t addr
 void MemContoller::FinishAllOperation() {
     if ( m_CacheCtrl_list[ 1 ]->mThisCacheType == Cache::BUFFERCACHE ) {
         m_CacheCtrl_list[ 1 ]->FlushOperationInBufferCache() ;
+        m_CacheCtrl_list[ 1 ]->AddFinishTimeStampInCacheLine() ;
     }  // if
 }  // MemContoller::FinishAllOperation()
