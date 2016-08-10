@@ -63,15 +63,7 @@ void Cache::BuildHybridCache( uint8_t numofcellType, uint8_t numofsub, uint8_t *
     delete[] writelatency ;
 }  // Cache::BuildHybridCache
 
-void Cache::SplitAddress( const uint64_t addr, uint64_t& tag, uint32_t& set_index, uint32_t& block_offset ) {
 
-    uint32_t mask_block = ( 1 << ( m_BlockSize_log2 ) ) - 1 ;
-    uint32_t mask_setindex = ( ( ( mask_block + 1 ) << m_Num_Set_Log2 ) - 1 ) ^ mask_block ;
-    block_offset = addr & mask_block ;
-    set_index = ( addr & mask_setindex ) >> m_BlockSize_log2 ;
-    tag = addr >> ( m_BlockSize_log2 + m_Num_Set_Log2 ) ;
-
-}  // Cache::SplitAddress()
 
 bool Cache::AccessCache( uint32_t AccessType, const uint64_t accessTime, const uint64_t address, Byte * Data,
         uint32_t length ) {
@@ -79,6 +71,7 @@ bool Cache::AccessCache( uint32_t AccessType, const uint64_t accessTime, const u
     uint64_t tag ;
     uint32_t index, block_offset ;
     SplitAddress( address, tag, index, block_offset ) ;
+
 
     uint32_t way_index = m_Sets[ index ]->FindTagInWay( tag ) ;
 
@@ -131,10 +124,20 @@ bool Cache::AccessHybridCache( uint32_t AccessType, const uint64_t accessTime, c
     return true ;
 }  // Cache::AccessSingleLine
 
+void Cache::SplitAddress( const uint64_t addr, uint64_t& tag, uint32_t& set_index, uint32_t& block_offset ) {
+
+    uint32_t mask_block = ( 1 << ( m_BlockSize_log2 ) ) - 1 ;
+    uint32_t mask_setindex = ( ( ( mask_block + 1 ) << m_Num_Set_Log2 ) - 1 ) ^ mask_block ;
+    block_offset = addr & mask_block ;
+    set_index = ( addr & mask_setindex ) >> m_BlockSize_log2 ;
+    tag = addr >> ( m_BlockSize_log2 + m_Num_Set_Log2 ) ;
+
+}  // Cache::SplitAddress()
+
 uint64_t Cache::TagToAddress( uint64_t tag, uint32_t index ) {
     uint64_t address ;
-    address = ( tag << m_Num_Set_Log2) + index ;
-    return address ;
+    address = ( tag << m_Num_Set_Log2) + index  ;
+    return address << m_BlockSize_log2 ;
 }  // Cache::TagToAddress()
 
 bool Cache::AllocateCache( uint32_t set_index ) {
@@ -163,7 +166,7 @@ void Cache::StoreCacheBlock( uint32_t set_index, uint64_t & TatgetAddr, Byte * o
     uint8_t way_index = m_Sets[ set_index ]->m_RP_Manager->GetReplaceIndex() ;
     m_Sets[ set_index ]->m_Way[ way_index ].Valid = false ;
     m_Sets[ set_index ]->ReadData( out, way_index, 0, m_BlockSize ) ;
-
+    TatgetAddr = TagToAddress( m_Sets[ set_index ]->m_Way[ way_index ].mTag, set_index  ) ;
 }  // Cache::StoreCacheBlock()
 
 bool Cache::RetentionTimeUp( uint32_t set_index, uint32_t & wayindex, uint64_t accessTime, Byte * out ) {
@@ -185,8 +188,11 @@ bool Cache::RetentionTimeUp( uint32_t set_index, uint32_t & wayindex, uint64_t a
 }  // Cache::CalRTime()
 void Cache::UpdateTimeStamp( uint32_t set_index, uint32_t wayindex, uint64_t accessTime ) {
     m_Sets[ set_index ]->m_Way[ wayindex ].mTimeStamp = accessTime ;
+    if ( m_Name != Cache::L2 ) return  ;
     if ( this->m_CacheLineWriteMod == Cache::SINGLE ) {
       m_Sets[ set_index ]->m_Way[ wayindex ].mTimeLog->push_back( accessTime ) ;
+      // Log::PrintMessage( std::to_string(set_index) + " " + std::to_string(wayindex) + " " + std::to_string(accessTime) + " " +
+      //                    std::to_string(m_Sets[ set_index ]->m_Way[ wayindex ].mTimeLog->size()) );
     } // if
     else  {
 

@@ -1,3 +1,0 @@
-Confige File = ./cache_buffer.cfg
-Total inst: 300000000
-Input file error: no this inputfile.

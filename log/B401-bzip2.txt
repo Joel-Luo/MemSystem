@@ -2,7 +2,7 @@ Confige File = ./cache_buffer.cfg
 Total inst: 500000000
 Input File Path = /home/luo/spec2006/BenchmarkTrace/401-bzip2_T.dat
 Output File Path = ./result/401-bzip2.out
-CacheLineUsage = ./result/401-bzip2_CLUS.txt
+CacheLineUsage = ../result/401-bzip2_CLUB.txt
 Int: 5000000	Progress:1.000000%
 Int: 10000000	Progress:2.000000%
 Int: 15000000	Progress:3.000000%
@@ -71,34 +71,3 @@ Int: 325000000	Progress:65.000000%
 Int: 330000000	Progress:66.000000%
 Int: 335000000	Progress:67.000000%
 Int: 340000000	Progress:68.000000%
-Int: 345000000	Progress:69.000000%
-Int: 350000000	Progress:70.000000%
-Int: 355000000	Progress:71.000000%
-Int: 360000000	Progress:72.000000%
-Int: 365000000	Progress:73.000000%
-Int: 370000000	Progress:74.000000%
-Int: 375000000	Progress:75.000000%
-Int: 380000000	Progress:76.000000%
-Int: 385000000	Progress:77.000000%
-Int: 390000000	Progress:78.000000%
-Int: 395000000	Progress:79.000000%
-Int: 400000000	Progress:80.000000%
-Int: 405000000	Progress:81.000000%
-Int: 410000000	Progress:82.000000%
-Int: 415000000	Progress:83.000000%
-Int: 420000000	Progress:84.000000%
-Int: 425000000	Progress:85.000000%
-Int: 430000000	Progress:86.000000%
-Int: 435000000	Progress:87.000000%
-Int: 440000000	Progress:88.000000%
-Int: 445000000	Progress:89.000000%
-Int: 450000000	Progress:90.000000%
-Int: 455000000	Progress:91.000000%
-Int: 460000000	Progress:92.000000%
-Int: 465000000	Progress:93.000000%
-Int: 470000000	Progress:94.000000%
-Int: 475000000	Progress:95.000000%
-Int: 480000000	Progress:96.000000%
-Int: 485000000	Progress:97.000000%
-Int: 490000000	Progress:98.000000%
-Int: 495000000	Progress:99.000000%

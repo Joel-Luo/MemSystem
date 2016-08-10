@@ -1,14 +1,14 @@
-stdbuf -o0 ./MemSystem -conf ./cache_buffer.cfg -inst_num 500000000 -input /home/luo/spec2006/BenchmarkTrace/400-perlbench_T.dat -output ./result/400-perlbench.out -clu ../result/400-perlbench_CLUS.txt >& ./log/B400-perlbench.txt &
+stdbuf -o0 ./MemSystem -conf ./cache_buffer.cfg -inst_num 500000000 -input /home/luo/spec2006/BenchmarkTrace/400-perlbench_T.dat -output ./result/400-perlbench.out -clu ../result/400-perlbench_CLUB.txt >& ./log/B400-perlbench.txt &
 
-stdbuf -o0 ./MemSystem -conf ./cache_buffer.cfg -inst_num 500000000 -input /home/luo/spec2006/BenchmarkTrace/401-bzip2_T.dat -output ./result/401-bzip2.out -clu ../result/401-bzip2_CLUS.txt >& ./log/B401-bzip2.txt &
+stdbuf -o0 ./MemSystem -conf ./cache_buffer.cfg -inst_num 500000000 -input /home/luo/spec2006/BenchmarkTrace/401-bzip2_T.dat -output ./result/401-bzip2.out -clu ../result/401-bzip2_CLUB.txt >& ./log/B401-bzip2.txt &
 
-stdbuf -o0 ./MemSystem -conf ./cache_buffer.cfg -inst_num 500000000 -input /home/luo/spec2006/BenchmarkTrace/403-gcc_T.dat -output ./result/403-gcc.out -clu ../result/403-gcc_CLUS.txt >& ./log/B403-gcc.txt &
+stdbuf -o0 ./MemSystem -conf ./cache_buffer.cfg -inst_num 500000000 -input /home/luo/spec2006/BenchmarkTrace/403-gcc_T.dat -output ./result/403-gcc.out -clu ../result/403-gcc_CLUB.txt >& ./log/B403-gcc.txt &
 
-stdbuf -o0 ./MemSystem -conf ./cache_buffer.cfg -inst_num 500000000 -input /home/luo/spec2006/BenchmarkTrace/410-bwaves_T.dat -output ./result/410-bwaves.out -clu ../result/410-bwaves_CLUS.txt >& ./log/B410-bwaves.txt &
+stdbuf -o0 ./MemSystem -conf ./cache_buffer.cfg -inst_num 500000000 -input /home/luo/spec2006/BenchmarkTrace/410-bwaves_T.dat -output ./result/410-bwaves.out -clu ../result/410-bwaves_CLUB.txt >& ./log/B410-bwaves.txt &
 
-stdbuf -o0 ./MemSystem -conf ./cache_buffer.cfg -inst_num 500000000 -input /home/luo/spec2006/BenchmarkTrace/416-gamess_T.dat -output ./result/416-gamess.out -clu ../result/416-gamess_CLUS.txt >& ./log/B416-gamess.txt &
+stdbuf -o0 ./MemSystem -conf ./cache_buffer.cfg -inst_num 500000000 -input /home/luo/spec2006/BenchmarkTrace/416-gamess_T.dat -output ./result/416-gamess.out -clu ../result/416-gamess_CLUB.txt >& ./log/B416-gamess.txt &
 
-stdbuf -o0 ./MemSystem -conf ./cache_buffer.cfg -inst_num 300000000 -input /home/luo/spec2006/BenchmarkTrace/429-mcf_T.dat -output ./result/429-mcf.out -clu ../result/429-mcf_CLUS.txt >& ./log/B429-mcf.txt &
+stdbuf -o0 ./MemSystem -conf ./cache_buffer.cfg -inst_num 300000000 -input /home/luo/spec2006/BenchmarkTrace/429-mcf_T.dat -output ./result/429-mcf.out -clu ../result/429-mcf_CLUB.txt >& ./log/B429-mcf.txt &
 
 #stdbuf -o0 ./MemSystem -conf ./cache_buffer.cfg -inst_num 300000000 -input /home/luo/spec2006/BenchmarkTrace/433-milc_T.dat -output ./result/433-milc.out -clu ../result/433-milc_CLUS.txt >& ./log/B433-milc.out.txt &
 

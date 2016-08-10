@@ -15,25 +15,25 @@ Read_Latency: 1255092471	Write_Latency: 155592888
 
 ========== L2 info ==========
 Buffer info : 
-w_access: 42499186	w_miss: 40593647	w_miss_rate: 95.516293%
-r_access: 42557118	r_miss: 42557118	r_miss_rate: 100.000000%
-t_access: 85056304	t_miss: 83150765	t_miss_rate: 97.759673%
+w_access: 42499186	w_miss: 42499186	w_miss_rate: 100.000000%
+r_access: 42557118	r_miss: 42557030	r_miss_rate: 99.999793%
+t_access: 85056304	t_miss: 85056216	t_miss_rate: 99.999897%
 Cache info :
-w_access: 40593646	w_miss: 1	w_miss_rate: 0.000002%
-r_access: 42557118	r_miss: 1050	r_miss_rate: 0.002467%
-t_access: 83150764	t_miss: 1051	t_miss_rate: 0.001264%
+w_access: 42499185	w_miss: 636	w_miss_rate: 0.001496%
+r_access: 42557030	r_miss: 8305060	r_miss_rate: 19.515131%
+t_access: 85056215	t_miss: 8305696	t_miss_rate: 9.764949%
 Buffer Latency:
-ReadLatency: 0	WriteLatency: 15244312
+ReadLatency: 792	WriteLatency: 0
 STTRAM Latency:
-ReadLatency: 383053962	WriteLatency: 527717436
+ReadLatency: 698605550	WriteLatency: 552513573
 Total Latency:
-ReadLatency: 383053962	WriteLatency: 542961748
+ReadLatency: 698606342	WriteLatency: 552513573
 ========== End of L2 ==========
 
 ========== L3 info ==========
-w_access: 0	w_miss: 0	w_miss_rate: -nan%
-r_access: 1051	r_miss: 12	r_miss_rate: 1.141770%
-t_access: 1051	t_miss: 12	t_miss_rate: 1.141770%
-Read_Latency: 27175	Write_Latency: 0
+w_access: 8263973	w_miss: 13869	w_miss_rate: 0.167825%
+r_access: 8305696	r_miss: 87631	r_miss_rate: 1.055071%
+t_access: 16569669	t_miss: 101500	t_miss_rate: 0.612565%
+Read_Latency: 214214725	Write_Latency: 207639500
 ========== End of L3 ==========
 

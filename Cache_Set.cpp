@@ -100,7 +100,7 @@ void Cache_Set::AllocateData( Byte * in, uint64_t tag, uint32_t way_index, uint3
 uint32_t Cache_Set::FindTagInWay( uint64_t tag ) {
 
     for ( uint32_t i = 0; i < m_Associativity; i++ ) {
-        if ( m_Way[ i ].Valid && m_Way[ i ].mTag == tag  )
+        if ( m_Way[ i ].mTag == tag && m_Way[ i ].Valid )
             return i ;
     }  // for
     return -1 ;
