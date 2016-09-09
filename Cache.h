@@ -85,6 +85,7 @@ class Cache {
     
         Cache_Set** m_Sets ;
         uint64_t mLastWriteCacheTime ;
+
     public:
         uint32_t m_Num_Set ;
         uint32_t m_ReplacePolicy ;
@@ -93,6 +94,7 @@ class Cache {
 
         uint8_t m_ReadLatency ;
         uint8_t m_WriteLatency ;
+        bool mEnableRecord ;
 
         BufferCache * mBufferCache ;
 
@@ -102,7 +104,7 @@ class Cache {
     public:
 
         Cache( uint32_t CacheName, uint8_t CacheType, uint32_t cache_size, uint32_t blocksize, uint32_t associativity,
-                uint32_t replacePolicy, uint32_t writepolicy, uint8_t CLWM, uint8_t readlatency, uint8_t writelatnecy ) ;
+                uint32_t replacePolicy, uint32_t writepolicy, uint8_t readlatency, uint8_t writelatnecy ) ;
         void BuildHybridCache( uint8_t numofcellType, uint8_t numofsub, uint8_t * size, uint32_t * retentiontime, uint8_t * readlatency, uint8_t * writelatency, uint32_t blocksize, uint32_t associativity, uint32_t replacePolicy, uint32_t writepolicy ) ;
 
         void BuildBufferCache( uint8_t numofentry, uint8_t DataLength, uint8_t readlatency, uint8_t writelatency ) ;

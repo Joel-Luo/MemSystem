@@ -30,15 +30,16 @@ void Cache_Ctrl::Access( const uint64_t accessTime, const uint64_t address, cons
     mThis->mLastWriteCacheTime = accessTime ;
     if ( mThisCacheType == Cache::CACHE ) {
         if ( mThis->AccessCache( AccessType, accessTime, address, Data, length ) ) {  //if true cache  hit
-            if ( AccessType == Cache::WRITE ) {
-                mThis->m_Num_W_Access++ ;
-                mThis->m_Num_W_Hit++ ;
+            if ( mThis->mEnableRecord ) {
+              if ( AccessType == Cache::WRITE ) {
+                  mThis->m_Num_W_Access++ ;
+                  mThis->m_Num_W_Hit++ ;
+              }  // if
+              else {
+                  mThis->m_Num_R_Access++ ;
+                  mThis->m_Num_R_Hit++ ;
+              }  // else
             }  // if
-            else {
-                mThis->m_Num_R_Access++ ;
-                mThis->m_Num_R_Hit++ ;
-            }  // else
-
             /*
              Log::PrintDebugLog( "CACHE L1 hit  : address:" ) ;
              printf( "0x%016llX length: %d\n", ( long long ) address, length ) ;
@@ -46,11 +47,12 @@ void Cache_Ctrl::Access( const uint64_t accessTime, const uint64_t address, cons
         }  // if
 
         else {  // cache miss
-            if ( AccessType == Cache::WRITE )
-                mThis->m_Num_W_Access++ ;
-            else
-                mThis->m_Num_R_Access++ ;
-
+            if ( mThis->mEnableRecord ) {
+              if ( AccessType == Cache::WRITE )
+                  mThis->m_Num_W_Access++ ;
+              else
+                  mThis->m_Num_R_Access++ ;
+            } // iif
             /*
              Log::PrintDebugLog( "CACHE L1 miss : address:" ) ;
              printf( "0x%016llX length: %d\n", ( long long ) address, length ) ;

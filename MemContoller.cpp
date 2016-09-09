@@ -24,7 +24,7 @@ void MemContoller::CreateMemSystem() {
                                            cfgparser->ParseDevice( "cache_l1_D", "blocksize" ),
                                            cfgparser->ParseDevice( "cache_l1", "associativity" ),
                                            cfgparser->ParseDevice( "cache_l1_D", "replacepolicy" ),
-                                           cfgparser->ParseDevice( "cache_l1_D", "writepolicy" ), Cache::SINGLE,
+                                           cfgparser->ParseDevice( "cache_l1_D", "writepolicy" ),
                                            cfgparser->ParseDevice( "cache_l1_D", "readlatency" ),
                                            cfgparser->ParseDevice( "cache_l1_D", "writelatency" ) ) ;
             Log::PrintMessageToFile(
@@ -47,7 +47,7 @@ void MemContoller::CreateMemSystem() {
                                                cfgparser->ParseDevice( "cache_l2", "blocksize" ),
                                                cfgparser->ParseDevice( "cache_l2", "associativity" ),
                                                cfgparser->ParseDevice( "cache_l2", "replacepolicy" ),
-                                               cfgparser->ParseDevice( "cache_l2", "writepolicy" ), Cache::SINGLE, -1,
+                                               cfgparser->ParseDevice( "cache_l2", "writepolicy" ), -1,
                                                -1 ) ;
                 uint8_t numOfCellType = cfgparser->ParseDevice( "cache_l2", "numofcelltype" ) ;
                 Log::PrintMessageToFile(
@@ -91,7 +91,6 @@ void MemContoller::CreateMemSystem() {
                                                cfgparser->ParseDevice( "cache_l2", "associativity" ),
                                                cfgparser->ParseDevice( "cache_l2", "replacepolicy" ),
                                                cfgparser->ParseDevice( "cache_l2", "writepolicy" ),
-                                               cfgparser->ParseDevice( "cache_l2", "cachelinemode" ),
                                                cfgparser->ParseDevice( "cache_l2", "readlatency" ),
                                                cfgparser->ParseDevice( "cache_l2", "writelatency" ) ) ;
                 Log::PrintMessageToFile(
@@ -125,7 +124,6 @@ void MemContoller::CreateMemSystem() {
                                                cfgparser->ParseDevice( "cache_l2", "associativity" ),
                                                cfgparser->ParseDevice( "cache_l2", "replacepolicy" ),
                                                cfgparser->ParseDevice( "cache_l2", "writepolicy" ),
-                                               cfgparser->ParseDevice( "cache_l2", "cachelinemode" ),
                                                cfgparser->ParseDevice( "cache_l2", "readlatency" ),
                                                cfgparser->ParseDevice( "cache_l2", "writelatency" ) ) ;
                 Log::PrintMessageToFile(
@@ -146,7 +144,7 @@ void MemContoller::CreateMemSystem() {
                                            cfgparser->ParseDevice( "cache_l3", "blocksize" ),
                                            cfgparser->ParseDevice( "cache_l3", "associativity" ),
                                            cfgparser->ParseDevice( "cache_l3", "replacepolicy" ),
-                                           cfgparser->ParseDevice( "cache_l3", "writepolicy" ), Cache::SINGLE,
+                                           cfgparser->ParseDevice( "cache_l3", "writepolicy" ),
                                            cfgparser->ParseDevice( "cache_l3", "readlatency" ),
                                            cfgparser->ParseDevice( "cache_l3", "writelatency" ) ) ;
             Log::PrintMessageToFile(
@@ -181,3 +179,8 @@ void MemContoller::FinishAllOperation() {
         m_CacheCtrl_list[ 1 ]->AddFinishTimeStampInCacheLine() ;
     }  // if
 }  // MemContoller::FinishAllOperation()
+
+void MemContoller::EnableRecord() {
+  for ( int i = 0 ; i < m_Cache_level ; i++ )
+      m_Cache_list[ i ]->mEnableRecord = true ;
+}  // MemContoller::EnableRecord()

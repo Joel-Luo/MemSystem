@@ -10,6 +10,7 @@ FILE * Log::CacheResultInfoFile = NULL ;
 FILE * Log::CacheLineInfoFile = NULL ;
 
 unsigned long long  gTotal_inst = 500000000 ;
+unsigned long long  gSkip_Inst = 1 ;
 
 void ExecuteMemOperation( FILE * input, MemContoller * memsystem ) {
     uint64_t accessTime = 0x0 ;
@@ -18,6 +19,8 @@ void ExecuteMemOperation( FILE * input, MemContoller * memsystem ) {
     for ( unsigned long long counter = 1; !feof( input ); counter++ ) {
         if ( counter % 5000000 == 0 )       
           Log::PrintMessage( "Int: " + std::to_string( counter) + "\tProgress:" + std::to_string( (double)counter/(double)gTotal_inst *100 ) + "%") ;
+        if ( counter == gSkip_Inst )
+            memsystem->EnableRecord();
         if ( counter > gTotal_inst ) break ;
         char * tempStr = new char[ 20 ] ;
         char * op_s = new char[ 2 ] ;
@@ -59,27 +62,32 @@ int main( int argc, char const *argv[] ) {
             char * configFile = NULL ;
 
             for ( int i = 1; i < argc; i = i + 2 ) {
-                if ( strcmp( argv[ i ], "-conf" ) == 0 ) {
+                if ( strcmp( argv[ i ], "--conf" ) == 0 ) {
                     Log::PrintMessage( "Confige File = " + std::string( argv[ i + 1 ] ) ) ;
                     configFile =(char*) argv[ i + 1 ] ;
                 }  // if
 
-                else if ( strcmp( argv[ i ], "-input" ) == 0 ) {
+                else if ( strcmp( argv[ i ], "--input" ) == 0 ) {
                     input = fopen( argv[ i + 1 ], "r" ) ;
                     if ( input == NULL )
                         Log::PrintError( "Input file error: no this inputfile." ) ;
                     Log::PrintMessage( "Input File Path = " + std::string( argv[ i + 1 ] ) ) ;
                 }  // else if
-                else if ( strcmp( argv[ i ], "-output" ) == 0 ) {
+                else if ( strcmp( argv[ i ], "--output" ) == 0 ) {
                     output = fopen( argv[ i + 1 ], "w" ) ;
                     Log::PrintMessage( "Output File Path = " + std::string( argv[ i + 1 ] ) ) ;
                 }  // else if
-                else if ( strcmp( argv[ i ], "-inst_num" ) == 0 ) {
+                else if ( strcmp( argv[ i ], "--inst_num" ) == 0 ) {
                     sscanf( argv[ i + 1 ], "%llu", &gTotal_inst ) ;
-                    Log::PrintMessage( "Total inst: " + std::to_string( gTotal_inst ) ) ;
+                    Log::PrintMessage( "Total Inst: " + std::to_string( gTotal_inst ) ) ;
                 } // else if 
 
-                else if ( strcmp( argv[ i ], "-clu" ) == 0 ) {
+                else if ( strcmp( argv[ i ], "--skip_inst" ) == 0 ) {
+                    sscanf( argv[ i + 1 ], "%llu", &gSkip_Inst ) ;
+                    Log::PrintMessage( "Skip Inst: " + std::to_string( gSkip_Inst ) ) ;
+                }   // else if
+
+                else if ( strcmp( argv[ i ], "--clu" ) == 0 ) {
                     CLU = fopen( argv[ i + 1 ], "w" ) ;
                     Log::PrintMessage( "CacheLineUsage = " + std::string( argv[ i + 1 ] ) ) ;
                 }  // else if

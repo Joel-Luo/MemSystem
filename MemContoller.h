@@ -35,11 +35,15 @@ class MemContoller {
                 uint32_t length ) ;
 
         void FinishAllOperation() ;
+
+        void EnableRecord() ;
     private:
 
         void CreateMemSystem() ;
 
         void CacheMigrationContrl() ;
+
+
 } ;
 
 #endif
