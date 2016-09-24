@@ -13,6 +13,11 @@ CS::Cache_Ctrl::Cache_Ctrl( Cache* thisLevel, uint8_t cachetype ) :
     mNextLevelCacheName = -1 ;
     mNextLevel = NULL ;
 
+    if ( mThis->m_CacheType == CS::MEM_NAME::L2 )
+      m_GTable = new CS::GTable( 512, CS::REPLACEPOLICY::LRU, 20 ) ;
+    m_GTable = NULL ;
+
+
 }  // Cache_Ctrl()
 
 void CS::Cache_Ctrl::SetNextLevelCacheCtrl( Cache_Ctrl * nextLevelCacheCtrl ) {

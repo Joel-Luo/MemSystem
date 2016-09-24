@@ -2,31 +2,28 @@
 #include <string.h>
 #include <stdio.h>
 
-CS::ReplaceManager::ReplaceManager( uint32_t way, uint32_t rp ) :
+CS::ReplaceManager::ReplaceManager( uint32_t size, uint32_t rp ) :
         m_ReplacePolicy( rp ) {
-    m_Record = new std::vector < uint8_t >() ;
+    m_Record = new std::vector < uint32_t >() ;
     if ( m_ReplacePolicy == CS::REPLACEPOLICY::LRU )
-        for ( uint32_t i = 0; i < way; i++ )
+        for ( uint32_t i = 0; i < size; i++ )
             m_Record->push_back( i ) ;
     // TODO  else if ( m_RP == ROUND_ROBIN ) ;
 }  // ReplaceManager::ReplaceManager()
 
-uint8_t CS::ReplaceManager::GetReplaceIndex() {
+uint32_t CS::ReplaceManager::GetReplaceIndex() {
     if ( m_ReplacePolicy == CS::REPLACEPOLICY::LRU )
         return ( *m_Record )[ 0 ] ;
     // TODO  else if ( m_RP == ROUND_ROBIN ) ;
     return -1 ;
 }  //  ReplaceManager::GetReplaceIndex()
 
-void CS::ReplaceManager::UpdateRecord( uint8_t index, bool Endposition ) {
+void CS::ReplaceManager::UpdateRecord( uint32_t index ) {
     if ( m_ReplacePolicy == CS::REPLACEPOLICY::LRU ) {
         for ( uint8_t i = 0; i < m_Record->size(); i++ ) {
             if ( ( *m_Record )[ i ] == index ) {
                 m_Record->erase( m_Record->begin() + i ) ;
-                if ( Endposition )
-                    m_Record->push_back( index ) ;
-                else
-                    m_Record->insert( m_Record->begin(), index ) ;
+                m_Record->push_back( index ) ;
                 return ;
             }  // if
         }  // for

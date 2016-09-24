@@ -7,6 +7,7 @@
 #include <stdint.h>
 
 using namespace CS ;   // name space CS ( Cache Simulator)
+
 FILE * CS::Log::CacheResultInfoFile = NULL ;
 FILE * CS::Log::CacheLineInfoFile = NULL ;
 
@@ -19,20 +20,28 @@ void ExecuteMemOperation( FILE * input, MemContoller * memsystem ) {
     uint64_t address = 0x0 ;
     // char op = 'x' ;
     for ( unsigned long long counter = 1; !feof( input ); counter++ ) {
-        if ( counter % 5000000 == 0 )       
+        if ( counter % 5000000 == 0 )
           Log::PrintMessage( "Int: " + std::to_string( counter) + "\tProgress:" + std::to_string( (double)counter/(double)gTotal_inst *100 ) + "%") ;
-        if ( counter == gSkip_Inst )
-            memsystem->EnableRecord();
+
+        if ( counter == gSkip_Inst )  memsystem->EnableRecord();
         if ( counter > gTotal_inst ) break ;
+
+
         char * tempStr = new char[ 20 ] ;
         char * op_s = new char[ 2 ] ;
+
         if ( fscanf( input, "%s", tempStr ) != 1 ) break  ;
+
         if ( feof( input ) || strcmp( tempStr, "#eof" ) == 0 ) break ;
         accessTime = strtoll( tempStr, NULL, 16 ) ;
+
         if ( fscanf( input, "%s", tempStr ) != 1 ) break  ;
         address = strtoll( tempStr, NULL, 16 ) ;
+
         if ( fscanf( input, "%s", op_s ) != 1 ) break ;
         // Log::PrintMessage( "Instruction id : " + std::to_string(counter) ) ;
+
+
         if ( strcmp( op_s, "R" ) == 0 )
             memsystem->CoreAccessMem( accessTime, address, CS::ACCESSTYPE::READ, NULL, 8 ) ;
         else if ( strcmp( op_s, "W" ) == 0 )
@@ -80,7 +89,7 @@ int main( int argc, char const *argv[] ) {
                 else if ( strcmp( argv[ i ], "--inst_num" ) == 0 ) {
                     sscanf( argv[ i + 1 ], "%llu", &gTotal_inst ) ;
                     Log::PrintMessage( "Total Inst: " + std::to_string( gTotal_inst ) ) ;
-                } // else if 
+                } // else if
 
                 else if ( strcmp( argv[ i ], "--skip_inst" ) == 0 ) {
                     sscanf( argv[ i + 1 ], "%llu", &gSkip_Inst ) ;
@@ -114,11 +123,10 @@ int main( int argc, char const *argv[] ) {
         }  // else
     }  // if
 
-    else {
-
+    else
         printf( "Incorrect number of Argument\n" ) ;
 
-    }  // else
+
 
     return 0 ;
 

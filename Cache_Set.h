@@ -20,12 +20,12 @@ namespace CS {
     class ReplaceManager {
 
         private:
-            std::vector < uint8_t > * m_Record ;
+            std::vector < uint32_t > * m_Record ;
             uint32_t m_ReplacePolicy ;
         public:
-            ReplaceManager( uint32_t way, uint32_t rp ) ;
-            uint8_t GetReplaceIndex() ;
-            void UpdateRecord( uint8_t index, bool Endposition ) ;
+            ReplaceManager( uint32_t size, uint32_t rp ) ;
+            uint32_t GetReplaceIndex() ;
+            void UpdateRecord( uint32_t index ) ;
 
     } ;
 

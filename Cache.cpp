@@ -1,8 +1,6 @@
 #include "Cache.h"
 #include "Log.h"
 
-
-
 uint32_t CS::Cache::floorLog2( uint32_t number ) {
     int p = 0 ;
     if ( number == 0 )
@@ -67,13 +65,12 @@ bool CS::Cache::AccessCache( uint32_t AccessType, const uint64_t accessTime, con
     }  // if
 
     else if ( AccessType == CS::ACCESSTYPE::WRITE ) {
-        UpdateTimeStamp( index, way_index, accessTime ) ;
         if ( m_WritePolicy == CS::WRITEPOLICY::WRITE_BACK )
             m_Sets[ index ]->m_Way[ way_index ].Dirty = true ;
         m_Sets[ index ]->WriteData( Data, way_index, block_offset, length ) ;
     }  // else if
 
-    m_Sets[ index ]->m_RP_Manager->UpdateRecord( way_index, true ) ;
+    m_Sets[ index ]->m_RP_Manager->UpdateRecord( way_index ) ;
 
     return true ;
 }  // Cache::AccessSingleLine
@@ -110,7 +107,7 @@ void CS::Cache::LoadCacheBlock( uint64_t tag, uint32_t set_index, Byte * in ) {
     uint8_t way_index = m_Sets[ set_index ]->m_RP_Manager->GetReplaceIndex() ;
     m_Sets[ set_index ]->m_Way[ way_index ].Valid = true ;
     m_Sets[ set_index ]->m_Way[ way_index ].mTag = tag ;
-    m_Sets[ set_index ]->m_RP_Manager->UpdateRecord( way_index, true ) ;
+    m_Sets[ set_index ]->m_RP_Manager->UpdateRecord( way_index ) ;
     m_Sets[ set_index ]->WriteData( in, way_index, 0, m_BlockSize ) ;
 
 }  // Cache::LoadCacheBlock()
@@ -123,32 +120,55 @@ void CS::Cache::StoreCacheBlock( uint32_t set_index, uint64_t & TatgetAddr, Byte
     TatgetAddr = TagToAddress( m_Sets[ set_index ]->m_Way[ way_index ].mTag, set_index  ) ;
 }  // Cache::StoreCacheBlock()
 
-bool CS::Cache::RetentionTimeUp( uint32_t set_index, uint32_t & wayindex, uint64_t accessTime, Byte * out ) {
+CS::GTable::GTable( uint32_t Size, uint8_t ReplacePolicy, uint32_t thershold ) : m_Size( Size ), m_Thershold( thershold) {
+    m_GTable = new std::vector< Entry* > () ;
+    mRP = new CS::ReplaceManager( m_Size, ReplacePolicy ) ;
+    for ( uint32_t i = 0 ; i < m_Size ; i++ ) {
+        Entry * temp = new Entry ;
+        temp->mTag = -1 ;
+        temp->times = -1 ;
+        m_GTable->push_back( temp ) ;
+    }  // for
+}   // CS::GTable()
 
-    uint64_t lasttime = m_Sets[ set_index ]->m_Way[ wayindex ].mTimeStamp ;
-    if ( lasttime == (uint64_t)-1 )
-        return false ;
-    uint64_t timelength = accessTime - lasttime ;
-    if ( timelength >= m_Sets[ set_index ]->m_RetentionTime ) {
-        m_Sets[ set_index ]->ReadData( out, wayindex, 0, m_BlockSize ) ;
-        m_Sets[ set_index ]->m_Way[ wayindex ].Valid = false ;
-        m_Sets[ set_index ]->m_RP_Manager->UpdateRecord( wayindex, false ) ;
-        wayindex = (uint32_t)-1 ;
+int32_t CS::GTable::SearchTable( uint64_t tag ) {
+    for ( uint32_t i = 0 ; i < m_Size ; i++ )
+        if ( m_GTable->at(i)->mTag == tag )
+          return i ;
+    return -1 ;
+}  // CS::GTable::SearchTable()
+
+void CS::GTable::UpdateTable( uint32_t index, uint64_t tag, uint32_t times ) {
+
+    Entry * en = m_GTable->at( index ) ;
+
+    if ( en->mTag != tag ) en->mTag = tag ;
+
+    en->times = times ;
+
+}  // CS::GTable::UpdateTable()
+
+bool CS::GTable::GTableController( uint64_t tag ) {
+
+    int32_t index = SearchTable( tag ) ;
+    if ( index == -1 ) {
+        UpdateTable( mRP->GetReplaceIndex(), tag, 1 ) ;
+        mRP->UpdateRecord( index ) ;
         return true ;
     }  // if
-    else
-        return false ;
 
-}  // Cache::CalRTime()
+    else {
+        Entry * en = m_GTable->at( index ) ;
+        UpdateTable( index, tag, en->times++ ) ;
+        mRP->UpdateRecord( index ) ;
 
-void CS::Cache::UpdateTimeStamp( uint32_t set_index, uint32_t wayindex, uint64_t accessTime ) {
-    m_Sets[ set_index ]->m_Way[ wayindex ].mTimeStamp = accessTime ;
+        if ( en->times < m_Thershold )
+            return true ;
+        else
+            return false ;
+    }  // else
+
+    return true ;
+}  // CS::GTable::GTableController()
 
 
-    m_Sets[ set_index ]->m_Way[ wayindex ].mTimeLog->push_back( accessTime ) ;
-      // Log::PrintMessage( std::to_string(set_index) + " " + std::to_string(wayindex) + " " + std::to_string(accessTime) + " " +
-      //                    std::to_string(m_Sets[ set_index ]->m_Way[ wayindex ].mTimeLog->size()) );
-
-
-
-}  // Cache::UpdateTimeStamp()
