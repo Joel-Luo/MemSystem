@@ -2,7 +2,7 @@
 
 #include "Log.h"
 #include <sstream>
-MemContoller::MemContoller( const char * cfg ) {
+CS::MemContoller::MemContoller( const char * cfg ) {
     m_Cache_list = NULL ;
     cfgparser = new CfgParser( cfg ) ;
     m_Cache_level = 0 ;
@@ -10,16 +10,16 @@ MemContoller::MemContoller( const char * cfg ) {
     CreateMemSystem() ;
 }  // MemSystem::MemSystem()
 
-void MemContoller::CreateMemSystem() {
+void CS::MemContoller::CreateMemSystem() {
     Log::PrintMessageToFile( Log::CacheResultInfoFile, "========== Cache Configuration ==========" ) ;
     m_Cache_level = cfgparser->ParseDevice( "cache_level", "level" ) ;
     m_Cache_list = new Cache*[ m_Cache_level ] ;
     m_CacheCtrl_list = new Cache_Ctrl*[ m_Cache_level ] ;
     m_CacheType = new uint8_t[ m_Cache_level ] ;
     for ( uint8_t i = 0; i < m_Cache_level; i++ ) {
-        if ( i == Cache::L1_D ) {
+        if ( i == CS::MEM_NAME::L1_D ) {
             m_CacheType[ i ] = cfgparser->ParseDevice( "cache_l1_D", "type" ) ;
-            m_Cache_list[ i ] = new Cache( Cache::L1_D, m_CacheType[ i ],
+            m_Cache_list[ i ] = new Cache( CS::MEM_NAME::L1_D, m_CacheType[ i ],
                                            cfgparser->ParseDevice( "cache_l1_D", "size" ),
                                            cfgparser->ParseDevice( "cache_l1_D", "blocksize" ),
                                            cfgparser->ParseDevice( "cache_l1_D", "associativity" ),
@@ -38,10 +38,10 @@ void MemContoller::CreateMemSystem() {
 
         }   // if
 
-        else if ( i == Cache::L2 ) {
+        else if ( i == CS::MEM_NAME::L2 ) {
             m_CacheType[ i ] = cfgparser->ParseDevice( "cache_l2", "type" ) ;
 
-            m_Cache_list[ i ] = new Cache( Cache::L2, m_CacheType[ i ], cfgparser->ParseDevice( "cache_l2", "size" ),
+            m_Cache_list[ i ] = new Cache( CS::MEM_NAME::L2, m_CacheType[ i ], cfgparser->ParseDevice( "cache_l2", "size" ),
                                            cfgparser->ParseDevice( "cache_l2", "blocksize" ),
                                            cfgparser->ParseDevice( "cache_l2", "associativity" ),
                                            cfgparser->ParseDevice( "cache_l2", "replacepolicy" ),
@@ -59,9 +59,9 @@ void MemContoller::CreateMemSystem() {
 
         }  // else if
 
-        else if ( i == Cache::L3 ) {
+        else if ( i == CS::MEM_NAME::L3 ) {
             m_CacheType[ i ] = cfgparser->ParseDevice( "cache_l3", "type" ) ;
-            m_Cache_list[ i ] = new Cache( Cache::L3, m_CacheType[ i ], cfgparser->ParseDevice( "cache_l3", "size" ),
+            m_Cache_list[ i ] = new Cache( CS::MEM_NAME::L3, m_CacheType[ i ], cfgparser->ParseDevice( "cache_l3", "size" ),
                                            cfgparser->ParseDevice( "cache_l3", "blocksize" ),
                                            cfgparser->ParseDevice( "cache_l3", "associativity" ),
                                            cfgparser->ParseDevice( "cache_l3", "replacepolicy" ),
@@ -87,7 +87,7 @@ void MemContoller::CreateMemSystem() {
     fflush( Log::CacheResultInfoFile ) ;
 }  // MemSystem::CreateMemSystem
 
-void MemContoller::CoreAccessMem( const uint64_t accessTime, const uint64_t address, const uint32_t AccessType,
+void CS::MemContoller::CoreAccessMem( const uint64_t accessTime, const uint64_t address, const uint32_t AccessType,
         Byte* Data, uint32_t length ) {
 
     m_CacheCtrl_list[ 0 ]->Access( accessTime, address, AccessType, Data, length ) ;
@@ -95,7 +95,7 @@ void MemContoller::CoreAccessMem( const uint64_t accessTime, const uint64_t addr
 }  // MemSystem::CoreAccessMem()
 
 
-void MemContoller::EnableRecord() {
+void CS::MemContoller::EnableRecord() {
     for ( int i = 0; i < m_Cache_level; i++ )
         m_Cache_list[ i ]->mEnableRecord = true ;
 }  // MemContoller::EnableRecord()

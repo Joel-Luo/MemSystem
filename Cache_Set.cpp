@@ -2,24 +2,24 @@
 #include <string.h>
 #include <stdio.h>
 
-ReplaceManager::ReplaceManager( uint32_t way, uint32_t rp ) :
+CS::ReplaceManager::ReplaceManager( uint32_t way, uint32_t rp ) :
         m_ReplacePolicy( rp ) {
     m_Record = new std::vector < uint8_t >() ;
-    if ( m_ReplacePolicy == LRU )
+    if ( m_ReplacePolicy == CS::REPLACEPOLICY::LRU )
         for ( uint32_t i = 0; i < way; i++ )
             m_Record->push_back( i ) ;
     // TODO  else if ( m_RP == ROUND_ROBIN ) ;
 }  // ReplaceManager::ReplaceManager()
 
-uint8_t ReplaceManager::GetReplaceIndex() {
-    if ( m_ReplacePolicy == LRU )
+uint8_t CS::ReplaceManager::GetReplaceIndex() {
+    if ( m_ReplacePolicy == CS::REPLACEPOLICY::LRU )
         return ( *m_Record )[ 0 ] ;
     // TODO  else if ( m_RP == ROUND_ROBIN ) ;
     return -1 ;
 }  //  ReplaceManager::GetReplaceIndex()
 
-void ReplaceManager::UpdateRecord( uint8_t index, bool Endposition ) {
-    if ( m_ReplacePolicy == LRU ) {
+void CS::ReplaceManager::UpdateRecord( uint8_t index, bool Endposition ) {
+    if ( m_ReplacePolicy == CS::REPLACEPOLICY::LRU ) {
         for ( uint8_t i = 0; i < m_Record->size(); i++ ) {
             if ( ( *m_Record )[ i ] == index ) {
                 m_Record->erase( m_Record->begin() + i ) ;
@@ -34,10 +34,10 @@ void ReplaceManager::UpdateRecord( uint8_t index, bool Endposition ) {
        // TODO  else if ( m_RP == ROUND_ROBIN ) ;
 }  //  ReplaceManager::UpdateRecord()
 
-Cache_Set::Cache_Set( uint32_t blocksize, uint32_t associativity, uint32_t replacePolicy, uint32_t writePolicy,
+CS::Cache_Set::Cache_Set( uint32_t blocksize, uint32_t associativity, uint32_t replacePolicy, uint32_t writePolicy,
         uint8_t ReadLatency, uint8_t WriteLatency ) :
         m_BlockSize( blocksize ), m_Associativity( associativity ), m_WritePolicy( writePolicy ), m_RetentionTime( 0 ), m_ReadLatency( ReadLatency ), m_WriteLatency( WriteLatency ) {
-    m_RP_Manager = new ReplaceManager( associativity, REPLACEPOLICY::LRU ) ;
+    m_RP_Manager = new ReplaceManager( associativity, CS::REPLACEPOLICY::LRU ) ;
     m_Way = new Way[ m_Associativity ] ;
     m_UsingTime = 0 ;
     for ( uint32_t i = 0; i < m_Associativity; i++ ) {
@@ -55,20 +55,20 @@ Cache_Set::Cache_Set( uint32_t blocksize, uint32_t associativity, uint32_t repla
 
 }  // Cache_Set::Cache_Set
 
-void Cache_Set::ReadData( Byte * out, uint32_t way_index, uint32_t offset, uint32_t length ) {
+void CS::Cache_Set::ReadData( Byte * out, uint32_t way_index, uint32_t offset, uint32_t length ) {
     //if ( out != NULL )
         // memcpy( out, m_Way[ way_index ].mData + offset, length ) ;
     m_UsingTime++ ;
 }  // Cache_Set::ReadLine()
 
-void Cache_Set::WriteData( Byte * in, uint32_t way_index, uint32_t offset, uint32_t length ) {
+void CS::Cache_Set::WriteData( Byte * in, uint32_t way_index, uint32_t offset, uint32_t length ) {
     //if ( in != NULL )
         // memcpy( m_Way[ way_index ].mData + offset, in, length ) ;
     m_UsingTime++ ;
 }  // Cache_Set::WriteLine()
 
-void Cache_Set::AllocateData( Byte * in, uint64_t tag, uint32_t way_index, uint32_t offset, uint32_t length ) {
-    if ( m_WritePolicy == WRITEPOLICY::WRITE_BACK ) {
+void CS::Cache_Set::AllocateData( Byte * in, uint64_t tag, uint32_t way_index, uint32_t offset, uint32_t length ) {
+    if ( m_WritePolicy == CS::WRITEPOLICY::WRITE_BACK ) {
         m_Way[ way_index ].Valid = true ;
         m_Way[ way_index ].mTag = tag ;
         //if ( in != NULL )
@@ -76,7 +76,7 @@ void Cache_Set::AllocateData( Byte * in, uint64_t tag, uint32_t way_index, uint3
     }  // if
 }  // Cache_Set::WriteLine()
 
-uint32_t Cache_Set::FindTagInWay( uint64_t tag ) {
+uint32_t CS::Cache_Set::FindTagInWay( uint64_t tag ) {
 
     for ( uint32_t i = 0; i < m_Associativity; i++ ) {
         if ( m_Way[ i ].mTag == tag && m_Way[ i ].Valid )

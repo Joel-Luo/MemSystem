@@ -2,19 +2,22 @@
 #define DRAM_H
 #include <stdint.h>
 
-class MainMemory {
+namespace CS {
+    class MainMemory {
 
-    public:
-        enum MAINMEM_NAME {
-            DRAM = 0
+        public:
+            enum MAINMEM_NAME {
+                DRAM = 0
 
-        } ;
-        MainMemory() ;
-        ~MainMemory() ;
+            } ;
+            MainMemory() ;
+            ~MainMemory() ;
 
-        void WriteToMainMemory() ;
-        void ReadFromMainMemory() ;
+            void WriteToMainMemory() ;
+            void ReadFromMainMemory() ;
 
-} ;
+    } ;
 
+}
+;
 #endif

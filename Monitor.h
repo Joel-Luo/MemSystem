@@ -10,16 +10,18 @@
 #include "Cache.h"
 #include <stdio.h>
 
-class Monitor {
-    public:
-        Cache ** m_Cache_list ;
-        int m_CacheLevel ;
-    public:
-        Monitor( int level, Cache ** CL ) ;
+namespace CS {
+    class Monitor {
+        public:
+            Cache ** m_Cache_list ;
+            int m_CacheLevel ;
+        public:
+            Monitor( int level, Cache ** CL ) ;
 
-        void OutputCacheInfo( int CacheType ) ;
-        void OutputResult() ;
+            void OutputCacheInfo( int CacheType ) ;
+            void OutputResult() ;
 
-} ;
-
+    } ;
+}
+;
 #endif /* MONITOR_H_ */

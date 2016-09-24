@@ -6,11 +6,13 @@
 #include "MemContoller.h"
 #include <stdint.h>
 
-FILE * Log::CacheResultInfoFile = NULL ;
-FILE * Log::CacheLineInfoFile = NULL ;
+using namespace CS ;   // name space CS ( Cache Simulator)
+FILE * CS::Log::CacheResultInfoFile = NULL ;
+FILE * CS::Log::CacheLineInfoFile = NULL ;
 
 unsigned long long  gTotal_inst = 500000000 ;
 unsigned long long  gSkip_Inst = 1 ;
+
 
 void ExecuteMemOperation( FILE * input, MemContoller * memsystem ) {
     uint64_t accessTime = 0x0 ;
@@ -32,9 +34,9 @@ void ExecuteMemOperation( FILE * input, MemContoller * memsystem ) {
         if ( fscanf( input, "%s", op_s ) != 1 ) break ;
         // Log::PrintMessage( "Instruction id : " + std::to_string(counter) ) ;
         if ( strcmp( op_s, "R" ) == 0 )
-            memsystem->CoreAccessMem( accessTime, address, MemContoller::READ, NULL, 8 ) ;
+            memsystem->CoreAccessMem( accessTime, address, CS::ACCESSTYPE::READ, NULL, 8 ) ;
         else if ( strcmp( op_s, "W" ) == 0 )
-            memsystem->CoreAccessMem( accessTime, address, MemContoller::WRITE, NULL, 8 ) ;
+            memsystem->CoreAccessMem( accessTime, address, CS::ACCESSTYPE:: WRITE, NULL, 8 ) ;
         else
             Log::PrintError( "Unknown memory operation" ) ;
 

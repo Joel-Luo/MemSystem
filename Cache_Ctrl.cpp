@@ -6,7 +6,7 @@
  */
 #include "Cache_Ctrl.h"
 #include "Log.h"
-Cache_Ctrl::Cache_Ctrl( Cache* thisLevel, uint8_t cachetype ) :
+CS::Cache_Ctrl::Cache_Ctrl( Cache* thisLevel, uint8_t cachetype ) :
         mThis( thisLevel ), mThisCacheType( cachetype ) {
 
     mThisCacheName = mThis->m_Name ;
@@ -15,22 +15,22 @@ Cache_Ctrl::Cache_Ctrl( Cache* thisLevel, uint8_t cachetype ) :
 
 }  // Cache_Ctrl()
 
-void Cache_Ctrl::SetNextLevelCacheCtrl( Cache_Ctrl * nextLevelCacheCtrl ) {
+void CS::Cache_Ctrl::SetNextLevelCacheCtrl( Cache_Ctrl * nextLevelCacheCtrl ) {
 
     mNextLevel = nextLevelCacheCtrl ;
     if ( mNextLevel == NULL )
-        mNextLevelCacheName = Cache::MAINMEM ;
+        mNextLevelCacheName = CS::MEM_NAME::MAINMEM ;
     else
         mNextLevelCacheName = mNextLevel->mThisCacheName ;
 
 }  // Cache_Ctrl::SetNextLevelCacheCtrl()
 
-void Cache_Ctrl::Access( const uint64_t accessTime, const uint64_t address, const uint32_t AccessType, Byte * Data,
+void CS::Cache_Ctrl::Access( const uint64_t accessTime, const uint64_t address, const uint32_t AccessType, Byte * Data,
         uint32_t length ) {
-    if ( mThisCacheType == Cache::CACHE ) {
+    if ( mThisCacheType == CS::CACHETYPE::CACHE ) {
         if ( mThis->AccessCache( AccessType, accessTime, address, Data, length ) ) {  //if true cache  hit
             if ( mThis->mEnableRecord ) {
-              if ( AccessType == Cache::WRITE ) {
+              if ( AccessType == CS::ACCESSTYPE::WRITE ) {
                   mThis->m_Num_W_Access++ ;
                   mThis->m_Num_W_Hit++ ;
               }  // if
@@ -47,7 +47,7 @@ void Cache_Ctrl::Access( const uint64_t accessTime, const uint64_t address, cons
 
         else {  // cache miss
             if ( mThis->mEnableRecord ) {
-              if ( AccessType == Cache::WRITE )
+              if ( AccessType == CS::ACCESSTYPE::WRITE )
                   mThis->m_Num_W_Access++ ;
               else
                   mThis->m_Num_R_Access++ ;
@@ -72,8 +72,8 @@ void Cache_Ctrl::Access( const uint64_t accessTime, const uint64_t address, cons
             if ( isNeedToWriteBack ) {  // if write through and always false
                 uint64_t StoreAddress ;
                 mThis->StoreCacheBlock( set_index, StoreAddress, wire_L1ToL2 ) ;
-                if ( mNextLevelCacheName != Cache::MAINMEM )
-                    mNextLevel->Access( accessTime, StoreAddress, Cache::WRITE, wire_L1ToL2, mThis->m_BlockSize ) ;
+                if ( mNextLevelCacheName != CS::MEM_NAME::MAINMEM )
+                    mNextLevel->Access( accessTime, StoreAddress, CS::ACCESSTYPE::WRITE, wire_L1ToL2, mThis->m_BlockSize ) ;
                 delete[] wire_L1ToL2 ;
             }  // if
 
@@ -86,8 +86,8 @@ void Cache_Ctrl::Access( const uint64_t accessTime, const uint64_t address, cons
             Byte * wire_L2ToL1 = NULL ;
 #endif
 
-            if ( mNextLevelCacheName != Cache::MAINMEM )
-                mNextLevel->Access( accessTime, LoadAddress, Cache::READ, wire_L2ToL1, mThis->m_BlockSize ) ;
+            if ( mNextLevelCacheName != CS::MEM_NAME::MAINMEM )
+                mNextLevel->Access( accessTime, LoadAddress, CS::ACCESSTYPE::READ, wire_L2ToL1, mThis->m_BlockSize ) ;
             mThis->LoadCacheBlock( tag, set_index, wire_L2ToL1 ) ;
             delete[] wire_L2ToL1 ;
 

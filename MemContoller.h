@@ -5,42 +5,34 @@
 #include "CfgParser.h"
 #include "Monitor.h"
 #include "Cache_Ctrl.h"
-class MemContoller {
+namespace CS {
+    class MemContoller {
 
-    public:
-        enum ACCESSTYPE {
-            READ = 0, WRITE
-        } ;
+        private:
+            uint8_t * m_CacheType ;
 
-        enum MEMTYPE {
-            L1_D = 0, L2, L3, MAINMEM
-        } ;
+            Cache_Ctrl ** m_CacheCtrl_list ;
+            uint8_t m_Cache_level ;
+            CfgParser * cfgparser ;
+            Cache ** m_Cache_list ;
+        public:
+            Monitor * m_Monitor ;
 
+            MemContoller( const char * cfg ) ;
 
-    private:
-        uint8_t * m_CacheType ;
+            void CoreAccessMem( const uint64_t accessTime, const uint64_t address, const uint32_t AccessType,
+                    Byte* Data, uint32_t length ) ;
 
-        Cache_Ctrl ** m_CacheCtrl_list ;
-        uint8_t m_Cache_level ;
-        CfgParser * cfgparser ;
-        Cache ** m_Cache_list ;
-    public:
-        Monitor * m_Monitor ;
+            void AccessNextLevel( uint32_t Cachetype, const uint64_t accessTime, const uint64_t address,
+                    const uint32_t AccessType, Byte* Data, uint32_t length ) ;
 
-        MemContoller( const char * cfg ) ;
+            void EnableRecord() ;
+        private:
 
-        void CoreAccessMem( const uint64_t accessTime, const uint64_t address, const uint32_t AccessType, Byte* Data, uint32_t length ) ;
+            void CreateMemSystem() ;
 
-        void AccessNextLevel( uint32_t Cachetype, const uint64_t accessTime, const uint64_t address, const uint32_t AccessType, Byte* Data,
-                uint32_t length ) ;
-
-        void EnableRecord() ;
-    private:
-
-        void CreateMemSystem() ;
-
-
-} ;
-
+    } ;
+}
+;
 #endif
 

@@ -13,7 +13,7 @@
 
 #define DEBUG ;
 
-
+namespace CS {
 
 class Log {
 
@@ -48,5 +48,5 @@ class Log {
 
 } ;
 
-
+} ;
 #endif /* LOG_H_ */

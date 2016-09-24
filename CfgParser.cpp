@@ -10,7 +10,7 @@
 
 using namespace std ;
 
-vector < string > * CfgParser::Split( string * input ) {
+vector < string > * CS::CfgParser::Split( string * input ) {
     vector < string > * vec = new vector < string >() ;
     string src( input->c_str() ) ;
     size_t start = 0 ;
@@ -31,7 +31,7 @@ vector < string > * CfgParser::Split( string * input ) {
     return vec ;
 }  // Split()
 
-string CfgParser::SplitTag( string input, string tag ) {
+string CS::CfgParser::SplitTag( string input, string tag ) {
 
     size_t start = input.find( "<" + tag + ">" ) ;
     if ( start == string::npos )
@@ -42,32 +42,28 @@ string CfgParser::SplitTag( string input, string tag ) {
     return input.substr( start, end - start ) ;
 }  // SplitTag()
 
-uint64_t CfgParser::CacheParamter( string tag, string value ) {
+uint64_t CS::CfgParser::CacheParamter( string tag, string value ) {
     try {
 
         if ( tag.compare( "replacepolicy" ) == 0 ) {
             if ( value.compare( "LRU" ) == 0 )
-                return REPLACEPOLICY::LRU ;
+                return CS::REPLACEPOLICY::LRU ;
             else if ( value.compare( "ROUND_ROBIN" ) == 0 )
-                return REPLACEPOLICY::ROUND_ROBIN ;
+                return CS::REPLACEPOLICY::ROUND_ROBIN ;
             else if ( value.compare( "RANDOM" ) == 0 )
-                return REPLACEPOLICY::RANDOM ;
+                return CS::REPLACEPOLICY::RANDOM ;
         }  // else if
 
         else if ( tag.compare( "writepolicy" ) == 0 ) {
             if ( value.compare( "WB" ) == 0 )
-                return WRITEPOLICY::WRITE_BACK ;
+                return CS::WRITEPOLICY::WRITE_BACK ;
             else if ( value.compare( "WT" ) == 0 )
-                return WRITEPOLICY::WRITE_TROUGH ;
+                return CS::WRITEPOLICY::WRITE_TROUGH ;
         }  // else if
 
         else if ( tag.compare( "type" ) == 0 ) {
             if ( value.compare( "Cache" ) == 0 )
-                return Cache::CACHE ;
-            else if ( value.compare( "hybridcache" ) == 0 )
-                return Cache::HYBRIDCACHE ;
-            else if ( value.compare( "buffercache" ) == 0 )
-                return Cache::BUFFERCACHE ;
+                return CS::CACHETYPE::CACHE ;
         }  // else if
 
 
@@ -83,7 +79,7 @@ uint64_t CfgParser::CacheParamter( string tag, string value ) {
     }
 }
 
-CfgParser::CfgParser( const char * cfg ) {
+CS::CfgParser::CfgParser( const char * cfg ) {
 
     m_cfgfile = fopen( cfg, "r" ) ;
     if ( m_cfgfile == NULL )
@@ -103,7 +99,7 @@ CfgParser::CfgParser( const char * cfg ) {
 
 }  // CfgParser::CfgParser()
 
-uint64_t CfgParser::ParseDevice( std::string DeviceName, std::string Tag ) {
+uint64_t CS::CfgParser::ParseDevice( std::string DeviceName, std::string Tag ) {
 
     for ( uint8_t i = 0; i < m_DeviceList->size(); i++ ) {
         if ( ( *m_DeviceList )[ i ].find( DeviceName ) != string::npos ) {
