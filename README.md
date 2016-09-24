@@ -11,7 +11,6 @@
 
 * git src
 * make 
-* ./memsystem -inst_num "500000000" -conf "config file path" -inst_num "numofinstruction" -input "input file path" -output "output result file path"
-* * e.x. ./MemSystem -conf ./cache_buffer.cfg -inst_num 500000000 -input ./400-perlbench_T.dat -output ./result/400-perlbench.out
+* $ ./MemSystem --conf ./cache.cfg --skip_inst 10000 --input ./main_trace.dat --output ./CacheResultInfo.txt  
  
 * ./memsystem -h   // if you need to help.

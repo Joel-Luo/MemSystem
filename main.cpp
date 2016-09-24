@@ -48,9 +48,9 @@ int main( int argc, char const *argv[] ) {
 
     if ( argc > 1 ) {
         if ( strcmp( argv[ 1 ], "-h" ) == 0 ) {
-            Log::PrintMessage( " -conf : \"config file path\"" ) ;
-            Log::PrintMessage( " -input : \"input file path\"" ) ;
-            Log::PrintMessage( " -inst_num: \"number\"" ) ;
+            Log::PrintMessage( " --conf : \"config file path\"" ) ;
+            Log::PrintMessage( " --input : \"input file path\"" ) ;
+            Log::PrintMessage( " --inst_num: \"number\"" ) ;
         }  // if
         else {
             MemContoller * memsystem = NULL ;

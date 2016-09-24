@@ -4,47 +4,6 @@
 #include <string.h>
 #include <vector>
 
-class BufferCache {
-    public :
-      struct BufferSet {
-        uint64_t mAddress ;
-        Byte * mData ;
-        uint64_t mAccessTime ;
-      };
-
-    public :
-      BufferSet ** mBufferSet ;
-      uint8_t mNumOfEntry ;
-      uint8_t mDataLength ;
-
-
-      uint64_t mAddtionWriteLantency ;
-      uint8_t m_ReadLatency ;
-      uint8_t m_WriteLatency ;
-      uint64_t m_Num_W_Access ;
-      uint64_t m_Num_W_Hit ;
-      uint64_t m_Num_R_Access ;
-      uint64_t m_Num_R_Hit ;
-
-
-      std::vector<uint8_t> * mBufferQueue ;
-      std::vector<uint8_t> * mBufferNonUseQueue ;
-
-      BufferCache(uint8_t NumOfEntry, uint8_t DataLength, uint8_t ReadLatency, uint8_t WriteLatency ) ;
-
-      std::vector<uint8_t> * GetRequestToCache( std::vector < uint8_t > * list, uint64_t nowTime ) ;
-
-      bool BufferAccess(  const uint64_t accessTime, const uint64_t address, const uint32_t AccessType,Byte * Data, uint32_t length ) ;
-
-      uint8_t AllocatBufferEntry( uint64_t nowTime, uint32_t &AddLatency,  bool & isBufferFull ) ;
-
-      void PushRequestToBuffer( const uint8_t pushIndex, const uint64_t accessTime, const uint64_t address, Byte * Data ) ;
-
-
-
-};
-
-
 class Cache {
     public:
         enum CACHE_NAME {
@@ -59,17 +18,11 @@ class Cache {
             CACHE = 0, HYBRIDCACHE, BUFFERCACHE
         };
 
-        enum CACHELINEWRITEMOD {
-            SINGLE = 0, PARALLEL
-        };
-
     private:
 
         uint32_t m_BlockSize_log2 ;
         uint32_t m_Associativity_log2 ;
         uint32_t m_Num_Set_Log2 ;
-
-
 
     public:
         uint8_t m_CacheType ;
@@ -84,7 +37,6 @@ class Cache {
 
     
         Cache_Set** m_Sets ;
-        uint64_t mLastWriteCacheTime ;
 
     public:
         uint32_t m_Num_Set ;
@@ -95,8 +47,6 @@ class Cache {
         uint8_t m_ReadLatency ;
         uint8_t m_WriteLatency ;
         bool mEnableRecord ;
-
-        BufferCache * mBufferCache ;
 
 
     private:
@@ -110,7 +60,6 @@ class Cache {
         void BuildBufferCache( uint8_t numofentry, uint8_t DataLength, uint8_t readlatency, uint8_t writelatency ) ;
 
         bool AccessCache( uint32_t AccessType, const uint64_t accessTime, const uint64_t address, Byte * Data, uint32_t length) ;
-        bool AccessHybridCache( uint32_t AccessType, const uint64_t accessTime, const uint64_t address, Byte * Data, uint32_t length, bool & timeUpWriteBack , Byte * WBData  ) ;
 
         void SplitAddress( const uint64_t addr, uint64_t& tag, uint32_t& assoc_index, uint32_t& block_offset ) ;
 
@@ -123,8 +72,6 @@ class Cache {
         bool RetentionTimeUp( uint32_t set_index, uint32_t & wayindex, uint64_t accessTime,  Byte * out) ;
         void UpdateTimeStamp(  uint32_t set_index, uint32_t  wayindex, uint64_t accessTime) ;
         
-        
-
 } ;
 
 
