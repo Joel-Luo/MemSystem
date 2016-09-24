@@ -34,14 +34,10 @@ class MemContoller {
         void AccessNextLevel( uint32_t Cachetype, const uint64_t accessTime, const uint64_t address, const uint32_t AccessType, Byte* Data,
                 uint32_t length ) ;
 
-        void FinishAllOperation() ;
-
         void EnableRecord() ;
     private:
 
         void CreateMemSystem() ;
-
-        void CacheMigrationContrl() ;
 
 
 } ;

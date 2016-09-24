@@ -25,13 +25,7 @@ class Cache_Ctrl {
 
         void Access(  const uint64_t accessTime, const uint64_t address, const uint32_t AccessType,Byte * Data, uint32_t length ) ;
 
-        void Migration() ;
-
-        void FlushOperationInBufferCache() ;
-
         void SetNextLevelCacheCtrl( Cache_Ctrl * nextLevelCacheCtrl ) ;
-
-        void AddFinishTimeStampInCacheLine() ;
 
 } ;
 

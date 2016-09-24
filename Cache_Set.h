@@ -57,7 +57,6 @@ class Cache_Set {
     public:
 
         Cache_Set( uint32_t blocksize, uint32_t associativity, uint32_t replacePolicy, uint32_t writePolicy, uint8_t ReadLatency, uint8_t WriteLatency ) ;
-        Cache_Set( uint32_t blocksize, uint32_t associativity, uint32_t replacePolicy, uint32_t writePolicy, uint8_t ReadLatency, uint8_t WriteLatency, uint32_t retentionTime ) ;
 
         uint32_t FindTagInWay( uint64_t tag ) ;
 

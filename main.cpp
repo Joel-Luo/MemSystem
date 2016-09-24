@@ -41,8 +41,6 @@ void ExecuteMemOperation( FILE * input, MemContoller * memsystem ) {
         delete [] tempStr ;
         delete [] op_s ;
     }  // for ;
-    
-    memsystem->FinishAllOperation() ;
 
 }
 
