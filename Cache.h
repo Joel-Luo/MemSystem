@@ -34,6 +34,7 @@ namespace CS {
 
         private :
             CS::ReplaceManager * mRP ;
+
             int32_t SearchTable( uint64_t tag ) ;
             void UpdateTable( uint32_t index, uint64_t tag, uint32_t times ) ;
 

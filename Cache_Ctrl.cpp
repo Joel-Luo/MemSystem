@@ -13,11 +13,9 @@ CS::Cache_Ctrl::Cache_Ctrl( Cache* thisLevel, uint8_t cachetype ) :
     mNextLevelCacheName = -1 ;
     mNextLevel = NULL ;
 
-    if ( mThis->m_CacheType == CS::MEM_NAME::L2 )
-      m_GTable = new CS::GTable( 512, CS::REPLACEPOLICY::LRU, 20 ) ;
     m_GTable = NULL ;
-
-
+    if ( mThis->m_CacheType == CS::CACHETYPE::GTABLE )
+      m_GTable = new GTable( 128, CS::REPLACEPOLICY::LRU, 10 ) ;
 
 }  // Cache_Ctrl()
 
@@ -142,6 +140,7 @@ void CS::Cache_Ctrl::Access( const uint64_t accessTime, const uint64_t address, 
 
 
             bool NeedToAllcate = m_GTable->GTableController(tag) ;
+
             if ( NeedToAllcate ) {  // search GTable if true to allocate in cache
 
             // To do allocate from cache, and evicted, write back to next level
@@ -179,7 +178,8 @@ void CS::Cache_Ctrl::Access( const uint64_t accessTime, const uint64_t address, 
             } // if
             else {
                 // to normal access nextlevel cache
-                mNextLevel->mThis->AccessCache( AccessType, accessTime, address, Data, length ) ;
+                if ( mNextLevelCacheName != CS::MEM_NAME::MAINMEM )
+                   mNextLevel->Access( accessTime, address, AccessType, Data, length ) ;
             }  // else
         }  // else
 

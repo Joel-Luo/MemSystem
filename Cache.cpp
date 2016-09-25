@@ -39,10 +39,8 @@ CS::Cache::Cache( uint32_t CacheName, uint8_t CacheType, uint32_t cache_size, ui
     m_Num_Set_Log2 = Cache::floorLog2( m_Num_Set ) ;
     m_Sets = new Cache_Set*[ m_Num_Set ] ;
 
-    if ( CacheType == CS::CACHETYPE::NORMAL )
-        for ( uint32_t i = 0; i < m_Num_Set; i++ )
-            m_Sets[ i ] =
-                    new Cache_Set( blocksize, associativity, replacePolicy, writepolicy, readlatency, writelatnecy ) ;
+    for ( uint32_t i = 0; i < m_Num_Set; i++ )
+      m_Sets[ i ] = new Cache_Set( blocksize, associativity, replacePolicy, writepolicy, readlatency, writelatnecy ) ;
 
 }  // Cache::Cache()
 
@@ -122,19 +120,22 @@ void CS::Cache::StoreCacheBlock( uint32_t set_index, uint64_t & TatgetAddr, Byte
 
 CS::GTable::GTable( uint32_t Size, uint8_t ReplacePolicy, uint32_t thershold ) : m_Size( Size ), m_Thershold( thershold) {
     m_GTable = new std::vector< Entry* > () ;
-    mRP = new CS::ReplaceManager( m_Size, ReplacePolicy ) ;
+    mRP = new CS::ReplaceManager( Size, ReplacePolicy ) ;
+
     for ( uint32_t i = 0 ; i < m_Size ; i++ ) {
         Entry * temp = new Entry ;
         temp->mTag = -1 ;
         temp->times = -1 ;
         m_GTable->push_back( temp ) ;
     }  // for
+
 }   // CS::GTable()
 
 int32_t CS::GTable::SearchTable( uint64_t tag ) {
-    for ( uint32_t i = 0 ; i < m_Size ; i++ )
+    for ( uint32_t i = 0 ; i < m_Size ; i++ ) {
         if ( m_GTable->at(i)->mTag == tag )
           return i ;
+    } // for
     return -1 ;
 }  // CS::GTable::SearchTable()
 

@@ -126,8 +126,7 @@ int main( int argc, char const *argv[] ) {
     else
         printf( "Incorrect number of Argument\n" ) ;
 
-
-
+    printf( "Finish the simulation.\n" ) ;
     return 0 ;
 
 }  // main()
