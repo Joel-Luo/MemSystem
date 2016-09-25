@@ -64,6 +64,8 @@ uint64_t CS::CfgParser::CacheParamter( string tag, string value ) {
         else if ( tag.compare( "type" ) == 0 ) {
             if ( value.compare( "Cache" ) == 0 )
                 return CS::CACHETYPE::NORMAL ;
+            else if ( value.compare( "GTable" ) == 0 )
+                return CS::CACHETYPE::GTABLE ;
         }  // else if
 
 
