@@ -13,7 +13,7 @@ CS::Monitor::Monitor( int level, Cache ** CL ) {
 }  // Monitor::Monitor()
 
 void CS::Monitor::OutputCacheInfo( int CacheLevel ) {
-    if ( m_Cache_list[ CacheLevel ]->m_CacheType == CS::CACHETYPE::CACHE ) {
+    if ( m_Cache_list[ CacheLevel ]->m_CacheType == CS::CACHETYPE::NORMAL ) {
         uint64_t w_access = m_Cache_list[ CacheLevel ]->m_Num_W_Access ;
         uint64_t w_miss = w_access - m_Cache_list[ CacheLevel ]->m_Num_W_Hit ;
         double w_rate = ( double ) w_miss / ( double ) w_access * 100 ;

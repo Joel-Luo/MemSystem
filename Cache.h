@@ -15,7 +15,7 @@ namespace CS {
     } ;
 
     enum CACHETYPE {
-        CACHE = 0
+        NORMAL = 0, GTABLE
     } ;
 
     class GTable {

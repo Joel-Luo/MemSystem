@@ -39,7 +39,7 @@ CS::Cache::Cache( uint32_t CacheName, uint8_t CacheType, uint32_t cache_size, ui
     m_Num_Set_Log2 = Cache::floorLog2( m_Num_Set ) ;
     m_Sets = new Cache_Set*[ m_Num_Set ] ;
 
-    if ( CacheType == CACHE )
+    if ( CacheType == CS::CACHETYPE::NORMAL )
         for ( uint32_t i = 0; i < m_Num_Set; i++ )
             m_Sets[ i ] =
                     new Cache_Set( blocksize, associativity, replacePolicy, writepolicy, readlatency, writelatnecy ) ;

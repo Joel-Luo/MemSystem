@@ -32,7 +32,7 @@ void CS::Cache_Ctrl::SetNextLevelCacheCtrl( Cache_Ctrl * nextLevelCacheCtrl ) {
 
 void CS::Cache_Ctrl::Access( const uint64_t accessTime, const uint64_t address, const uint32_t AccessType, Byte * Data,
         uint32_t length ) {
-    if ( mThisCacheType == CS::CACHETYPE::CACHE ) {
+    if ( mThisCacheType == CS::CACHETYPE::NORMAL ) {
         if ( mThis->AccessCache( AccessType, accessTime, address, Data, length ) ) {  //if true cache  hit
             if ( mThis->mEnableRecord ) {
               if ( AccessType == CS::ACCESSTYPE::WRITE ) {
@@ -100,6 +100,11 @@ void CS::Cache_Ctrl::Access( const uint64_t accessTime, const uint64_t address, 
             mThis->AccessCache( AccessType, accessTime, address, Data, length ) ;
         }  // else
     }  // if  normal Cache
+
+    else if ( mThisCacheType == CS::CACHETYPE::GTABLE ) {
+
+
+    }  // else if
 
 
 }  // Cache_Ctrl::Access()
