@@ -31,6 +31,8 @@ namespace CS {
 
             bool GTableController( uint64_t tag ) ;
             // if DO NOT need to allocate in cache return false
+			
+			uint32_t c = 0 ;
 
         private :
             CS::ReplaceManager * mRP ;

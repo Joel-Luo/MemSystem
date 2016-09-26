@@ -48,6 +48,7 @@ namespace CS {
         private:
             uint32_t m_Associativity ;
             uint32_t m_WritePolicy ;
+			
 
         public:
             uint32_t m_RetentionTime ;

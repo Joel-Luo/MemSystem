@@ -134,9 +134,10 @@ void CS::Cache_Ctrl::Access( const uint64_t accessTime, const uint64_t address, 
             uint32_t set_index, block_offset ;
             mThis->SplitAddress( address, tag, set_index, block_offset ) ;
 
-
             bool NeedToAllcate = mThis->m_GTable[ set_index ]->GTableController(tag) ;
 
+			// CS::Log::PrintMessage( std::to_string(set_index) + ":" + std::to_string(mThis->m_GTable[ set_index ]->c )) ;
+			
             if ( NeedToAllcate ) {  // search GTable if true to allocate in cache
 
             // To do allocate from cache, and evicted, write back to next level
