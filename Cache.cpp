@@ -45,7 +45,7 @@ CS::Cache::Cache( uint32_t CacheName, uint8_t CacheType, uint32_t cache_size, ui
         m_Sets[ i ] = new Cache_Set( blocksize, associativity, replacePolicy, writepolicy, readlatency, writelatnecy ) ;
 
         if ( m_CacheType == CS::CACHETYPE::GTABLE ) {
-            m_GTable[ i ] = new GTable( 16, CS::REPLACEPOLICY::LRU, 5 ) ;
+            m_GTable[ i ] = new GTable( 16, CS::REPLACEPOLICY::LRU, 2 ) ;
         } // if
     } // for
 
@@ -131,27 +131,27 @@ CS::GTable::GTable( uint32_t Size, uint8_t ReplacePolicy, uint32_t thershold ) :
 
     for ( uint32_t i = 0 ; i < m_Size ; i++ ) {
         Entry * temp = new Entry ;
-        temp->mTag = -1 ;
-        temp->times = -1 ;
+        temp->mTag = 0 ;
+        temp->times = 0 ;
         m_GTable->push_back( temp ) ;
     }  // for
 
 }   // CS::GTable()
 
 int32_t CS::GTable::SearchTable( uint64_t tag ) {
+
     for ( uint32_t i = 0 ; i < m_Size ; i++ ) {
-        if ( m_GTable->at(i)->mTag == tag )
-          return i ;
+        if ( m_GTable->at(i)->mTag == tag ) 
+		  return i ;
     } // for
+	
     return -1 ;
 }  // CS::GTable::SearchTable()
 
 void CS::GTable::UpdateTable( uint32_t index, uint64_t tag, uint32_t times ) {
 
     Entry * en = m_GTable->at( index ) ;
-
-    if ( en->mTag != tag ) en->mTag = tag ;
-
+    if ( en->mTag != tag )en->mTag = tag ;
     en->times = times ;
 
 }  // CS::GTable::UpdateTable()
@@ -159,6 +159,7 @@ void CS::GTable::UpdateTable( uint32_t index, uint64_t tag, uint32_t times ) {
 bool CS::GTable::GTableController( uint64_t tag ) {
 
     int32_t index = SearchTable( tag ) ;
+	
     if ( index == -1 ) {
         UpdateTable( mRP->GetReplaceIndex(), tag, 1 ) ;
         mRP->UpdateRecord( index ) ;

@@ -30,9 +30,10 @@ void CS::MemContoller::CreateMemSystem() {
             Log::PrintMessageToFile(
                     Log::CacheResultInfoFile,
                     "Create cache: cache_l1_D\tsize: " + std::to_string( m_Cache_list[ i ]->m_CacheSize >> 10 )
-                            + "\tblocksize: " + std::to_string( m_Cache_list[ i ]->m_BlockSize ) + "\tReadLatency: "
-                            + std::to_string( m_Cache_list[ i ]->m_ReadLatency ) + "\tWriteLatency: "
-                            + std::to_string( m_Cache_list[ i ]->m_WriteLatency ) ) ;
+                            + "\tblocksize: " + std::to_string( m_Cache_list[ i ]->m_BlockSize )  
+                            + "\tSet_Size: " + std::to_string( m_Cache_list[ i ]->m_Num_Set ) 
+                            + "\tReadLatency: " + std::to_string( m_Cache_list[ i ]->m_ReadLatency )  
+                            + "\tWriteLatency: " + std::to_string( m_Cache_list[ i ]->m_WriteLatency ) ) ;
 
             m_CacheCtrl_list[ i ] = new Cache_Ctrl( m_Cache_list[ i ], m_CacheType[ i ] ) ;
 
@@ -51,9 +52,10 @@ void CS::MemContoller::CreateMemSystem() {
             Log::PrintMessageToFile(
                     Log::CacheResultInfoFile,
                     "Create cache: cache_l2\t\tsize: " + std::to_string( m_Cache_list[ i ]->m_CacheSize >> 10 )
-                            + "\tblocksize: " + std::to_string( m_Cache_list[ i ]->m_BlockSize ) + "\tReadLatency: "
-                            + std::to_string( m_Cache_list[ i ]->m_ReadLatency ) + "\tWriteLatency: "
-                            + std::to_string( m_Cache_list[ i ]->m_WriteLatency ) ) ;
+                            + "\tblocksize: " + std::to_string( m_Cache_list[ i ]->m_BlockSize )  
+                            + "\tSet_Size: " + std::to_string( m_Cache_list[ i ]->m_Num_Set ) 
+                            + "\tReadLatency: " + std::to_string( m_Cache_list[ i ]->m_ReadLatency )  
+                            + "\tWriteLatency: " + std::to_string( m_Cache_list[ i ]->m_WriteLatency ) ) ;
             m_CacheCtrl_list[ i ] = new Cache_Ctrl( m_Cache_list[ i ], m_CacheType[ i ] ) ;
             m_CacheCtrl_list[ i - 1 ]->SetNextLevelCacheCtrl( m_CacheCtrl_list[ i ] ) ;
 
@@ -71,9 +73,10 @@ void CS::MemContoller::CreateMemSystem() {
             Log::PrintMessageToFile(
                     Log::CacheResultInfoFile,
                     "Create cache: cache_l3\t\tsize: " + std::to_string( m_Cache_list[ i ]->m_CacheSize >> 10 )
-                            + "\tblocksize: " + std::to_string( m_Cache_list[ i ]->m_BlockSize ) + "\tReadLatency: "
-                            + std::to_string( m_Cache_list[ i ]->m_ReadLatency ) + "\tWriteLatency: "
-                            + std::to_string( m_Cache_list[ i ]->m_WriteLatency ) ) ;
+                            + "\tblocksize: " + std::to_string( m_Cache_list[ i ]->m_BlockSize )  
+                            + "\tSet_Size: " + std::to_string( m_Cache_list[ i ]->m_Num_Set ) 
+                            + "\tReadLatency: " + std::to_string( m_Cache_list[ i ]->m_ReadLatency )  
+                            + "\tWriteLatency: " + std::to_string( m_Cache_list[ i ]->m_WriteLatency ) ) ;
             m_CacheCtrl_list[ i ] = new Cache_Ctrl( m_Cache_list[ i ], m_CacheType[ i ] ) ;
             m_CacheCtrl_list[ i - 1 ]->SetNextLevelCacheCtrl( m_CacheCtrl_list[ i ] ) ;
         }  // else if
