@@ -66,7 +66,7 @@ int main( int argc, char const *argv[] ) {
             MemContoller * memsystem = NULL ;
             FILE * input = NULL ;
             FILE * output = NULL ;
-            FILE * CLU = NULL ;  // cache line usage
+
             char * configFile = NULL ;
 
             for ( int i = 1; i < argc; i = i + 2 ) {
@@ -94,11 +94,6 @@ int main( int argc, char const *argv[] ) {
                     sscanf( argv[ i + 1 ], "%llu", &gSkip_Inst ) ;
                     Log::PrintMessage( "Skip Inst: " + std::to_string( gSkip_Inst ) ) ;
                 }   // else if
-
-                else if ( strcmp( argv[ i ], "--clu" ) == 0 ) {
-                    CLU = fopen( argv[ i + 1 ], "w" ) ;
-                    Log::PrintMessage( "CacheLineUsage = " + std::string( argv[ i + 1 ] ) ) ;
-                }  // else if
 
             }  // for
 
