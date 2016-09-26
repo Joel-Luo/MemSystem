@@ -38,15 +38,9 @@ CS::Cache::Cache( uint32_t CacheName, uint8_t CacheType, uint32_t cache_size, ui
     m_Num_Set = m_CacheSize >> ( m_BlockSize_log2 + m_Associativity_log2 ) ;
     m_Num_Set_Log2 = Cache::floorLog2( m_Num_Set ) ;
     m_Sets = new Cache_Set*[ m_Num_Set ] ;
-    m_GTable = NULL ;
-    m_GTable = new GTable*[  m_Num_Set ] ;
-    
+
     for ( uint32_t i = 0; i < m_Num_Set; i++ ) {
         m_Sets[ i ] = new Cache_Set( blocksize, associativity, replacePolicy, writepolicy, readlatency, writelatnecy ) ;
-
-        if ( m_CacheType == CS::CACHETYPE::GTABLE ) {
-            m_GTable[ i ] = new GTable( 16, CS::REPLACEPOLICY::LRU, 2 ) ;
-        } // if
     } // for
 
 }  // Cache::Cache()
@@ -124,60 +118,3 @@ void CS::Cache::StoreCacheBlock( uint32_t set_index, uint64_t & TatgetAddr, Byte
     m_Sets[ set_index ]->ReadData( out, way_index, 0, m_BlockSize ) ;
     TatgetAddr = TagToAddress( m_Sets[ set_index ]->m_Way[ way_index ].mTag, set_index  ) ;
 }  // Cache::StoreCacheBlock()
-
-CS::GTable::GTable( uint32_t Size, uint8_t ReplacePolicy, uint32_t thershold ) : m_Size( Size ), m_Thershold( thershold) {
-    m_GTable = new std::vector< Entry* > () ;
-    mRP = new CS::ReplaceManager( Size, ReplacePolicy ) ;
-
-    for ( uint32_t i = 0 ; i < m_Size ; i++ ) {
-        Entry * temp = new Entry ;
-        temp->mTag = 0 ;
-        temp->times = 0 ;
-        m_GTable->push_back( temp ) ;
-    }  // for
-
-}   // CS::GTable()
-
-int32_t CS::GTable::SearchTable( uint64_t tag ) {
-
-    for ( uint32_t i = 0 ; i < m_Size ; i++ ) {
-        if ( m_GTable->at(i)->mTag == tag ) 
-		  return i ;
-    } // for
-	
-    return -1 ;
-}  // CS::GTable::SearchTable()
-
-void CS::GTable::UpdateTable( uint32_t index, uint64_t tag, uint32_t times ) {
-
-    Entry * en = m_GTable->at( index ) ;
-    if ( en->mTag != tag )en->mTag = tag ;
-    en->times = times ;
-
-}  // CS::GTable::UpdateTable()
-
-bool CS::GTable::GTableController( uint64_t tag ) {
-
-    int32_t index = SearchTable( tag ) ;
-	
-    if ( index == -1 ) {
-        UpdateTable( mRP->GetReplaceIndex(), tag, 1 ) ;
-        mRP->UpdateRecord( index ) ;
-        return true ;
-    }  // if
-
-    else {
-        Entry * en = m_GTable->at( index ) ;
-        UpdateTable( index, tag, en->times++ ) ;
-        mRP->UpdateRecord( index ) ;
-
-        if ( en->times < m_Thershold )
-            return true ;
-        else
-            return false ;
-    }  // else
-
-    return true ;
-}  // CS::GTable::GTableController()
-
-

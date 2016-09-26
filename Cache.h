@@ -15,33 +15,8 @@ namespace CS {
     } ;
 
     enum CACHETYPE {
-        NORMAL = 0, GTABLE
+        NORMAL = 0
     } ;
-
-    class GTable {
-        public:
-            struct Entry {
-                    uint64_t mTag ;
-                    uint32_t times ;
-            } ;
-            uint32_t m_Size ;
-            uint32_t m_Thershold ;
-            std::vector < Entry* > * m_GTable ;
-            GTable( uint32_t Size, uint8_t ReplacePolicy, uint32_t Thershold ) ;
-
-            bool GTableController( uint64_t tag ) ;
-            // if DO NOT need to allocate in cache return false
-			
-			uint32_t c = 0 ;
-
-        private :
-            CS::ReplaceManager * mRP ;
-
-            int32_t SearchTable( uint64_t tag ) ;
-            void UpdateTable( uint32_t index, uint64_t tag, uint32_t times ) ;
-
-    } ;
-
     class Cache {
 
         private:
@@ -71,7 +46,7 @@ namespace CS {
 
             uint8_t m_ReadLatency ;
             uint8_t m_WriteLatency ;
-            GTable ** m_GTable ;
+
             bool mEnableRecord ;
 
         private:
