@@ -69,6 +69,7 @@ namespace CS {
 
             uint8_t m_ReadLatency ;
             uint8_t m_WriteLatency ;
+            GTable ** m_GTable ;
             bool mEnableRecord ;
 
         private:

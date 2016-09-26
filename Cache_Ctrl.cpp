@@ -13,10 +13,6 @@ CS::Cache_Ctrl::Cache_Ctrl( Cache* thisLevel, uint8_t cachetype ) :
     mNextLevelCacheName = -1 ;
     mNextLevel = NULL ;
 
-    m_GTable = NULL ;
-    if ( mThis->m_CacheType == CS::CACHETYPE::GTABLE )
-      m_GTable = new GTable( 128, CS::REPLACEPOLICY::LRU, 10 ) ;
-
 }  // Cache_Ctrl()
 
 void CS::Cache_Ctrl::SetNextLevelCacheCtrl( Cache_Ctrl * nextLevelCacheCtrl ) {
@@ -139,7 +135,7 @@ void CS::Cache_Ctrl::Access( const uint64_t accessTime, const uint64_t address, 
             mThis->SplitAddress( address, tag, set_index, block_offset ) ;
 
 
-            bool NeedToAllcate = m_GTable->GTableController(tag) ;
+            bool NeedToAllcate = mThis->m_GTable[ set_index ]->GTableController(tag) ;
 
             if ( NeedToAllcate ) {  // search GTable if true to allocate in cache
 

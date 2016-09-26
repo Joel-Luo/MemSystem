@@ -9,7 +9,6 @@
 using namespace CS ;   // name space CS ( Cache Simulator)
 
 FILE * CS::Log::CacheResultInfoFile = NULL ;
-FILE * CS::Log::CacheLineInfoFile = NULL ;
 
 unsigned long long  gTotal_inst = 500000000 ;
 unsigned long long  gSkip_Inst = 1 ;
@@ -114,7 +113,7 @@ int main( int argc, char const *argv[] ) {
             }  // else if
 
             Log::CacheResultInfoFile = output ;
-            Log::CacheLineInfoFile = CLU ;
+
             memsystem = new MemContoller( configFile ) ;
             ExecuteMemOperation( input, memsystem ) ;
 

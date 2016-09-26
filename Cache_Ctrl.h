@@ -18,7 +18,7 @@ namespace CS {
         private:
             Cache * mThis ;
             Cache_Ctrl * mNextLevel ;
-            GTable * m_GTable ;
+
 
         public:
 
