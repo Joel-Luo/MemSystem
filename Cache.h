@@ -7,7 +7,7 @@
 namespace CS {
 
     enum MEM_NAME {
-        L1_D = 0, L2, L3, MAINMEM
+        L1_D = 0, MAINMEM
     } ;
 
     enum ACCESSTYPE {
@@ -42,7 +42,6 @@ namespace CS {
             uint32_t m_Num_Set ;
             uint32_t m_ReplacePolicy ;
             uint32_t m_WritePolicy ;
-            uint8_t m_CacheLineWriteMod ;
 
             uint8_t m_ReadLatency ;
             uint8_t m_WriteLatency ;

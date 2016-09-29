@@ -33,10 +33,10 @@ void CS::ReplaceManager::UpdateRecord( uint32_t index ) {
 
 CS::Cache_Set::Cache_Set( uint32_t blocksize, uint32_t associativity, uint32_t replacePolicy, uint32_t writePolicy,
         uint8_t ReadLatency, uint8_t WriteLatency ) :
-        m_BlockSize( blocksize ), m_Associativity( associativity ), m_WritePolicy( writePolicy ), m_RetentionTime( 0 ), m_ReadLatency( ReadLatency ), m_WriteLatency( WriteLatency ) {
+        m_BlockSize( blocksize ), m_Associativity( associativity ), m_WritePolicy( writePolicy ), m_ReadLatency( ReadLatency ), m_WriteLatency( WriteLatency ) {
     m_RP_Manager = new ReplaceManager( associativity, CS::REPLACEPOLICY::LRU ) ;
     m_Way = new Way[ m_Associativity ] ;
-    m_UsingTime = 0 ;
+   
     for ( uint32_t i = 0; i < m_Associativity; i++ ) {
         m_Way[ i ].mTag = -1 ;
         m_Way[ i ].Valid = false ;
@@ -55,13 +55,13 @@ CS::Cache_Set::Cache_Set( uint32_t blocksize, uint32_t associativity, uint32_t r
 void CS::Cache_Set::ReadData( Byte * out, uint32_t way_index, uint32_t offset, uint32_t length ) {
     //if ( out != NULL )
         // memcpy( out, m_Way[ way_index ].mData + offset, length ) ;
-    m_UsingTime++ ;
+    
 }  // Cache_Set::ReadLine()
 
 void CS::Cache_Set::WriteData( Byte * in, uint32_t way_index, uint32_t offset, uint32_t length ) {
     //if ( in != NULL )
         // memcpy( m_Way[ way_index ].mData + offset, in, length ) ;
-    m_UsingTime++ ;
+
 }  // Cache_Set::WriteLine()
 
 void CS::Cache_Set::AllocateData( Byte * in, uint64_t tag, uint32_t way_index, uint32_t offset, uint32_t length ) {

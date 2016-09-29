@@ -11,6 +11,6 @@
 
 * git src
 * make 
-* $ ./MemSystem --conf ./cache.cfg --skip_inst 10000 --input ./main_trace.dat --output ./CacheResultInfo.txt  
+* $ ./MemSystem --conf ./cache.cfg --input ./main_trace.dat --output ./CacheResultInfo.txt  
  
 * ./memsystem -h   // if you need to help.

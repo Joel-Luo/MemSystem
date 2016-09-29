@@ -48,13 +48,11 @@ namespace CS {
         private:
             uint32_t m_Associativity ;
             uint32_t m_WritePolicy ;
-			
 
         public:
-            uint32_t m_RetentionTime ;
             uint8_t m_ReadLatency ;
             uint8_t m_WriteLatency ;
-            uint32_t m_UsingTime ;
+            
 
         public:
 

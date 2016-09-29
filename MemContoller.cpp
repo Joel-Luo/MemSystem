@@ -38,48 +38,6 @@ void CS::MemContoller::CreateMemSystem() {
             m_CacheCtrl_list[ i ] = new Cache_Ctrl( m_Cache_list[ i ], m_CacheType[ i ] ) ;
 
         }   // if
-
-        else if ( i == CS::MEM_NAME::L2 ) {
-            m_CacheType[ i ] = cfgparser->ParseDevice( "cache_l2", "type" ) ;
-
-            m_Cache_list[ i ] = new Cache( CS::MEM_NAME::L2, m_CacheType[ i ], cfgparser->ParseDevice( "cache_l2", "size" ),
-                                           cfgparser->ParseDevice( "cache_l2", "blocksize" ),
-                                           cfgparser->ParseDevice( "cache_l2", "associativity" ),
-                                           cfgparser->ParseDevice( "cache_l2", "replacepolicy" ),
-                                           cfgparser->ParseDevice( "cache_l2", "writepolicy" ),
-                                           cfgparser->ParseDevice( "cache_l2", "readlatency" ),
-                                           cfgparser->ParseDevice( "cache_l2", "writelatency" ) ) ;
-            Log::PrintMessageToFile(
-                    Log::CacheResultInfoFile,
-                    "Create cache: cache_l2\t\tsize: " + std::to_string( m_Cache_list[ i ]->m_CacheSize >> 10 )
-                            + "\tblocksize: " + std::to_string( m_Cache_list[ i ]->m_BlockSize )  
-                            + "\tSet_Size: " + std::to_string( m_Cache_list[ i ]->m_Num_Set ) 
-                            + "\tReadLatency: " + std::to_string( m_Cache_list[ i ]->m_ReadLatency )  
-                            + "\tWriteLatency: " + std::to_string( m_Cache_list[ i ]->m_WriteLatency ) ) ;
-            m_CacheCtrl_list[ i ] = new Cache_Ctrl( m_Cache_list[ i ], m_CacheType[ i ] ) ;
-            m_CacheCtrl_list[ i - 1 ]->SetNextLevelCacheCtrl( m_CacheCtrl_list[ i ] ) ;
-
-        }  // else if
-
-        else if ( i == CS::MEM_NAME::L3 ) {
-            m_CacheType[ i ] = cfgparser->ParseDevice( "cache_l3", "type" ) ;
-            m_Cache_list[ i ] = new Cache( CS::MEM_NAME::L3, m_CacheType[ i ], cfgparser->ParseDevice( "cache_l3", "size" ),
-                                           cfgparser->ParseDevice( "cache_l3", "blocksize" ),
-                                           cfgparser->ParseDevice( "cache_l3", "associativity" ),
-                                           cfgparser->ParseDevice( "cache_l3", "replacepolicy" ),
-                                           cfgparser->ParseDevice( "cache_l3", "writepolicy" ),
-                                           cfgparser->ParseDevice( "cache_l3", "readlatency" ),
-                                           cfgparser->ParseDevice( "cache_l3", "writelatency" ) ) ;
-            Log::PrintMessageToFile(
-                    Log::CacheResultInfoFile,
-                    "Create cache: cache_l3\t\tsize: " + std::to_string( m_Cache_list[ i ]->m_CacheSize >> 10 )
-                            + "\tblocksize: " + std::to_string( m_Cache_list[ i ]->m_BlockSize )  
-                            + "\tSet_Size: " + std::to_string( m_Cache_list[ i ]->m_Num_Set ) 
-                            + "\tReadLatency: " + std::to_string( m_Cache_list[ i ]->m_ReadLatency )  
-                            + "\tWriteLatency: " + std::to_string( m_Cache_list[ i ]->m_WriteLatency ) ) ;
-            m_CacheCtrl_list[ i ] = new Cache_Ctrl( m_Cache_list[ i ], m_CacheType[ i ] ) ;
-            m_CacheCtrl_list[ i - 1 ]->SetNextLevelCacheCtrl( m_CacheCtrl_list[ i ] ) ;
-        }  // else if
     }  // for ()
 
     // connect memory control , now assume is null
@@ -92,9 +50,7 @@ void CS::MemContoller::CreateMemSystem() {
 
 void CS::MemContoller::CoreAccessMem( const uint64_t accessTime, const uint64_t address, const uint32_t AccessType,
         Byte* Data, uint32_t length ) {
-
     m_CacheCtrl_list[ 0 ]->Access( accessTime, address, AccessType, Data, length ) ;
-
 }  // MemSystem::CoreAccessMem()
 
 
