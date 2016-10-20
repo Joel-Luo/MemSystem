@@ -28,12 +28,19 @@ uint8_t CS::PreloadTable::NeedToPreload( uint64_t tag,  uint32_t index) {
     if (  i != (uint32_t)-1 ) {
         m_RP_Manager->UpdateRecord(i) ;
         uint8_t offset = (mEntry[i].mState+1) * 5 ;  // !!key point offset setting
-        if ( index - mEntry[i].mIndex <= offset )
+
+        if ( index - mEntry[i].mIndex <= offset ) {
             mEntry[i].mTimes++ ;
+        } // if
+        else  {
+            mEntry[i].mState = 0  ;
+        }  //else
+
         if ( mEntry[i].mTimes >= (uint32_t)(mEntry[i].mState+1)*3 ) {
            mEntry[i].mState++  ;
            if ( mEntry[i].mState > 3 ) mEntry[i].mState = 3 ;
         } // if
+
         return mEntry[i].mState ;
     }  // if
 
