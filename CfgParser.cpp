@@ -45,7 +45,7 @@ string CS::CfgParser::SplitTag( string input, string tag ) {
 uint64_t CS::CfgParser::CacheParamter( string tag, string value ) {
     try {
 
-        if ( tag.compare( "replacepolicy" ) == 0 ) {
+        if ( tag.find( "replacepolicy" ) != std::string::npos ) {
             if ( value.compare( "LRU" ) == 0 )
                 return CS::REPLACEPOLICY::LRU ;
             else if ( value.compare( "ROUND_ROBIN" ) == 0 )
@@ -54,7 +54,7 @@ uint64_t CS::CfgParser::CacheParamter( string tag, string value ) {
                 return CS::REPLACEPOLICY::RANDOM ;
         }  // else if
 
-        else if ( tag.compare( "writepolicy" ) == 0 ) {
+        else if ( tag.find( "writepolicy" )  != std::string::npos  ) {
             if ( value.compare( "WB" ) == 0 )
                 return CS::WRITEPOLICY::WRITE_BACK ;
             else if ( value.compare( "WT" ) == 0 )
@@ -62,8 +62,11 @@ uint64_t CS::CfgParser::CacheParamter( string tag, string value ) {
         }  // else if
 
         else if ( tag.compare( "type" ) == 0 ) {
-            if ( value.compare( "Cache" ) == 0 )
+            if ( value.compare( "Normal" ) == 0 )
                 return CS::CACHETYPE::NORMAL ;
+            else if ( value.compare( "Preload" ) == 0 )
+                return CS::CACHETYPE::PRELOAD ;
+
         }  // else if
 
 

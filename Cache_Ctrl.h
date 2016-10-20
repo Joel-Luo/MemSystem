@@ -10,14 +10,14 @@
 #define CACHE_CTRL_H
 
 #include "Cache.h"
-
+#include "PreloadCache.h"
 
 
 namespace CS {
     class Cache_Ctrl {
         private:
-            Cache * mThis ;
-            Cache_Ctrl * mNextLevel ;
+            void* mThis ;
+            void* mNextLevel ;
 
 
         public:
@@ -26,7 +26,7 @@ namespace CS {
             uint8_t mThisCacheName ;
             uint8_t mNextLevelCacheName ;
 
-            Cache_Ctrl( Cache* thisLevel, uint8_t cachetype ) ;
+            Cache_Ctrl( Base* thisLevel, uint8_t cachetype ) ;
 
             void Access( const uint64_t accessTime, const uint64_t address, const uint32_t AccessType, Byte * Data,
                     uint32_t length ) ;

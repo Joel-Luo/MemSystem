@@ -28,10 +28,9 @@ uint32_t CS::Cache::floorLog2( uint32_t number ) {
 }  // Cache::floorLog2()
 
 CS::Cache::Cache( uint32_t CacheName, uint8_t CacheType, uint32_t cache_size, uint32_t blocksize, uint32_t associativity,
-        uint32_t replacePolicy, uint32_t writepolicy,  uint8_t readlatency, uint8_t writelatnecy ) :
-         m_CacheType( CacheType ), m_Name( CacheName ), m_CacheSize( cache_size << 10 ), m_BlockSize( blocksize ), m_Num_W_Access( 0 ),  m_Num_W_Hit( 0 ), m_Num_R_Access( 0 ), m_Num_R_Hit( 0 ), m_Num_Way( associativity ),m_Sets(
+        uint32_t replacePolicy, uint32_t writepolicy,  uint8_t readlatency, uint8_t writelatnecy ) : Base(CacheName, CacheType),
+          m_CacheSize( cache_size << 10 ), m_BlockSize( blocksize ), m_Num_W_Access( 0 ),  m_Num_W_Hit( 0 ), m_Num_R_Access( 0 ), m_Num_R_Hit( 0 ), m_Num_Way( associativity ),m_Sets(
         NULL ), m_Num_Set( 0 ), m_ReplacePolicy( replacePolicy ), m_WritePolicy( writepolicy ), m_ReadLatency( readlatency ), m_WriteLatency( writelatnecy ) {
-    mEnableRecord = false ;
 
     m_BlockSize_log2 = Cache::floorLog2( blocksize ) ;
     m_Associativity_log2 = Cache::floorLog2( associativity ) ;
@@ -46,7 +45,7 @@ CS::Cache::Cache( uint32_t CacheName, uint8_t CacheType, uint32_t cache_size, ui
 }  // Cache::Cache()
 
 
-bool CS::Cache::AccessCache( uint32_t AccessType, const uint64_t accessTime, const uint64_t address, Byte * Data,
+uint8_t CS::Cache::AccessCache( uint32_t AccessType, const uint64_t accessTime, const uint64_t address, Byte * Data,
         uint32_t length ) {
 
     uint64_t tag ;
@@ -57,7 +56,7 @@ bool CS::Cache::AccessCache( uint32_t AccessType, const uint64_t accessTime, con
     uint32_t way_index = m_Sets[ index ]->FindTagInWay( tag ) ;
 
     if ( way_index == (uint32_t)-1 )
-        return false ;  // cache miss
+        return CS::CACHEHITTYPE::MISS ;  // cache miss
 
     if ( AccessType == CS::ACCESSTYPE::READ ) {
         m_Sets[ index ]->ReadData( Data, way_index, block_offset, length ) ;
@@ -71,7 +70,7 @@ bool CS::Cache::AccessCache( uint32_t AccessType, const uint64_t accessTime, con
 
     m_Sets[ index ]->m_RP_Manager->UpdateRecord( way_index ) ;
 
-    return true ;
+    return CS::CACHEHITTYPE::HIT ;
 }  // Cache::AccessSingleLine
 
 void CS::Cache::SplitAddress( const uint64_t addr, uint64_t& tag, uint32_t& set_index, uint32_t& block_offset ) {

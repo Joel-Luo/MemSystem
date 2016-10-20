@@ -6,6 +6,14 @@
 
 namespace CS {
 
+    class Base {
+        public:
+            Base( uint32_t CacheName, uint8_t CacheType ) : m_CacheType( CacheType ), m_Name( CacheName ) { mEnableRecord = false ; }
+            uint8_t m_CacheType ;
+            uint8_t m_Name ;
+            bool mEnableRecord ;
+    };
+
     enum MEM_NAME {
         L1_D = 0, L2, L3, MAINMEM
     } ;
@@ -15,9 +23,14 @@ namespace CS {
     } ;
 
     enum CACHETYPE {
-        NORMAL = 0
+        NORMAL = 0, PRELOAD
     } ;
-    class Cache {
+
+    enum CACHEHITTYPE {
+        MISS = 0, HIT, HIT_SRAM, HIT_MRAM
+    };
+
+    class Cache : public Base {
 
         private:
 
@@ -26,8 +39,7 @@ namespace CS {
             uint32_t m_Num_Set_Log2 ;
 
         public:
-            uint8_t m_CacheType ;
-            uint8_t m_Name ;
+
             uint64_t m_CacheSize ;
             uint32_t m_BlockSize ;
             uint64_t m_Num_W_Access ;
@@ -47,19 +59,17 @@ namespace CS {
             uint8_t m_ReadLatency ;
             uint8_t m_WriteLatency ;
 
-            bool mEnableRecord ;
+
 
         private:
             static uint32_t floorLog2( uint32_t number ) ;
 
         public:
-
-            Cache( uint32_t CacheName, uint8_t CacheType, uint32_t cache_size, uint32_t blocksize,
+            Cache(  uint32_t CacheName, uint8_t CacheType, uint32_t cache_size, uint32_t blocksize,
                     uint32_t associativity, uint32_t replacePolicy, uint32_t writepolicy, uint8_t readlatency,
                     uint8_t writelatnecy ) ;
 
-            bool AccessCache( uint32_t AccessType, const uint64_t accessTime, const uint64_t address, Byte * Data,
-                    uint32_t length ) ;
+            uint8_t AccessCache( uint32_t AccessType, const uint64_t accessTime, const uint64_t address, Byte * Data, uint32_t length );
 
             void SplitAddress( const uint64_t addr, uint64_t& tag, uint32_t& assoc_index, uint32_t& block_offset ) ;
 

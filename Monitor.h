@@ -8,15 +8,17 @@
 #ifndef MONITOR_H
 #define MONITOR_H
 #include "Cache.h"
+#include "PreloadCache.h"
+
 #include <stdio.h>
 
 namespace CS {
     class Monitor {
         public:
-            Cache ** m_Cache_list ;
+            Base ** m_Cache_list ;
             int m_CacheLevel ;
         public:
-            Monitor( int level, Cache ** CL ) ;
+            Monitor( int level, Base ** CL ) ;
 
             void OutputCacheInfo( int CacheType ) ;
             void OutputResult() ;

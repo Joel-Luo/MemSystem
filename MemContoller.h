@@ -5,6 +5,7 @@
 #include "CfgParser.h"
 #include "Monitor.h"
 #include "Cache_Ctrl.h"
+#include "PreloadCache.h"
 namespace CS {
     class MemContoller {
 
@@ -14,7 +15,7 @@ namespace CS {
             Cache_Ctrl ** m_CacheCtrl_list ;
             uint8_t m_Cache_level ;
             CfgParser * cfgparser ;
-            Cache ** m_Cache_list ;
+            Base ** m_Cache_list ;
         public:
             Monitor * m_Monitor ;
 
