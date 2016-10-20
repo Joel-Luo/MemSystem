@@ -30,8 +30,10 @@ uint8_t CS::PreloadTable::NeedToPreload( uint64_t tag,  uint32_t index) {
         uint8_t offset = (mEntry[i].mState+1) * 5 ;  // !!key point offset setting
         if ( index - mEntry[i].mIndex <= offset )
             mEntry[i].mTimes++ ;
-        if ( mEntry[i].mTimes >= (uint32_t)(mEntry[i].mState+1)*3 )
+        if ( mEntry[i].mTimes >= (uint32_t)(mEntry[i].mState+1)*3 ) {
            mEntry[i].mState++  ;
+           if ( mEntry[i].mState > 3 ) mEntry[i].mState = 3 ;
+        } // if
         return mEntry[i].mState ;
     }  // if
 
