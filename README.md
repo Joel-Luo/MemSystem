@@ -14,3 +14,7 @@
 * $ ./MemSystem --conf ./cache.cfg --skip_inst 10000 --input ./main_trace.dat --output ./CacheResultInfo.txt  
  
 * ./memsystem -h   // if you need to help.
+
+### License
+
+MIT license
